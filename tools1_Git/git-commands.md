@@ -1,4 +1,5 @@
 # Git
+
 ## Intro
 分布式版本控制软件。版本控制意味着可以不用重写过去的版本就可以保存时间过程中的修改；分布式意味着开发者使用 Git仓库 的每一次提交、每一个分支、每一个文件都具有一个完整仓库的副本。
 <div style="text-align:center">
@@ -32,6 +33,15 @@
 
 
 ## 命令
+### 配置相关
+- `git config --global user.name "username"` 设置全局仓库用户名字
+- `git config --global user.email "useremail"` 设置全局仓库用户邮箱 （去掉 `global` 则为设置当前仓库的）
+- `git config --global --get user.name` 获取局仓库用户名字
+- `git config --global --get user.email` 获取全局仓库用户邮箱 （去掉 `global` 则为获取当前仓库的）
+- `echo "some_file_or_directory" > .gitignore` 设置 .gitignore 文件来忽略特定文件或目录
+- `git config --list` 查看所有配置项
+- `git config --help` 查看某个配置项的帮助信息
+- 
 ### 基本操作
 - `git init` 初始化目录为仓库
 - `git status` 查看当前仓库状态
