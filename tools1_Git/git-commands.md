@@ -3,7 +3,7 @@
 ## Intro
 分布式版本控制软件。版本控制意味着可以不用重写过去的版本就可以保存时间过程中的修改；分布式意味着开发者使用 Git仓库 的每一次提交、每一个分支、每一个文件都具有一个完整仓库的副本。
 <div style="text-align:center">
-    <img src="../pic/Git工作流程.png" alt="Git工作流程" style="margin-bottom: 1px;">
+    <img src="../tools1_Git/pic/Git工作流程.png" alt="Git工作流程" style="margin-bottom: 1px;">
     <p>Git工作流程</p>
 </div>
 
@@ -41,7 +41,8 @@
 - `echo "some_file_or_directory" > .gitignore` 设置 .gitignore 文件来忽略特定文件或目录
 - `git config --list` 查看所有配置项
 - `git config --help` 查看某个配置项的帮助信息
-- 
+
+
 ### 基本操作
 - `git init` 初始化目录为仓库
 - `git status` 查看当前仓库状态

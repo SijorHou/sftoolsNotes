@@ -23,8 +23,32 @@
 ## jupyter notebook 插件安装
 [jupyter notebook 插件系列](https://blog.csdn.net/qq_41554005/article/details/109736988?ops_request_misc=&request_id=&biz_id=102&utm_term=jupyter%20notebook%20%E4%BB%A3%E7%A0%81%E6%8A%98%E5%8F%A0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~sobaiduweb~default-1-109736988.142^v100^control&spm=1018.2226.3001.4187)
 
+- 将虚拟环境加入jupyter notebook
+- `jupyter ipykernel list` 查看当前jupyter notebook中使用的python环境
+- `conda install ipykernel` 进入虚拟环境后，安装内核包
+- `python -m ipykernel install --user --name env_name --display-name "name made to display in jupyter notebook"` 将内核加入jupyter notebook
+
 # IDE
 ## pycharm 安装教程
 [pycharm从安装到全副武装](https://blog.csdn.net/weixin_46211269/article/details/119934323?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522172065482116800222831053%2522%252C%2522scm%2522%253A%252220140713.130102334..%2522%257D&request_id=172065482116800222831053&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~top_positive~default-1-119934323-null-null.142^v100^control&utm_term=pycharm%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B&spm=1018.2226.3001.4187)
 
 [pycharm安装教程](https://blog.csdn.net/qq_44809707/article/details/122501118?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522172065482116800222831053%2522%252C%2522scm%2522%253A%252220140713.130102334..%2522%257D&request_id=172065482116800222831053&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~top_positive~default-2-122501118-null-null.142^v100^control&utm_term=pycharm%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B&spm=1018.2226.3001.4187)
+
+# C++ 
+[vscode C++ 环境配置](https://blog.csdn.net/Hudiscount/article/details/120209994?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522172094334116800211538815%2522%252C%2522scm%2522%253A%252220140713.130102334..%2522%257D&request_id=172094334116800211538815&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~top_positive~default-1-120209994-null-null.142^v100^pc_search_result_base8&utm_term=vscode%20C%2B%2B%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE&spm=1018.2226.3001.4187)
+
+# 机器学习
+## pytorch环境配置
+- [机器学习和统计学习的区别联系](https://blog.csdn.net/gongdiwudu/article/details/132164292)
+- [深度学习环境配置](https://blog.csdn.net/qq_41225961/article/details/135745674)
+- [win10 cuda toolkit 安装参考](https://blog.csdn.net/weixin_43798572/article/details/123122477?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522170973610016800188578169%2522%252C%2522scm%2522%253A%252220140713.130102334..%2522%257D&request_id=170973610016800188578169&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~sobaiduend~default-2-123122477-null-null.142^v99^pc_search_result_base8&utm_term=cuda%20toolkit%E5%AE%89%E8%A3%85%E9%80%89%E6%8B%A9&spm=1018.2226.3001.4187)
+- [pytorch 安装教程](https://blog.csdn.net/weixin_44904136/article/details/123285884?ops_request_misc=&request_id=&biz_id=102&utm_term=pytorch%20%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B&utm_medium=distribute.pc_search_result.none-task-blog-2~all~sobaiduweb~default-2-123285884.142^v99^pc_search_result_base8&spm=1018.2226.3001.4187)
+- [pytorch 安装报错替换阿里云镜像源](https://blog.csdn.net/qq_53819990/article/details/132874569?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522170974234216800184161724%2522%252C%2522scm%2522%253A%252220140713.130102334..%2522%257D&request_id=170974234216800184161724&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~top_click~default-2-132874569-null-null.142^v99^pc_search_result_base8&utm_term=Solving%20environment%3A%20unsuccessful%20attempt%20using%20repodata%20from%20current_repodata.json%2C%20retrying%20with%20next%20repodata%20source.&spm=1018.2226.3001.4187)
+
+
+*安装情况检查*
+```python
+import torch
+print(torch.__version__)
+print(torch.cuda.is_available())
+```
