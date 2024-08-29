@@ -1,24 +1,25 @@
 # 遗留问题
 ## 基础篇： 
-### vmtools命令行安装
-### 远程登录、文件传输等工具软件的下载
-### vim命令学习
+远程登录、文件传输等工具软件的下载
+vim命令学习
 
 # linux 基础篇
 
 ## 课程基本内容
 <div style="text-align:center">
-    <img src="/proj2_linux/pic_source/content.png" alt="图片描述" style="margin-bottom: 1px;">
+    <img src="/tools3_Linux/pic_source/content.png" alt="图片描述" style="margin-bottom: 1px;">
     <p>linux课程内容</p>
 </div>
 
 <div style="text-align:center">
-    <img src="/proj2_linux/pic_source/拓展内容.png" alt="图片描述" style="margin-bottom: 1px;">
+    <img src="/tools3_Linux/pic_source/拓展内容.png" alt="图片描述" style="margin-bottom: 1px;">
     <p>拓展内容</p>
 </div>
 
 ## 虚拟机以及centos安装教程
 [VMware虚拟机搭建Linux CentOS7（全网最详细图文讲解）](https://blog.csdn.net/Myx74270512/article/details/127883266?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522171430541616800227423510%2522%252C%2522scm%2522%253A%252220140713.130102334..%2522%257D&request_id=171430541616800227423510&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~sobaiduend~default-1-127883266-null-null.142^v100^pc_search_result_base8&utm_term=%E8%99%9A%E6%8B%9F%E6%9C%BAcentos%E5%AE%89%E8%A3%85&spm=1018.2226.3001.4187)
+
+[VM 卸载](https://blog.csdn.net/weixin_55118477/article/details/121078890)
 
 ## 网络连接的三种模式
 虚拟机中的 ***[NAT](https://www.xiaolincoding.com/network/4_ip/ip_base.html#nat)（Network Address Translation）是一种网络地址转换技术***，*它允许多个设备共享一个单一的公网IP地址来访问互联网*。NAT在虚拟化环境中非常常见，因为它允许虚拟机使用私有IP地址，同时通过宿主机的网络接口连接到外部网络。
@@ -49,20 +50,42 @@
 - 2. 当执行若干操作后，可能有了多个快照 A->B->C->...
 - 3. 若要回到之前的状态如B，右键虚拟机"快照管理器"，选择快照后，点击"转到"（可以产生新的快照分支）
 <div style="text-align:center">
-    <img src="/proj2_linux/pic_source/快照管理.png" alt="图片描述" style="margin-bottom: 1px;">
+    <img src="/tools3_Linux/pic_source/快照管理.png" alt="图片描述" style="margin-bottom: 1px;">
     <p>快照管理</p>
 </div>
 
 ### vmtools安装
 [安装vmtools]((https://blog.csdn.net/weixin_43624626/article/details/123451198?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522171453418416800197045550%2522%252C%2522scm%2522%253A%252220140713.130102334..%2522%257D&request_id=171453418416800197045550&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~top_click~default-1-123451198-null-null.142^v100^pc_search_result_base8&utm_term=centos%E5%AE%89%E8%A3%85vmtools&spm=1018.2226.3001.4187))可以更好的管理vm虚拟机，如 ***可以设置windows和centos的共享文件夹***
-
+    
 <div style="text-align:center">
-    <img src="/proj2_linux/pic_source/vmtools安装.png" alt="图片描述" style="margin-bottom: 1px;">
+    <img src="/tools3_Linux/pic_source/vmtools安装.png" alt="图片描述" style="margin-bottom: 1px;">
     <p>vmtools安装</p>
 </div>
 
 问题解决:
 [centos7安装 VMTools显示灰色正确解决办法](https://blog.csdn.net/hsuehgw/article/details/129482915)
+这里实际上在开启虚拟机的时候就点击VMware查看，`重新安装VMware Tools` 会亮起来
+注意进入虚拟机后，点击 `单列？` 登录 root 账户进行操作
+
+***安装步骤***
+1. `VMwareTools-10.3.22-15902021.tar.gz` 拷贝到 `其他->计算机->opt` 文件夹中去
+2. 打开终端
+   1. `cd /opt` 进入 opt 目录， `ls` 展示文件夹中内容，可以看到拷贝过来的 `VM...`压缩包
+   2. `tar -zxvf VM...` 解压该压缩包，`ls` 查看解压文件夹名字 `vm...`
+   3. `cd vm...` 进入解压文件夹，`ls` 查看文件，找到 `vmware-install.pl` 安装文件
+   4. `./vmware-install.pl` 执行安装文件（需要有 `gcc` 环境）
+   5. 一直回车，最后一步选择 no
+
+
+<div style="text-align:center">
+    <img src="/tools3_Linux/pic_source/vm-tools安装后设置共享文件夹.png" alt="设置共享文件夹" style="margin-bottom: 1px;">
+    <p>设置共享文件夹</p>
+</div>
+
+***设置共享文件夹***
+1. Windows 中新建一个用于共享的文件夹
+2. VMware 库中右键虚拟机，`设置 ——> 选项 ——> 共享文件夹 ——> 总是启用 ——> 添加主机路径` 然后确认完成
+3. Linux如何访问共享文件夹？
 
 ## 目录结构
 Linux的目录结构以树形方式呈现，以下是Linux系统中一些常见目录及其作用：
@@ -83,20 +106,33 @@ Linux的目录结构以树形方式呈现，以下是Linux系统中一些常见�
 14. **/proc** 和 **/sys**：这两个目录都是虚拟文件系统，主要保存系统的内核、进程、外部设备状态和网络设备状态等信息。
 
 <div style="text-align:center">
-    <img src="/proj2_linux/pic_source/linux目录结构1.png" alt="图片描述" style="margin-bottom: 1px;">
-    <img src="/proj2_linux/pic_source/linux目录结构2.png" alt="图片描述" style="margin-bottom: 1px;">
-    <img src="/proj2_linux/pic_source/linux目录结构3.png" alt="图片描述" style="margin-bottom: 1px;">
+    <img src="/tools3_Linux/pic_source/linux目录结构1.png" alt="图片描述" style="margin-bottom: 1px;">
+    <img src="/tools3_Linux/pic_source/linux目录结构2.png" alt="图片描述" style="margin-bottom: 1px;">
+    <img src="/tools3_Linux/pic_source/linux目录结构3.png" alt="图片描述" style="margin-bottom: 1px;">
     <p>linux目录结构</p>
 </div>
 
 ## 远程登录及文件传输
+### 无ens33无网络问题
+[问题解决教程](https://blog.csdn.net/wangning0714/article/details/130841243?ops_request_misc=&request_id=&biz_id=102&utm_term=%E8%99%9A%E6%8B%9F%E6%9C%BALinux%E6%B2%A1%E6%9C%89%E7%BD%91%E7%BB%9Cens33&utm_medium=distribute.pc_search_result.none-task-blog-2~all~sobaiduweb~default-2-130841243.142^v100^pc_search_result_base5&spm=1018.2226.3001.4187)
+
+### Xshell Xftp 使用
 1. 公司开发的具体场景
     - linux服务器是开发小组共享的
     - 正式上线项目运行在公网
     - 程序员需要远程登录到linux进行项目管理或开发
     - 远程登录客户端有 Xshell6（用于远程登录）、Xftp6（传输文件）
 
+2. [Xshell下载远程连接服务器教程](https://blog.csdn.net/qiujicai/article/details/139868155?ops_request_misc=&request_id=&biz_id=102&utm_term=xshell%E4%B8%8B%E8%BD%BD%E6%95%99%E7%A8%8B&utm_medium=distribute.pc_search_result.none-task-blog-2~all~sobaiduweb~default-1-139868155.nonecase&spm=1018.2226.3001.4187)
 
-## vi 和 vim 的使用
+- `ifconfig` 查看Linuxi 的ip（ens33）
+- Xshell中新建会话，设置名字、ssh连接方式、ip、22端口号
+- 建立会话后双击会话，填写密码
+
+
+3. Xftp 下载同理
+- Xftp左上角文件-打开，可以新建会话
+- 填写名称、ip、SFTP连接方式、22端口号、主机名、密码
+- PS：建立会话连接后，Linux中文件乱码：修改会话属性为UTF-8
 
 
