@@ -61,7 +61,8 @@ ENCRYPTION = 'Y';                    -- 启用加密，适用于MySQL 8.0及以�
 ***选择数据库***
 - `mysql -u [username:root] -p -D db_name`  命令行选择数据库（进入MySQL选择数据库命令见前面）
 
-### [MySQL数据类型](https://www.runoob.com/mysql/mysql-data-types.html)
+### MySQL数据类型
+[MySQL数据类型](https://www.runoob.com/mysql/mysql-data-types.html)
 
 MySQL支持多种类型，大致三类：数值、日期/时间、字符串类型
 
