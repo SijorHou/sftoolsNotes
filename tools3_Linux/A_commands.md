@@ -65,6 +65,7 @@ Linux文件属性有两种设置方法，一种是数字，一种是符号。
   - `cp [-adflipusr] source_file target_dir`
   - `cp [option] src1, src2, src3, ..., dir`
 - `rm [-fir]` 移除文件或目录
+  - `rm -rf xxx` 强制递归全部删除（慎用）
 - `mv`
   - `mv [-fiu] source_file target_dir`
   - `mv [options] src1, src2, src3, ..., dir `
@@ -77,3 +78,97 @@ Linux文件属性有两种设置方法，一种是数字，一种是符号。
 - `nl file` 显示行号，但是有更丰富的行号显示的设置选项
 - `head/taiil -n number file` 显示文件的前/后几行
 - `more, less [option] file` 文件显示
+
+
+## Linux 用户和用户组管理
+[Linux 用户和用户组管理](https://www.runoob.com/linux/linux-user-manage.html)
+
+### Linux 用户账号管理
+
+***账号管理***
+- `useradd [option] username` 添加用户账号
+  - `-c -d -g -s` 分别是： 指定一段注释性描述、指定创建目录、指定用户所属的组、指定用户登录的shell
+  - PS：在指定目录常见用户时，如 `useradd –d  /home/sam -m sam` sam 是用户 sam 的主目录
+  - 如果主目录名字和用户名不同，如何查看现有用户？
+    - `cat /etc/passwd` 查看最后面的行，显示现有用户信息
+
+- `userdel [option] username` 删除用户
+  - `-r` 连通主目录一起删除
+- `usermod [option] username` 修改用户相关属性
+  - 如 `usermod -s /bin/ksh -d /home/z –g developer sam`
+  - 此命令将用户sam的登录Shell修改为ksh，主目录改为/home/z，用户组改为developer
+
+***密码口令管理 `passwd`***
+- `passwd [option] username` 超级用户可以为自己和其他用户设置 口令，但是普通用户只能为自己设置
+- `passwd` 用户为自己设置口令
+- `passwd [-ludf] username` 
+  - `-l, -u` 分别是锁定用户（无法登录） 、解锁用户
+  - `-d` 移除用户口令
+
+### Linux 用户属组管理
+***组管理***
+- `groupadd [option] groupname` 新增一个用户组
+  - `-g`修改组的GID用户标识, 如`groupadd -g 1005 userrr`
+  - `-o` 一般与-g选项同时使用，表示新用户组的GID可以与系统已有用户组的GID相同
+- `groupdel groupname` 删除用户组
+- `groupmod [option] groupname` 修改用户组的属性（GID、名称）
+  - `-g, groupmod -g 1002 userrr` 修改用户组 `userrr` 的GID 为 1002
+  - `-n, groupmod -n newname userrr` 修改用户组 `userrr` 的名字 为 `newname`
+  - `-o` 一般与-g选项同时使用，表示新用户组的GID可以与系统已有用户组的GID相同
+- `newgrp othergroup` 一个用户有多个属组，切换到 `othergroup`
+
+***用户账号相关文件***
+- 完成用户管理的工作有许多种方法，但是每一种方法实际上都是对有关的系统文件进行修改
+- 与用户和用户组相关的信息都存放在一些系统文件中，这些文件包括：
+  - `/etc/passwd`
+  - `/etc/shadow`
+  - `/etc/group`
+- 可以使用查看命令查看文件
+  - 如 `cat /etc/passwd`，`tail -n 10 /etc/group`
+- 用户信息
+  - `/etc/passwd`中如 `sijorhou:x:1000:1000:sijorhou:/home/sijorhou:/bin/bash`
+  - 含义为：`用户名:口令:用户标识号:组标识号:注释性描述:主目录:登录Shell`
+
+***批量添加用户***
+...
+
+## Linux 磁盘管理
+[Linux 磁盘管理](https://www.runoob.com/linux/linux-filesystem.html)
+
+
+## vim的使用
+[vim使用](https://www.runoob.com/linux/linux-vim.html)
+
+三种模式：命令/普通模式、输入/插入模式、命令行模式
+
+***命令/普通模式***
+- `vim filename.fmt` 进入vim文本编辑（刚进入是 **普通/命令模式**）
+- `iao` 以为不同方式进入插入模式
+  - `i` 进入插入模式，从当前光标位置开始插入
+  - `a` 进入插入模式，从当前光标的下一个位置开始插入
+  - `o` 在当前光标所在行的下方插入空行，从空行开始输入（进入了插入模式）
+  - `O` 在当前光标所在行的上方插入空行，从空行开始输入（进入了插入模式）
+- `dd` 剪切光标所在行； `5dd` 剪切从光标所在行开始的下面 5行
+- `yy` 复制光标所在行； `5yy` 复制从光标所在行开始的下面 5行
+- `p` paste 将内容粘贴到光标所在行之下
+- `P` paste 将内容粘贴到光标所在行之上
+- `u` 撤销上一步操作
+- `Ctrl + r` 重新操作一次撤销的内容
+- `gg, G` 小写将光标定位到文本首行，大写将光标定位到末行 
+- `num + shift g` 输入一个数字`num` 代表行号，按键会快速定位到该行 
+
+
+***命令行模式***
+- `[ESC] :w`  `[ESC]` 表可选，如果在输入/插入模式，按`[ESC]`退出到普通模式，然后进行 `write`写入，即保存
+- `[ESC] :q` 退出Vim编辑器
+- `[ESC] :wq` 保存并退出
+- `[ESC] :q!` 强制退出，不保存
+- `/ + keywords + Enter` 在普通模式时，左斜杠进入命令行模式，输入关键字，回车查询关键字
+- `[ESC] :set nu` 在文本中设置行号
+  - `[ESC] :set nonu` 在文本中取消设置行号
+
+
+
+
+
+
