@@ -1,7 +1,7 @@
-# 遗留问题
-## 基础篇： 
-远程登录、文件传输等工具软件的下载
-vim命令学习
+# 问题解决
+1. `yum install tree` 安装包的时候报错
+    [yum命令报错“Could not resolve host: mirrorlist.centos.org； Unknown error“解决办法](https://blog.csdn.net/qq_34585611/article/details/140390894?ops_request_misc=%257B%2522request%255Fid%2522%253A%25225C09FF9F-8CFF-4298-9A8D-C252717F3B7C%2522%252C%2522scm%2522%253A%252220140713.130102334..%2522%257D&request_id=5C09FF9F-8CFF-4298-9A8D-C252717F3B7C&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~sobaiduend~default-5-140390894-null-null.142^v100^pc_search_result_base5&utm_term=Could%20not%20resolve%20host%3A%20mirrorlist.centos.org)
+2. 
 
 # linux 基础篇
 
@@ -135,4 +135,53 @@ Linux的目录结构以树形方式呈现，以下是Linux系统中一些常见�
 - 填写名称、ip、SFTP连接方式、22端口号、主机名、密码
 - PS：建立会话连接后，Linux中文件乱码：修改会话属性为UTF-8
 
+## vim 使用
 
+三种模式：命令/普通模式、输入/插入模式、命令行模式
+
+***命令/普通模式***
+- `vim filename.fmt` 进入vim文本编辑（刚进入是 **普通/命令模式**）
+- `iao` 以为不同方式进入插入模式
+  - `i` 进入插入模式，从当前光标位置开始插入
+  - `a` 进入插入模式，从当前光标的下一个位置开始插入
+  - `o` 在当前光标所在行的下方插入空行，从空行开始输入（进入了插入模式）
+  - `O` 在当前光标所在行的上方插入空行，从空行开始输入（进入了插入模式）
+- `dd` 剪切光标所在行； `5dd` 剪切从光标所在行开始的下面 5行
+- `yy` 复制光标所在行； `5yy` 复制从光标所在行开始的下面 5行
+- `p` paste 将内容粘贴到光标所在行之下
+- `P` paste 将内容粘贴到光标所在行之上
+- `u` 撤销上一步操作
+- `Ctrl + r` 重新操作一次撤销的内容
+- `gg, G` 小写将光标定位到文本首行，大写将光标定位到末行 
+- `num + shift g` 输入一个数字`num` 代表行号，按键会快速定位到该行 
+
+
+***命令行模式***
+- `[ESC] :w`  `[ESC]` 表可选，如果在输入/插入模式，按`[ESC]`退出到普通模式，然后进行 `write`写入，即保存
+- `[ESC] :q` 退出Vim编辑器
+- `[ESC] :wq` 保存并退出
+- `[ESC] :q!` 强制退出，不保存
+- `/ + keywords + Enter` 在普通模式时，左斜杠进入命令行模式，输入关键字，回车查询关键字
+- `[ESC] :set nu` 在文本中设置行号
+  - `[ESC] :set nonu` 在文本中取消设置行号
+
+
+## Linux 关机重启
+<div style="text-align:center">
+    <img src="/tools3_Linux/pic_source/关机重启.png" alt="关机重启" style="margin-bottom: 1px;">
+    <p>关机重启</p>
+</div>
+
+## 用户登录和注销
+
+- `su user` 登录一个用户（root、user）
+- `logout/exit` 注销用户（无UI界面/UI界面），返回上一个登录的用户、退出系统 
+
+
+## 用户管理
+- `useradd username` 添加用户
+  - `useradd -d home-path username` 一般添加用户的时候会指定该用户的家目录，通常是同名，如 `useradd -d /home/tom tom`, 也可以不同名， 不加设置默认同名
+- `userdel username` 删除用户
+  - 默认删除，该用户的家目录不会被删除，`/etc/passwd, group, shadow` 中对应的用户的相关信息会删除
+  - `userdel -r username` 删除用户时候连通用户的家目录一起删除
+- `who am i` 查看当前用户（显示第一次登录的用户信息，避免切换用户造成混淆）
