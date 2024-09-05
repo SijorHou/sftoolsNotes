@@ -52,3 +52,19 @@ import torch
 print(torch.__version__)
 print(torch.cuda.is_available())
 ```
+
+## 强化学习
+
+[spinningup windows安装教程](https://zhuanlan.zhihu.com/p/588956001)
+[OpenAI Spinning Up 教程环境安装详解](https://zhuanlan.zhihu.com/p/472290066)
+
+- 需要安装 Xvcxsrv作为 Windows 上的服务器
+- wsl上的运行程序的结果，交给Windows上的 Xvcxsrv 来可视化
+- 根据教程走，会有报错，诸如无法访问，最关键的两步如下：
+  - 在Windows防火墙中，Xvcxsrv 允许通过的应用中，专用、通用网络都要选上
+  - 在快捷方式中，即其 “目标” 中后面添加一些启动参数，主要用于程序在启动的时候，传递一些参数，重要的参数是 `-ac` 一定要填上
+
+### Ubuntu 
+- WSL 进入只有用户账户（Ubuntu每次开启都有一个新的 root密码）
+  - `sudo passwd` 输入当前用户密码即可进入 root
+
