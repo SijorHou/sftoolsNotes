@@ -45,6 +45,11 @@
 - [pytorch 安装教程](https://blog.csdn.net/weixin_44904136/article/details/123285884?ops_request_misc=&request_id=&biz_id=102&utm_term=pytorch%20%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B&utm_medium=distribute.pc_search_result.none-task-blog-2~all~sobaiduweb~default-2-123285884.142^v99^pc_search_result_base8&spm=1018.2226.3001.4187)
 - [pytorch 安装报错替换阿里云镜像源](https://blog.csdn.net/qq_53819990/article/details/132874569?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522170974234216800184161724%2522%252C%2522scm%2522%253A%252220140713.130102334..%2522%257D&request_id=170974234216800184161724&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~top_click~default-2-132874569-null-null.142^v99^pc_search_result_base8&utm_term=Solving%20environment%3A%20unsuccessful%20attempt%20using%20repodata%20from%20current_repodata.json%2C%20retrying%20with%20next%20repodata%20source.&spm=1018.2226.3001.4187)
 
+[wsl 配置 pytroch cuda环境](https://blog.csdn.net/ww_khun/article/details/129410363?ops_request_misc=&request_id=&biz_id=102&utm_term=wsl%20%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E7%8E%AF%E5%A2%83&utm_medium=distribute.pc_search_result.none-task-blog-2~all~sobaiduweb~default-2-129410363.142^v100^control&spm=1018.2226.3001.4187)
+
+[wsl 上 nvcc -V 命令无效](https://blog.csdn.net/qq_44702930/article/details/138952574?ops_request_misc=&request_id=&biz_id=102&utm_term=nvcc-V%E5%91%BD%E4%BB%A4%E6%97%A0%E6%95%88&utm_medium=distribute.pc_search_result.none-task-blog-2~all~sobaiduweb~default-1-138952574.142^v100^control&spm=1018.2226.3001.4187)
+
+[wsl pytorch 安装](https://blog.csdn.net/2301_78342837/article/details/140882112?ops_request_misc=%257B%2522request%255Fid%2522%253A%252271CFEFCC-FB87-4506-B018-266803F3947B%2522%252C%2522scm%2522%253A%252220140713.130102334..%2522%257D&request_id=71CFEFCC-FB87-4506-B018-266803F3947B&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~sobaiduend~default-1-140882112-null-null.142^v100^control&utm_term=wsl%E5%AE%89%E8%A3%85pytorch&spm=1018.2226.3001.4187)
 
 *安装情况检查*
 ```python
@@ -57,12 +62,14 @@ print(torch.cuda.is_available())
 
 [spinningup windows安装教程](https://zhuanlan.zhihu.com/p/588956001)
 [OpenAI Spinning Up 教程环境安装详解](https://zhuanlan.zhihu.com/p/472290066)
+[报错解决](https://blog.csdn.net/weixin_42092516/article/details/129879122?utm_medium=distribute.pc_relevant.none-task-blog-2~default~baidujs_baidulandingword~default-0-129879122-blog-124125723.235%5Ev38%5Epc_relevant_anti_t3_base&spm=1001.2101.3001.4242.1&utm_relevant_index=1&ydreferer=aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl82MjIxNjg2Mi9hcnRpY2xlL2RldGFpbHMvMTI0MTI1NzIz)
 
 - 需要安装 Xvcxsrv作为 Windows 上的服务器
 - wsl上的运行程序的结果，交给Windows上的 Xvcxsrv 来可视化
 - 根据教程走，会有报错，诸如无法访问，最关键的两步如下：
   - 在Windows防火墙中，Xvcxsrv 允许通过的应用中，专用、通用网络都要选上
   - 在快捷方式中，即其 “目标” 中后面添加一些启动参数，主要用于程序在启动的时候，传递一些参数，重要的参数是 `-ac` 一定要填上
+  - 或者 `export DISPLAY=:0.0`
 
 ### Ubuntu 
 - WSL 进入只有用户账户（Ubuntu每次开启都有一个新的 root密码）

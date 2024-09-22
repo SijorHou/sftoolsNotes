@@ -95,7 +95,7 @@ Linux文件属性有两种设置方法，一种是数字，一种是符号。
 - `userdel [option] username` 删除用户
   - `-r` 连通主目录一起删除
 - `usermod [option] username` 修改用户相关属性
-  - 如 `usermod -s /bin/ksh -d /home/z –g developer sam`
+  - 如 `usermod -s /bin/ksh -d /home/z –g developer`
   - 此命令将用户sam的登录Shell修改为ksh，主目录改为/home/z，用户组改为developer
 
 ***密码口令管理 `passwd`***
