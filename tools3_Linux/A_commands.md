@@ -169,12 +169,167 @@ Linux文件属性有两种设置方法，一种是数字，一种是符号。
   - `[ESC] :set nonu` 在文本中取消设置行号
 
 
+## apt command
+`apt [options] [command] [package ...]`
+
+- `sudo apt update` 列出所有可更新的软件清单
+  - `sudo apt update <package_name>` 更新指定软件
+- `sudo apt upgrade` 升级软件包
+  - `sudo apt full-upgrade` 升级软件包之前先删除需要更新软件包
+- `sudo apt install <package_name>` 安装指定软件
+  - `sudo apt install <package_name1> <package_name2> <package_name3>` 安装多个软件
+  - `sudo apt reinstall <package_name>` 重新安装
+- `sudo apt show <package_name>` 显示软件包具体信息,例如：版本号，安装大小，依赖关系等等
+- `sudo apt remove <package_name` 删除软件包
+  - `sudo apt autoremove` 清理不再使用的依赖和库文件
+  - `sudo apt purge <package_name>` 移除软件包及配置文件
+- `sudo apt search <keyword>` 查找软件包
+- `apt list` 
+  - `apt list --upgradable` 列出可更新软件包及版本信息
+  - `apt list --installed` 列出所有已安装的包
+  - `apt list --all-versions` 列出所有已安装的包的版本信息
+
+## yum command
+[Linux yum 命令](https://www.runoob.com/linux/linux-yum.html)
+
 
 
 # Shell 教程
+[shell 编程](https://www.runoob.com/w3cnote/shell-scripting.html)
 
 
-# Linux 命令大全
+```bash
+#!/bin/bash
+echo "hello Sijorhou!"
+```
+- `#!` 告诉系统使用什么 interpreter 来执行此脚本
+  - `/bin/bash` 是要使用的脚本解释器
+- `chmod +x ./test.sh`, `./test.sh` 先后用于赋予脚本执行权限，执行脚本
+- `sh test.sh` 直接执行脚本
+
+***echo***
+echo 命令可以用于显示简单的消息，也可以用来执行变量替换和打印变量的值
+
+- `echo "hello, sijorhou"` 打印字符串
+- `echo $variable_name` 打印变量值
+- `echo "${my_val}PATH"` 双引号字符串支持变量
+- `echo -e "\n \t"`  `-e`双引号字符创支持转移序列
+- 
+
+***注释***
+`#` 单行注释
+`:' ... '` 多行注释
+```bash
+# 单行注释
+
+:' 这里
+可以编辑
+多行注释'
+```
+***长命令续行***
+`\` 使用 反斜杠，如下：
+```bash
+#!/bin/bash
+
+# 定义一个包含所有要卸载的软件包名称的数组
+packages=(docker docker-client docker-client-latest docker-common docker-latest      docker-latest-logrotate docker-logrotate docker-engine)
+
+# 使用 for 循环遍历数组并卸载每个软件包
+for pkg in "${packages[@]}"; do
+    sudo yum remove -y "$pkg"
+done
+
+# 或者如下：
+sudo yum remove docker \
+docker-client \
+docker-client-latest \
+docker-common \
+docker-latest \
+docker-latest-logrotate \
+docker-logrotate \
+docker-engine
+```
+
+## Shell 变量
+***变量***
+- 变量名： 用于存储数据值，不加$, 名称与等号之间无空格，数字字母下划线，不能以数字开头
+  - `your_name="sijorhou"`
+- 使用变量： 使用一个定义的变量，再起前面加 $ 即可（{可选}）
+  - `echo $your_name` `echo ${your_name}` 会打印出对应变量值
+- 只读变量：将变量定义为只能读取不可修改的变量
+  - `readonly variable_name`
+- 删除变量： 删除后的变量不能再次使用，不能删除只读变量
+  - `unset variable_name`
+- 环境变量：
+  - `echo $PATH`
+- 变量类型：
+  - `my_string='Hello, sijorhou!'` 字符串
+  - `declare / typeset` 声明一个变量，大多情况可互换
+    - `declare int_val=10` 声明初始化一个整型变量
+    - `declare -x variable_name` 将变量导出为环境变量
+    - `declare -r variable_name=value` 将变量设置为只读变量
+    - `declare -i int_var`
+    - `declare -f float_var`
+    - `declare -a array_name` 声明一个数组
+
+***字符串***
+
+- 字符串：
+  - `str='this a string'` 单引号字符串，原样输出所有字符串，其中变量无效
+  - `your_name="sijorhou"` 双引号字符串，可以有变量、转义字符
+  - 字符串拼接
+  - `echo ${#str} / echo ${#str[0]}` 两者等价，获取字符串长度，即元素个数
+  - `echo ${str:1:4}` 从字符串第 2 个字符开始截取 4 个字符
+
+```bash
+# 单引号字符串
+single_quot='sijorhou'
+
+# 双引号字符串 echo 输出： hello! I know you're "sijorhou"!
+your_name="sijorhou"
+str="hello! I know you're \"$your_name\"! \n"
+echo -e $str
+
+
+# 单引号字符串拼接
+:'
+  greeting_1 输出结果： hello, sijorhou !
+  greeting_2 输出结果： hello, ${your_name} !
+'
+greeting_1='hello, '$your_name' !'
+greeting_2='hello, ${your_name} !'
+echo $greeting_1  $greeting_2
+
+# 双引号拼接
+:'
+  greeting_3 输出结果： hello, sijorhou !
+  greeting_4 输出结果： hello, sijorhou !
+'
+greeting_3="hello, "$your_name" !"
+greeting_4="helllo, ${your_name} !"
+echo $greeting_3  $greeting_4
+```
+
+***数组***
+
+- 数组
+  - `declare -a array_name` 声明一个数组
+  - `my_array=(1 2 3 4 5)` 定义一个简单数组
+  - `array_name["name"]="sijorhou"` 向数组中添加键值对元素
+  - `${array_name[key]}` 访问数组元素
+  - `echo ${array_name[@]}` `@` 用于获取所有元素
+  - `length=${#array_name[@]}` , `length=${#array_name[*]}` 获取数组元素个数
+  - `len_elem=${#array_name[n]}` 获取数组单个元素的长度
+
+```bash
+#!/bin/sh
+
+declare -a name_array
+declare -a int_array
+
+```
+
+# Linux 命令
 ## 6. 网络通讯
 ### ifconfig
 
