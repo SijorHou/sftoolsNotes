@@ -1,3 +1,5 @@
+# 拓展
+1. [systemctl 命令详解](https://blog.csdn.net/baidu_41553551/article/details/125303909?ops_request_misc=%257B%2522request%255Fid%2522%253A%25229195543C-816D-4D13-BDE6-E2D0D729FFB5%2522%252C%2522scm%2522%253A%252220140713.130102334..%2522%257D&request_id=9195543C-816D-4D13-BDE6-E2D0D729FFB5&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~top_positive~default-1-125303909-null-null.142^v100^pc_search_result_base5&utm_term=systemctl&spm=1018.2226.3001.4187)
 # 问题解决
 1. `yum install tree` 安装包的时候报错
     [yum命令报错“Could not resolve host: mirrorlist.centos.org； Unknown error“解决办法](https://blog.csdn.net/qq_34585611/article/details/140390894?ops_request_misc=%257B%2522request%255Fid%2522%253A%25225C09FF9F-8CFF-4298-9A8D-C252717F3B7C%2522%252C%2522scm%2522%253A%252220140713.130102334..%2522%257D&request_id=5C09FF9F-8CFF-4298-9A8D-C252717F3B7C&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~sobaiduend~default-5-140390894-null-null.142^v100^pc_search_result_base5&utm_term=Could%20not%20resolve%20host%3A%20mirrorlist.centos.org)
@@ -209,3 +211,28 @@ Linux的目录结构以树形方式呈现，以下是Linux系统中一些常见�
   - `-n, groupmod -n newname userrr` 修改用户组 `userrr` 的名字 为 `newname`
   - `-o` 一般与-g选项同时使用，表示新用户组的GID可以与系统已有用户组的GID相同
 - `newgrp othergroup` 一个用户有多个属组，切换到 `othergroup`
+
+## 运行级别
+
+***指定运行级别***
+
+- `init [0123456]` 切换不同运行级别
+  - 0：停机模式，系统会关闭。
+  - 1：单用户模式，用于系统维护。
+  - 2：多用户模式，没有网络服务。
+  - 3：完全多用户模式，具有网络功能。
+  - 4：保留未使用。
+  - 5：图形界面模式，具有网络功能。
+  - 6：重启模式，系统会重启
+
+常用 3， 5
+**init 命令已经被 systemctl 命令取代**
+
+- `systemctl get-default` 查看当前运行级别(target)
+  - `graphical.target` 表运行的图形界面 5
+  - `multi-user.target` 表多用户模式 3
+- `systemctl set-defult xxx.target` 设置当前target
+  - 如执行 `systemctl set-defult multi-user.target` 然后重启，则切换到命令行多用户模式
+
+
+## 文件目录管理

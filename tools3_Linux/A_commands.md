@@ -12,7 +12,7 @@
 
 
 ## 文件基本属性
-[文档基本属性]((https://www.runoob.com/linux/linux-file-attr-permission.html))
+[文档基本属性](https://www.runoob.com/linux/linux-file-attr-permission.html)
 
 - `ls -l` 长格式显示文件属性信息，列出当前目录中的偶有文件目录
 
@@ -53,33 +53,53 @@ Linux文件属性有两种设置方法，一种是数字，一种是符号。
 
 
 ### 常用处理命令
-- `pwd [-P]` (print work directory) 显示当前所在目录(`-P` 显示真实目录，而不是链接的目录)
+- `pwd [-P]` (print work directory) 显示当前所在目录（绝对路径）(`-P` 显示真实目录，而不是链接的目录)
 - `ls` (list files) 列出目录及文件
 - `cd` (change directory) 切换目录
+  - `cd ~` 回到家目录
+  - `cd ../../` 回到上两级目录
 - `mkdir [-mp]`
   - `mkdir -p xx/xx/` 参数`-p`可以递归创建多层目录
   - `mkdir -m 777 newdir` 参数`-m`可以在创建目录时候设置权限
 - `rmdir [-p]` 
   - 删除（递归）目录
   - 先递归到最深删除该层目录，然后一层层返回上级父目录，若为空则删除，否则不删除
-- `cp [-adflipusr]` 拷贝文件或目录
-  - `cp [-adflipusr] source_file target_dir`
-  - `cp [option] src1, src2, src3, ..., dir`
 - `rm [-fir]` 移除文件或目录
   - `rm -rf xxx` 强制递归全部删除（慎用）
+- `cp [-adflipusr]` 拷贝文件或目录
+  - `cp [-adflipusr] source_file target_dir`
+  - `\cp ,\cp -r/xxx/yyy /zzz` 将yyy目录连带拷贝到zzz，其中文件强制覆盖不提示
+  - `cp [option] src1, src2, src3, ..., dir`
 - `mv`
   - `mv [-fiu] source_file target_dir`
   - `mv [options] src1, src2, src3, ..., dir `
+  - `mv file_name_a file_name_b` 在当前目录中将 file_name_a 移动到 file_name_b，相当于修改 file_name_a 的名称
+  - `mv file_name_a /dir1/dir2/file_name_b` 移动并重命名
+
+- `touch file_name` 顾名思义，“摸了”一下某个文件
+  - 对于已经存在的文件，会修改文件时间戳（最后被修改的时间），该文件好像被“摸了”一下
+  - 对于不存在的文件，会创建该空文件（无需`vim file_name` 进入然后退出）
 
 ### Linux 文件查看命令
 - `cat [-AbnvET] file`
   - `-A` 整合了 `vET` 的选项，列出特殊字符而不只是空白
   - `-b -n` 都是显示行号
+  - `cat file | more` cat只能浏览不能修改文件，为了浏览方便，后接管道命令 `| more`。**管道命令就是将前一个命令的结果交给下一个命令进行处理**
 - `tac file` 从最后一行开始，倒着显示每行内容
+  - `tail -f file` 会一直循环读取文件末尾内容，即一直监控该文件的内容变化（可能在其他终端中在修改该文件）
 - `nl file` 显示行号，但是有更丰富的行号显示的设置选项
 - `head/taiil -n number file` 显示文件的前/后几行
 - `more, less [option] file` 文件显示
-
+- `echo [option] [output_content]` 输出内容到控制台
+  - `echo "hi, sijorhou!"` 控制台会输出 字符串内容
+  - `echo $PATH / $HOSTNAME` 控制台会输出 路径 / 主机名
+- `>` 输出重定向
+  - `echo "xxx" > file_name` 原本命令输出内容到控制台，现在重定向为一个文件，即输出内容到该文件中（覆盖写入）
+  - `ls -al > file_name` 将目录行列表内容覆盖写入 file_name 文件
+- `>>` 输出内追加重定向
+  - `cat file_name1 >> file_name2` 会将 file_name1 中的内容追加输入到 file_name2 文件的末尾
+  - `echo "str content" >> file_name` 将命令行输入内容追加到文件末尾
+ 
 
 ## Linux 用户和用户组管理
 [Linux 用户和用户组管理](https://www.runoob.com/linux/linux-user-manage.html)
