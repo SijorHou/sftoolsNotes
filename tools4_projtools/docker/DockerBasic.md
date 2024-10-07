@@ -7,6 +7,11 @@
 
 [Docker菜鸟教程](https://www.runoob.com/docker/docker-tutorial.html)
 
+## 问题解决
+[docker run hello-world 无法从镜像源拉取报错](https://blog.csdn.net/qq_52712971/article/details/141862621?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522C64B1263-50CA-4288-B8E9-ED1B552F555E%2522%252C%2522scm%2522%253A%252220140713.130102334..%2522%257D&request_id=C64B1263-50CA-4288-B8E9-ED1B552F555E&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~top_positive~default-1-141862621-null-null.142^v100^control&utm_term=docker%3A%20Error%20response%20from%20daemon%3A%20Get%20https%3A%2F%2Fregistry-1.docker.io%2Fv2%2F%3A%20net%2Fhttp%3A%20request%20canceled%20while%20waiting%20for%20connection%20%28Client.Timeout%20exceeded%20while%20awaiting%20headers%29.&spm=1018.2226.3001.4187)
+
+[docker search 报错](https://blog.csdn.net/qq_28908085/article/details/125346981?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522C176DA12-CA3D-48C3-B40B-6F82174DEE2D%2522%252C%2522scm%2522%253A%252220140713.130102334..%2522%257D&request_id=C176DA12-CA3D-48C3-B40B-6F82174DEE2D&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~sobaiduend~default-1-125346981-null-null.142^v100^control&utm_term=docker%20search%E5%91%BD%E4%BB%A4%E6%8A%A5%E9%94%99&spm=1018.2226.3001.4187)
+问题未来解决
 
 ## 大纲
 - 基础
@@ -79,7 +84,7 @@ docker client 和 daemon 之间通过 REST API 进行通信
 ## Installation
 
 ***Centos***
-1. 安装 Engine 之前，先安装 repository
+安装 Engine 之前，先安装 repository
 ```bahs
 sudo yum install -y yum-utils
 sudo yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
@@ -87,12 +92,63 @@ sudo yum-config-manager --add-repo https://download.docker.com/linux/centos/dock
 # docker.com 国外网站，容易超时，配置阿里云镜像
 sudo yum-config-manager --add-repo https://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
 ```
-2. `yum makecache fast` 更新yum软件包索引
-3. 是d
-4. 深度
-5. 深度
-6. 深度
-7. 深度
-8. 深度
 
 ***Ubuntu***
+按照官网教程即可
+
+***aliyun mirror configuration***
+
+## hello-world 分析
+<div style="text-align:center">
+    <img src="/tools4_projtools/pic_src/hello_world过程.png" alt="图片描述" style="margin-bottom: 1px;">
+    <p>hello_world过程</p>
+</div>
+
+***docker 为什么比虚拟机快***
+- docker抽象层更少，CPU、内存利用率都更有效率
+  - docker不需要 Hypervisor(虚拟机)实现硬件资源虚拟化
+  - 运行在docker容器上的程序直接使用实际物理机的硬件资源
+- docker利用宿主机内核，不需要加载 os 内核
+  - 新建一个容器时，docker无需像虚拟机那样，重新加载一个 os内核（分钟级）
+  - 直接使用宿主机os，新建一个docker容器只需几秒
+
+
+## 常用 docker 命令
+
+<div style="text-align:center">
+    <img src="/tools4_projtools/pic_src/docker结构.png" alt="图片描述" style="margin-bottom: 1px;">
+    <p>docker结构</p>
+</div>
+
+### 帮助启动类命令
+- `systemctl start docker`
+- `systemctl stop docker`
+- `systemctl restart docker`
+- `systemctl status docker`
+- `systemctl enable docker` 设置开机自启动
+- `systemctl disable docker` 禁用开机自启动
+- `docker info` 查看docker概要信息
+- `docker version` 查看docker版本
+- `docker --help` 总体帮助文件查看命令
+- `docker [command] --help` 查看某个命令帮助文件
+
+### 镜像类命令
+- `docker images` 列出所有的docker镜像，对应信息标签内容如下：
+  - `REPOSITORY` 镜像源的仓库源： ***同一个REPOSITORY可以有多个TAG，代表仓库源中不同版本***
+  - `TAG` 镜像的标签**版本号**
+  - `IMAGE ID`
+  - `CREATED`
+  - `SIZE`
+- `docker search [option] TERM` 在 docker hub 中搜索镜像
+  - `docker search hello-world` 
+  - `docker search --limit 5 redis` 限制结果显示数量
+
+
+
+### 容器命令
+
+
+
+
+
+

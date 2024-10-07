@@ -1,5 +1,15 @@
 # 拓展
-1. [systemctl 命令详解](https://blog.csdn.net/baidu_41553551/article/details/125303909?ops_request_misc=%257B%2522request%255Fid%2522%253A%25229195543C-816D-4D13-BDE6-E2D0D729FFB5%2522%252C%2522scm%2522%253A%252220140713.130102334..%2522%257D&request_id=9195543C-816D-4D13-BDE6-E2D0D729FFB5&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~top_positive~default-1-125303909-null-null.142^v100^pc_search_result_base5&utm_term=systemctl&spm=1018.2226.3001.4187)
+1. systemed
+   1. [systemctl 命令详解](https://blog.csdn.net/baidu_41553551/article/details/125303909?ops_request_misc=%257B%2522request%255Fid%2522%253A%25229195543C-816D-4D13-BDE6-E2D0D729FFB5%2522%252C%2522scm%2522%253A%252220140713.130102334..%2522%257D&request_id=9195543C-816D-4D13-BDE6-E2D0D729FFB5&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~top_positive~default-1-125303909-null-null.142^v100^pc_search_result_base5&utm_term=systemctl&spm=1018.2226.3001.4187)
+   2. [systemed 官网](https://systemd.io/)
+   3. [完全指南：systemctl命令及服务管理技巧](https://blog.csdn.net/qq_41308872/article/details/133743091?ops_request_misc=&request_id=&biz_id=102&utm_term=systemctl&utm_medium=distribute.pc_search_result.none-task-blog-2~all~sobaiduweb~default-1-133743091.nonecase&spm=1018.2226.3001.4187)
+2. ps
+   1. [ps 命令详解](https://blog.csdn.net/qq_40673786/article/details/135166627?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522935040D8-6D90-483E-B978-0BC8748026F6%2522%252C%2522scm%2522%253A%252220140713.130102334.pc%255Fall.%2522%257D&request_id=935040D8-6D90-483E-B978-0BC8748026F6&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~first_rank_ecpm_v1~rank_v31_ecpm-2-135166627-null-null.142^v100^control&utm_term=Linux%E7%9A%84%20ps%E5%91%BD%E4%BB%A4&spm=1018.2226.3001.4187)
+3. grep
+   1. [grep 命令详解](https://blog.csdn.net/m0_53741670/article/details/129484597?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522E7F25FC7-5E3B-4969-ADDA-2A9372F8E5C5%2522%252C%2522scm%2522%253A%252220140713.130102334.pc%255Fall.%2522%257D&request_id=E7F25FC7-5E3B-4969-ADDA-2A9372F8E5C5&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~first_rank_ecpm_v1~rank_v31_ecpm-4-129484597-null-null.142^v100^control&utm_term=Linux%E7%9A%84%20grep%E5%91%BD%E4%BB%A4&spm=1018.2226.3001.4187)
+
+
+
 # 问题解决
 1. `yum install tree` 安装包的时候报错
     [yum命令报错“Could not resolve host: mirrorlist.centos.org； Unknown error“解决办法](https://blog.csdn.net/qq_34585611/article/details/140390894?ops_request_misc=%257B%2522request%255Fid%2522%253A%25225C09FF9F-8CFF-4298-9A8D-C252717F3B7C%2522%252C%2522scm%2522%253A%252220140713.130102334..%2522%257D&request_id=5C09FF9F-8CFF-4298-9A8D-C252717F3B7C&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~sobaiduend~default-5-140390894-null-null.142^v100^pc_search_result_base5&utm_term=Could%20not%20resolve%20host%3A%20mirrorlist.centos.org)
@@ -7,7 +17,7 @@
 2. 无ens33无网络问题
 [问题解决教程](https://blog.csdn.net/wangning0714/article/details/130841243?ops_request_misc=&request_id=&biz_id=102&utm_term=%E8%99%9A%E6%8B%9F%E6%9C%BALinux%E6%B2%A1%E6%9C%89%E7%BD%91%E7%BB%9Cens33&utm_medium=distribute.pc_search_result.none-task-blog-2~all~sobaiduweb~default-2-130841243.142^v100^pc_search_result_base5&spm=1018.2226.3001.4187)
 
-3. WSL 与 Windows互ping
+1. WSL 与 Windows互ping
 [WSL ping Windows](https://blog.csdn.net/Cypher_X/article/details/123011200)
 [WSL 镜像共享主机代理](https://blog.csdn.net/weixin_62355896/article/details/134458330?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522D96D92CB-AE8B-468A-8C2F-4D5BF9D06DB7%2522%252C%2522scm%2522%253A%252220140713.130102334..%2522%257D&request_id=D96D92CB-AE8B-468A-8C2F-4D5BF9D06DB7&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~sobaiduend~default-2-134458330-null-null.142^v100^control&utm_term=wsl%3A%20%E6%A3%80%E6%B5%8B%E5%88%B0%20localhost%20%E4%BB%A3%E7%90%86%E9%85%8D%E7%BD%AE%EF%BC%8C%E4%BD%86%E6%9C%AA%E9%95%9C%E5%83%8F%E5%88%B0%20WSL%E3%80%82NAT%20%E6%A8%A1%E5%BC%8F%E4%B8%8B%E7%9A%84%20WSL%20%E4%B8%8D%E6%94%AF%E6%8C%81%20localhost%20%E4%BB%A3%E7%90%86%E3%80%82&spm=1018.2226.3001.4187)
 
@@ -233,6 +243,30 @@ Linux的目录结构以树形方式呈现，以下是Linux系统中一些常见�
   - `multi-user.target` 表多用户模式 3
 - `systemctl set-defult xxx.target` 设置当前target
   - 如执行 `systemctl set-defult multi-user.target` 然后重启，则切换到命令行多用户模式
+
+## systemctl command detail
+
+语法： ***`systemctl COMMAND name.service`***
+用途： 用于控制 systemed系统和服务，***systemed是Linux中用于 初始化系统组件、管理系统进程的 daemon守护进程和服务管理器***
+
+<div style="text-align:center">
+    <img src="/tools3_Linux/pic_source/systemed命令.png" alt="systemed命令" style="margin-bottom: 1px;">
+    <p>systemed命令</p>
+</div>
+
+systemed系统重，服务 service 通常指后台运行的进程，可以是系统服务如网络管理、日志记录、硬件管理等，也可以是用户服务，如web服务、数据库服务等
+
+- 服务： systemed管理的实体，定义了如何启动和管理一个或多个进程
+- 进程： os系统执行程序的一个实例
+
+
+***systemctl list-units***
+- `--type=`列出指定类型的单元
+  - `systemctl list-units` 默认列出所有服务单元（`.device, .mount, .service, .slice, .target, timer`）
+  - `systemctl list-units --type=service`
+- `--state=` 列出指定状态的单元
+  - `systemctl list-units --state=running`
+  - `systemctl list-units --state=running --type=service`
 
 
 ## 文件目录管理
