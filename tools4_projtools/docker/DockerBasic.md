@@ -142,13 +142,47 @@ sudo yum-config-manager --add-repo https://mirrors.aliyun.com/docker-ce/linux/ce
 - `docker search [option] TERM` 在 docker hub 中搜索镜像
   - `docker search hello-world` 
   - `docker search --limit 5 redis` 限制结果显示数量
-
+- `docker pull [options] NAME[:TAG]` 拉取一个镜像（: 后面跟所需镜像版本号，默认 latest）
+- `docker system df` 查看镜像/容器/数据卷所占空间
+- `docker rmi [option] NAME` 移除某个镜像
+  - `docker rmi -f hello-wordl` 强制移除 hello-world 镜像
+  - `docker rmi -f NAME_ID` 删除单个
+  - `docker rmi -f NAME:TAG NAME2:TAG` 删除多个
+  - `docker rmi -f $(docker images -qa)` 删除全部
 
 
 ### 容器命令
+- `docker run [options] IMAGE [COMMAND]` 新建并启动容器 
+  - `options`
+    - `--name` 为容器分配一个名字
+    - `-d` run container in background and print container ID
+    - `-i` 以交互式模式运行容器，通常与 `-t` 同时使用
+    - `-t` 为容器分配一个伪输入终端，通常与`-i`同时使用
+    - `-P` 随机端口映射
+    - `-p` 指定端口映射 `-p hostPort:containerPort`
+  - `docker run --name=myCentos -it centos /bin/bash` 
+- `docker ps [options]` docker container list, 列出容器
+  - `-a, docker ps -a` 列出所有容器
+  - `-n 3` 显示最近3个容器
+  - `-l` 显示最后使用的一个容器
+  - `-q` 只显示 container ID `docker -aq`
+  - `-s` 显示文件总大小
+- `docker start CONTAINER_NAME/ID` 启动已经停止的容器
+- `docker stop CONTAINER_NAME/ID` 停止容器
+- `docker kill CONTAINER_NAME?ID` 强制停止容器
+- `docker rm [options] CONTAINER` 删除一个或多个容器(删除已经停止的容器)
+  - `docker rm -f RUNNING_CONTAINER` 可以强制删除一个启用的容器
+  - `docker rm -f $(docker ps -aq)` 删除全部容器
 
 
+***结合shell命令***
+在删除全部镜像和全部容器的命令中， `docker images -aq` 和 `docker ps -aq` 是会分别列出所有镜像ID和容器ID的docker命令
+
+然后使用 `${}` 定义那些ID变量，在docker的删除命令中使用，即 `docker rmi -f $(docker images -aq)` 和 `docker rm -f $(docker ps -aq)`
+
+也可以先停止全部容器，然后普通删除： `docker stop ${docker ps -aq}` `docker rm ${docker ps -aq}`
 
 
+***重要命令***
 
 
