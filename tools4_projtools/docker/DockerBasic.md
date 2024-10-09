@@ -184,5 +184,22 @@ sudo yum-config-manager --add-repo https://mirrors.aliyun.com/docker-ce/linux/ce
 
 
 ***重要命令***
+- `docker run -d CONTAINER_NAME`  启动守护式容器（后台服务器， docker服务在后台运行）
+  - `docker run -d centos` 命令执行后，会立刻退出该容器，后台centos容器并没有运行，***Docker容器后台运行，必须有一个前台进程***
+  - 所以还是使用 `docker run -it ...` 告诉容器不要中断，还有后续交互操作
+- `docker logs CONTAINER_NAME/ID` 查看某个容器的日志
+- `docker top CONTAINER_NAME/ID` 查看容器内运行的进程
+- `docker inspect CONTAINER_NAME/ID` 查看容器内部细节
 
+***重新进入容器***
+- `docker exec [options] CONTAINER_NAME/ID COMMAND` 进入**正在运行的容器**并以命令行交互
+  - `docker execu -it myCentos /bin/bash` 重新以交互式方式执行容器中的 bash
+  - `Ctl + P + Q` 可以从交互式命令行中退出容器 
+- `docker attach CONTAINER_NAME/ID`  重新进入容器
+- ***两者区别：***
+  - `docker exec` 是在容器中打开新的终端，可以启动新的进程，使用 `exit` 退出，不会停止容器
+  - `docker attach` 直接进入容器启动命令的终端，不会启动新的进程，使用 `exit` 退出，会停止容器
 
+***文件拷贝、导入导出***
+- `docker cp [options] CONTAINER:SRC_PATH DEST_PATH   /   SRC_PATH CONTAINER:DEST_PATH`
+  - 
