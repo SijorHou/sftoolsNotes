@@ -12,13 +12,14 @@
 
 # 问题解决
 1. `yum install tree` 安装包的时候报错
-    [yum命令报错“Could not resolve host: mirrorlist.centos.org； Unknown error“解决办法](https://blog.csdn.net/qq_34585611/article/details/140390894?ops_request_misc=%257B%2522request%255Fid%2522%253A%25225C09FF9F-8CFF-4298-9A8D-C252717F3B7C%2522%252C%2522scm%2522%253A%252220140713.130102334..%2522%257D&request_id=5C09FF9F-8CFF-4298-9A8D-C252717F3B7C&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~sobaiduend~default-5-140390894-null-null.142^v100^pc_search_result_base5&utm_term=Could%20not%20resolve%20host%3A%20mirrorlist.centos.org)
+[yum命令报错“Could not resolve host: mirrorlist.centos.org； Unknown error“解决办法](https://blog.csdn.net/qq_34585611/article/details/140390894?ops_request_misc=%257B%2522request%255Fid%2522%253A%25225C09FF9F-8CFF-4298-9A8D-C252717F3B7C%2522%252C%2522scm%2522%253A%252220140713.130102334..%2522%257D&request_id=5C09FF9F-8CFF-4298-9A8D-C252717F3B7C&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~sobaiduend~default-5-140390894-null-null.142^v100^pc_search_result_base5&utm_term=Could%20not%20resolve%20host%3A%20mirrorlist.centos.org)
     
 2. 无ens33无网络问题
 [问题解决教程](https://blog.csdn.net/wangning0714/article/details/130841243?ops_request_misc=&request_id=&biz_id=102&utm_term=%E8%99%9A%E6%8B%9F%E6%9C%BALinux%E6%B2%A1%E6%9C%89%E7%BD%91%E7%BB%9Cens33&utm_medium=distribute.pc_search_result.none-task-blog-2~all~sobaiduweb~default-2-130841243.142^v100^pc_search_result_base5&spm=1018.2226.3001.4187)
 
 1. WSL 与 Windows互ping
-[WSL ping Windows](https://blog.csdn.net/Cypher_X/article/details/123011200)
+[WSL ping Windows-防火墙问题](https://blog.csdn.net/Cypher_X/article/details/123011200)
+[WSL ping Windows](https://blog.csdn.net/wtl1992/article/details/138133428?ops_request_misc=%257B%2522request%255Fid%2522%253A%252259E1025D-886C-4B7D-9556-D6953E5469A4%2522%252C%2522scm%2522%253A%252220140713.130102334..%2522%257D&request_id=59E1025D-886C-4B7D-9556-D6953E5469A4&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~sobaiduend~default-2-138133428-null-null.142^v100^control&utm_term=wsl2%20ping%E4%B8%8D%E9%80%9A%E4%B8%BB%E6%9C%BA&spm=1018.2226.3001.4187)
 [WSL 镜像共享主机代理](https://blog.csdn.net/weixin_62355896/article/details/134458330?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522D96D92CB-AE8B-468A-8C2F-4D5BF9D06DB7%2522%252C%2522scm%2522%253A%252220140713.130102334..%2522%257D&request_id=D96D92CB-AE8B-468A-8C2F-4D5BF9D06DB7&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~sobaiduend~default-2-134458330-null-null.142^v100^control&utm_term=wsl%3A%20%E6%A3%80%E6%B5%8B%E5%88%B0%20localhost%20%E4%BB%A3%E7%90%86%E9%85%8D%E7%BD%AE%EF%BC%8C%E4%BD%86%E6%9C%AA%E9%95%9C%E5%83%8F%E5%88%B0%20WSL%E3%80%82NAT%20%E6%A8%A1%E5%BC%8F%E4%B8%8B%E7%9A%84%20WSL%20%E4%B8%8D%E6%94%AF%E6%8C%81%20localhost%20%E4%BB%A3%E7%90%86%E3%80%82&spm=1018.2226.3001.4187)
 
 

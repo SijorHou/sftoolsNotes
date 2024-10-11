@@ -11,7 +11,9 @@
 [docker run hello-world 无法从镜像源拉取报错](https://blog.csdn.net/qq_52712971/article/details/141862621?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522C64B1263-50CA-4288-B8E9-ED1B552F555E%2522%252C%2522scm%2522%253A%252220140713.130102334..%2522%257D&request_id=C64B1263-50CA-4288-B8E9-ED1B552F555E&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~top_positive~default-1-141862621-null-null.142^v100^control&utm_term=docker%3A%20Error%20response%20from%20daemon%3A%20Get%20https%3A%2F%2Fregistry-1.docker.io%2Fv2%2F%3A%20net%2Fhttp%3A%20request%20canceled%20while%20waiting%20for%20connection%20%28Client.Timeout%20exceeded%20while%20awaiting%20headers%29.&spm=1018.2226.3001.4187)
 
 [docker search 报错](https://blog.csdn.net/qq_28908085/article/details/125346981?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522C176DA12-CA3D-48C3-B40B-6F82174DEE2D%2522%252C%2522scm%2522%253A%252220140713.130102334..%2522%257D&request_id=C176DA12-CA3D-48C3-B40B-6F82174DEE2D&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~sobaiduend~default-1-125346981-null-null.142^v100^control&utm_term=docker%20search%E5%91%BD%E4%BB%A4%E6%8A%A5%E9%94%99&spm=1018.2226.3001.4187)
-问题未来解决
+
+
+[centos 镜像中无法使用 yum install 问题解决](https://blog.csdn.net/qq_41422009/article/details/122865240)
 
 ## 大纲
 - 基础
@@ -202,4 +204,16 @@ sudo yum-config-manager --add-repo https://mirrors.aliyun.com/docker-ce/linux/ce
 
 ***文件拷贝、导入导出***
 - `docker cp [options] CONTAINER:SRC_PATH DEST_PATH   /   SRC_PATH CONTAINER:DEST_PATH`
-  - 
+  - `docker cp myCentos:/tmp/a.txt /home/sijorhou/Desktop/Docker_learningFile` 将 a.txt 文件从容器中移动到宿主机
+- `export`
+  - `docker export [options] CONTAINER` 将整个容器的文件系统导入到一个 tar 包中
+  - `docker export myCentos > docker_mycCentos.tar` 将docker中的myCentos镜像，导出到宿主机命令执行目录下的 docker_myCentos.tar 文件中去
+- `import` 
+  - `docker import [option] file/url REPOSITORY:TAG` 导入 tar包中的内容，创建一个 文件系统镜像, 有如下 直接导入 和 标准输入流处理tar并管道传递给import命令 两种方式
+  - `docker import xxx.tar repository_name:tag_version`
+  - `cat xxx.tar | docker import - repository_name:tag_version`
+
+<div style="text-align:center">
+    <img src="/tools4_projtools/pic_src/容器导入导出.png" alt="图片描述" style="margin-bottom: 1px;">
+    <p>容器导入导出</p>
+</div>
