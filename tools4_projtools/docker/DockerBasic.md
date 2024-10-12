@@ -180,7 +180,8 @@ sudo yum-config-manager --add-repo https://mirrors.aliyun.com/docker-ce/linux/ce
 ***结合shell命令***
 在删除全部镜像和全部容器的命令中， `docker images -aq` 和 `docker ps -aq` 是会分别列出所有镜像ID和容器ID的docker命令
 
-然后使用 `${}` 定义那些ID变量，在docker的删除命令中使用，即 `docker rmi -f $(docker images -aq)` 和 `docker rm -f $(docker ps -aq)`
+然后使用 `${}` 定义那些ID变量，在docker的删除命令中使用，即 `docker rmi -f $(docker images -aq)` 
+和 `docker rm -f $(docker ps -aq)`
 
 也可以先停止全部容器，然后普通删除： `docker stop ${docker ps -aq}` `docker rm ${docker ps -aq}`
 
@@ -217,3 +218,87 @@ sudo yum-config-manager --add-repo https://mirrors.aliyun.com/docker-ce/linux/ce
     <img src="/tools4_projtools/pic_src/容器导入导出.png" alt="图片描述" style="margin-bottom: 1px;">
     <p>容器导入导出</p>
 </div>
+
+
+## 镜像
+### 镜像概念
+#### 镜像分层
+执行`docker pull IMAGE_NAME` 命令的时候，Docker 会逐层下载镜像，***每一层都是一个 tai 归档文件***
+执行`docker push IMAGE_NAME` 命令的时候，Docker 会将镜像分解为多个层并账户层上传
+
+镜像分层允许Docker镜像由多个层组成，每一层代表 Dockerfile中的一个指令，镜像分层技术使得Docker由如下几个优势：
+- 可维护性，如果需要更新一个镜像依赖，只需要重构相关层即可
+- 共享层，不同镜像可以共享层，减少存储空间，提高了分发效率
+- 缓存优化
+- 安全性
+  
+#### UnionFS 联合文件系统
+UnionFS 是一种分层、轻量级并且高性能的文件系统，***支持对文件系统的修改作为一次提交来一层层叠加***，同时可以将不同目录挂载到同一个虚拟文件系统下
+
+***UnionFS 是Docker镜像的基础，镜像可以通过分层来进行集成，基于基础镜像可以制作各种具体的应用镜像***
+
+<div style="text-align:center">
+    <img src="/tools4_projtools/pic_src/Docker镜像加载原理.png" alt="图片描述" style="margin-bottom: 1px;">
+    <p>Docker镜像加载原理</p>
+</div>
+
+#### 重点理解
+Docker 镜像层都是只读的，容器层是可写的
+
+**当容器启动时，一个新的可写层被加载到镜像的顶部**
+
+**这一层通常被称作 “容器层”， “容器层”之下的都叫做镜像层**
+
+- test: Hub 上pull的镜像，如centos，仅仅具有最小系统，很多命令并不包含（vim、clear、tree）
+- 在 镜像的一个容器中，如myCentos，下载 vim、clear、tree命令，***并提交容器副本使之成为一个新的镜像***
+- 那么， 使用该新镜像生成的容器，一开始就带有上述三个命令
+
+结合上面理解，一开始生成的容器，可以修改（可写入），其下层都是底层基本镜像，当修改后的容器要变为新的镜像时，该容器层也变为 底层镜像层的一部分
+
+再用该新镜像生成容器时候，新容器则包含 下层新镜像（修改后的容器）所具有的特性
+
+***command***
+- `docker commit [options] CONINTAINER [REPOSITORY:TAG]` create a new image from a container's changes
+  - `-a` autor
+  - `-m` 提交的描述信息
+  - `docker commit -m="added vim, tree, clear cmds" -a="sijorhou" myCentos centos-with-cmds:1.1`
+
+<div style="text-align:center">
+    <img src="/tools4_projtools/pic_src/docker-commit定制镜像.png" alt="图片描述" style="margin-bottom: 1px;">
+    <p>docker commit定制镜像</p>
+</div>
+
+<div style="text-align:center">
+    <img src="/tools4_projtools/pic_src/定制镜像使用.png" alt="图片描述" style="margin-bottom: 1px;">
+    <p>使用定制镜像</p>
+</div>
+
+图中可以看到：
+
+执行 `docker commit -m="addex vim, tree, clear cmds" -a="sijorhou" myCentos centos-with-cmds:1.1`命令之后，查看镜像，已经将 根据容器 `myCentos` 生成了 `centos-with-cmds:1.1` 镜像
+
+创建一个 `centos-with-cmds:1.1` 镜像的容器： `docker run -it --name=cmdsCentos centos-with-cmds:1.1 /bin/bash` ，在该容器中使用 `tree` 命令，发现可以使用，并且 tmp中还有之前在 `myCentos` 中创建的测试文本，现在已经成为底层镜像的一部分了
+
+
+### 本地镜像发布到阿里云
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
