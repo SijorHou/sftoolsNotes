@@ -95,4 +95,7 @@ fork 别人的项目有了更新，将当前分支同步为最新版本
 
 ### 从远程仓库获取
 
-
+- `git clone git@github.com:proj_url` 
+  - 将GitHub上的项目克隆到本地，系统默认设置远程仓库标识符为 origin，处于 master分支下
+  - `git checkout -b feature-D origin/feature-D` `git push` 本地创建并切换到和远程仓库分支同名的 feature-D， 然后将本地分支内容推送到远程仓库
+- `git pull origin feature-D` 获取最新远程仓库分支

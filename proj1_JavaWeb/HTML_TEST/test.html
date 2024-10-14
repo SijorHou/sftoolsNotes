@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <!DOCTYPE html>
+        <title> this is a documental title</title>
+        <meta charset="utf-8" />
+    </head>
+    <body>
+        <!--
+            <h1> 标题
+            <br> 换行
+            <br> 水平线
+            
+            列表
+                <ol> 有序列表
+                <ul> 无序列表
+                <li> 列表项
+            
+            超链接 <a></a> 有两个属性：
+                    1. href 定义要跳转的目标资源地址
+                        1) 完整url www.baidu.com
+                        2) 相对路径
+                        3) 绝对路径
+                    2. target 定义目标资源打开方式
+                        1) _self 当前窗口打开
+                        2) _blank 新窗口打开
+            
+            图像 <img ..attrs.. />
+                    1. src 定义图片路径
+                        1) url
+                        2) 相对路径
+                        3) 绝对路径
+                    2. title 定义鼠标悬停在图片上时候显示的文字
+                    3. alt 定义图片加载失败时候的提示文字
+                    4. width height 定义为像素或百分比
+
+                    更精细的格式控制可以通过 CSS 实现
+
+            表格标签
+                    table 整张表格
+                        thead 表头
+                        tbody 表体
+                        tfoot 表尾
+                            tr 表格中一行
+                                td 行中的一个单元格
+                                th 自带加粗效果的td
+                                    colspan="x" 横向占用x个单元格
+                                    rowspan="x" 纵向占用x个单元格
+                
+            表单标签 （可以让用户在界面上输入各种信息并提交的一种标签，是向服务器发送数据主要的方式之一）
+                    
+                    name: 表单项一定要定义name属性，定义提交 时的参数名（key）       
+                    value: 表单项还需要定义value属性，定义提交时的实参值（value）
+
+                    form 标签，内部定义用于让用户输入信息的 ‘表单项标签’
+                        action: form-attr，定义信息提交的服务器地址 （url， 相对路径， 绝对路径）
+                        method: form-attr， 定义信息提交方式 （GET， POST）
+                            get: 
+                                get 方式， 数据会加在 url 后，以为 ? 作为参数开始表示，多个参数使用 & 隔开
+                                    url?key=value&key=value&...
+                                特点：
+                                    get提交会显示明文，直接暴露在地址栏，不安全
+                                    地址栏显示内容长度有限，可提交数据量有限制
+                                    地址栏get明文提交只能提交文字
+
+                            post: 
+                                post 方式， 数据会通过请求体发送，不会加在 url后面
+                                特点：
+                                    参数默认不会放到 url 后面
+                                    数据不会直接暴露在地址栏上，相对安全（网络数据包可抓，并不绝对安全）
+                                    数据是单独打包通过请求体发送的（请求体容量很大，可以提交大量数据）
+                                    请求体中数据可以是字符、字节数据、文件
+
+            
+                    input 标签， 主要的表单项标签，用于定义表单项
+                        name: input-attr， 定义提交的参数名
+                        type: input-attr， 定义表单项类型
+                            text
+                            password
+                            submit
+                            reset
+                            radio: 单选框， 多个单选框使用相同name属性值时，就会有互斥效果
+                            checkbox: 复选框，多个选项
+                            hidden: 隐藏域， 不显示在页面上，但是会一起被提交。希望用户提交特定信息，为了避免数据被修改，设置为隐藏域信息  
+                            file: 上传文件    
+                        value
+                        checked: 表明默认选项
+                        readonly: 只读选项
+                        disabled: 使input选项失效
+                    
+                    textarea 标签，多行文本框
+                    select 下拉框
+                        option: 定义选项
+                        selected: 标记默认显示的选项，和checked本质相同
+
+                    
+        
+        -->
+        <h1> this is a headline </h1>
+        <br>
+        <p> this is a paragraph </p>
+        <hr>
+        <a href="https://www.baidu.com"> baidu url </a>
+        <br><br><br>
+        <a href="./target/shangqiunews_tar.html" target="_self">
+            <span style="color: green;">A ShangQiu news will open in current window</span>
+        </a>
+        <br><br><br>
+        <a href="./target/shangqiunews_tar.html" target="_blank">
+            <span style="color: green;">A ShangQiu news will open in new window</span>
+        </a>
+        <br><br><br>
+        <span style="color: red;">"This text is red."</span>
+        <hr>
+        <img src="/proj1_JavaWeb/pic_src/HTML 结构.png" title="HTML basic structure" alt="failed loading pic"/>
+        
+        <br><br><hr>
+        <ul>
+            <li>完整HTML页面
+                <ul>
+                    <li>声明为HTML5文档: !DOCTYPE</li>
+                    <li>html</li>
+                    <li>头部元素
+                        <ul>
+                            <li>head</li>
+                            <li>meta charset="utf-8"</li>
+                            <li>title</li>
+                        </ul>
+                    </li>
+                    <li>可见的页面内容
+                        <ul>
+                            <li>body</li>
+                            <li>h1</li>
+                            <li>p</li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+
+        <br><br><hr>
+        <h3 style="text-align: center;">shor term plan</h3>
+        <table border="1px" style="margin: 0px auto; width: 500px;">
+            <thead>
+                <tr>
+                    <th>target</th>
+                    <th>goal</th>
+                    <th>deadline</th>
+                    <th>PS</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>research</td>
+                    <td>finish researching and publish an article</td>
+                    <td>before 2025.1.1</td>
+                    <td rowspan="4">All for a better life</td>
+                </tr>
+                <tr>
+                    <td>proj preparation</td>
+                    <td>learn nessary skills, make some projects and find a job</td>
+                    <td>before 2025.1.1</td>
+                </tr>
+                <tr>
+                    <td>self bussiness start</td>
+                    <td>self research of digital humanbing and financial investment of stock and fund </td>
+                    <td>before 2025.1.1</td>
+                </tr>
+                <tr>
+                    <th>why these targets?</th>
+                    <td colspan="2">because they're the most urgent</td>
+                </tr>
+            </tbody>
+            <tfoot></tfoot>
+        </table>
+
+        <br><br><hr>
+        <h3>form test</h3>
+        <form action="./target/form_tar.html" method="get">
+            <!--采用 post 方式虽然网页反馈 405请求方式不允许，但是F12查看网页状态，内容确实成功提交-->
+            <!--add form items: tag of info submited by user-->
+            username: <input type="text" name="username" value="sijorhou"/>  <br>
+            password: <input type="password" name="password"/>  <br>
+            gender: 
+                <!--单选框
+                    指定name属性，使得勾选框具有互斥属性（不会都选上）
+                    指定value属性，使得勾选不同框，后端能看到不同的值
+                    checked 属性表明该选框在没有实际输入选项时候是默认选项
+                -->
+                <input type="radio" name="gender" value="1" checked/> Male 
+                <input type="radio" name="gender" value="0"/> Female 
+                <br>
+
+            hobbies:
+                <!--复选框 -->
+                <input type="checkbox" name="hobby" value="1"/> basketball
+                <input type="checkbox" name="hobby" value="2"/> soccer
+                <input type="checkbox" name="hobby" value="3"/> table-tennis
+                <br>
+
+            <input type="hidden" name="hidden item" value="000"/>
+            <br>
+            <!--多行文本框-->
+            <textarea name="intro" style="width: 300px; height: 100px;"></textarea>
+            <br>
+
+            address of Yu:
+                <select>
+                    <option value="1">A</option>
+                    <option value="2">B</option>
+                    <option value="3">G</option>
+                    <option value="4">N</option>
+                    <option value="-1" selected>--please select--</option>
+                </select>
+                <br>
+            
+            select file:
+                <input type="file"/>
+                <br>
+            <input type="submit" value="sign in"/>
+            <input type="reset" value="clear"/>
+        
+            
+
+           
+        </form>
+
+    </body>
+</html>
