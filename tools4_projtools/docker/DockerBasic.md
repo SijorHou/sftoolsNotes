@@ -281,12 +281,31 @@ Docker 镜像层都是只读的，容器层是可写的
 
 
 ### 本地镜像发布到阿里云
+<div style="text-align:center">
+    <img src="/tools4_projtools/pic_src/本地镜像发布到阿里云流程.png" alt="图片描述" style="margin-bottom: 1px;">
+    <p>本地镜像发布到阿里云流程</p>
+</div>
+
+***镜像生成方法***
+
+***本地镜像推送到阿里云***
+
+- 阿里云-容器镜像服务-实例列表-个人实例
+- 进入个人实例后，先创建`命名空间`， 然后创建`命名空间下的镜像仓库`
+- 执行`docker commit -m"changed yum source to aliyun source, added vim, tree, ncurses cmds" -a="sijorhou" aliyun-yumSrc-Centos aliyun-yum-src-centos` 将本地容器
+- 执行创建的镜像仓库中的命令（登录、向Registry中 push本地image）
+
+
+***删除本地镜像后从阿里云镜像仓库下载镜像测试***
+
+### docker私有库
+- ***Docker Registry***， 一个官方工具，用于搭建私有的镜像仓库
+- `docker pull registry` 下载私有仓库工具
+- 运行私有库Registry，相当于本地有个私有的 Docker Hub
 
 
 
-
-
-
+## 容器数据卷
 
 
 
