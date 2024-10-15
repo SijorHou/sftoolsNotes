@@ -223,7 +223,7 @@ sudo yum-config-manager --add-repo https://mirrors.aliyun.com/docker-ce/linux/ce
 ## 镜像
 ### 镜像概念
 #### 镜像分层
-执行`docker pull IMAGE_NAME` 命令的时候，Docker 会逐层下载镜像，***每一层都是一个 tai 归档文件***
+执行`docker pull IMAGE_NAME` 命令的时候，Docker 会逐层下载镜像，***每一层都是一个 tar 归档文件***
 执行`docker push IMAGE_NAME` 命令的时候，Docker 会将镜像分解为多个层并账户层上传
 
 镜像分层允许Docker镜像由多个层组成，每一层代表 Dockerfile中的一个指令，镜像分层技术使得Docker由如下几个优势：
@@ -294,18 +294,63 @@ Docker 镜像层都是只读的，容器层是可写的
 - 进入个人实例后，先创建`命名空间`， 然后创建`命名空间下的镜像仓库`
 - 执行`docker commit -m"changed yum source to aliyun source, added vim, tree, ncurses cmds" -a="sijorhou" aliyun-yumSrc-Centos aliyun-yum-src-centos` 将本地容器
 - 执行创建的镜像仓库中的命令（登录、向Registry中 push本地image）
+  - `docker login --username=aliyun_username generated_path` 登录阿里云Docker Registry
+  - `docker tag [ImageID]/SOURCE_IMAGE_NAME[:TAG] generated_path/my_namespace/my_images:[IMAGE_VERSION]` 创建一个引用源镜像的 标签目标镜像
+  - `docker push generated_path/my_namespace/my_images:[IMAGE_VERSION]` 推送到阿里云的仓库；重命名镜像，通过专有网络推送 到 Registry）
+  - `docker pull generated_path/my_namespace/my_images:[IMAGE_VERSION]` 拉取镜像
 
 
 ***删除本地镜像后从阿里云镜像仓库下载镜像测试***
 
-### docker私有库
+### docker私有库构建
 - ***Docker Registry***， 一个官方工具，用于搭建私有的镜像仓库
 - `docker pull registry` 下载私有仓库工具
 - 运行私有库Registry，相当于本地有个私有的 Docker Hub
+- `docker run -d -p hostPort:containerPort -v host_dir:container_dir --privileged=true registry`
+  - `-d` 后台运行勇气，返回容器ID（启动守护式容器）
+  - `-p` 指定端口映射，先访问 `hostPort` 主机端口，再访问 `containerPort` 容器端口（实际上含义为：将宿主机的端口映射到容器的端口，使得可以通过宿主机的端口访问容器内部的registry服务）***对于不同私有仓库，意味着不同的registry容器服务，端口号也是不同的***
+  - `-v` 绑定挂载一个容器卷， 指定仓库所创建的 registry容器的 `host_dir:container_dir` 目录下（默认是 `var/lib/registry`）
+  - `--previleged=true` 给予容器特权模式，***允许容器访问宿主机所有设备，并且可移植性一些通常需要高级权限的操作（长用于需要特殊权限的容器，如运行Docker守护进程的容器）***
+- 整个命令就是，创建一个 registry 容器作为私有仓库，私有仓库中存储镜像的位置在 `container_dir`，但是实际上数据的真正存储位置在 `host_dir`，将该宿主机目录挂载于容器目录下，Docker registry 容器会通过 `container_dir` 来操作 宿主机上 `host_dir` 中的数据
+  - 这种挂载方式确保了，即使registry容器被删除或重启，存储在宿主机上的镜像数据也不会丢失；通过Docker registry进行访问、推送、拉取镜像时，这些操作实际上通过 registry容器来管理 `host_dir`中的实际数据
+  - example（两种等效方式）：
+    - `docker run -d -p 5000:5000 -v /private-registries/:/tmp/registry --privileged=true registry`
+      - `/sijorhou/myregistry/` 是要挂载到容器中的宿主机资源，是宿主机上的一个目录或文件的绝对路径
+      - `:` 分隔符，用于区分宿主机路径和容器内路径
+      - `/tmp/registry` 容器内部的目录或文件路径，宿主机资源每挂载到的位置
+    - `docker run -d -p 5000:5000 --mount type=bind,src=/private-registries/,dst=/tmp/registry --privileged=true registry`
+
+### docker镜像与私有库的交互
+- `curl -X GET http://hostIP:5000/v2/_catalog` 查看私有镜像仓库中的镜像列表
+  - `/v2/_catalog` 路径会获取仓库目录，列出所有仓库的名称，并返回JSON格式数据，列出私有仓库中所有镜像的名称
+- `docker tag [IMAGEID]/IMAGE_NAME[:TAG] hostIP:5000/IMAGE_NAME[:TAG]` 重建一个目标镜像标签（代表仓库中的标签完整的名称）
+- 修改docker配置文件（/etc/docker/daemon.json） 使之支持 http（docker 默认不允许 http 推送镜像）
+  - `"insecure-registries": ["hostIP:5000]` 告诉docker 本机IP下5000端口 私服库是安全的，可以接受并支持
+- `docker push hostIP:5000/IMAGE_NAME[:TAG]`
+- 再次查看私有镜像仓库中的镜像列表
+- `docker pull hostIP:5000/IMAGE_NAME[:TAG]` 从私服库中拉取镜像
+
+### 完整过程
+<div style="text-align:center">
+    <img src="/tools4_projtools/pic_src/私有库交互1-tag生成.png" alt="图片描述" style="margin-bottom: 1px;">
+    <p>tag生成</p>
+</div>
+<div style="text-align:center">
+    <img src="/tools4_projtools/pic_src/私有库交互2-直接push失败.png" alt="图片描述" style="margin-bottom: 1px;">
+    <p>直接push失败</p>
+</div>
+<div style="text-align:center">
+    <img src="/tools4_projtools/pic_src/私有库交互3-docker配置允许http.png" alt="图片描述" style="margin-bottom: 1px;">
+    <p>docker配置允许http</p>
+</div>
+    <img src="/tools4_projtools/pic_src/私有库交互4-重启服务后push.png" alt="图片描述" style="margin-bottom: 1px;">
+    <p>重启服务后push</p>
+</div>
 
 
 
 ## 容器数据卷
+
 
 
 

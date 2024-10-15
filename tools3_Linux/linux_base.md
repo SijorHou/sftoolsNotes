@@ -270,4 +270,10 @@ systemed系统重，服务 service 通常指后台运行的进程，可以是系
   - `systemctl list-units --state=running --type=service`
 
 
+## curl command
+- `curl [options] [URL]` 是一个用于传输数据的命令行工具。***常用于测试和调试网络服务，或在命令行中与 Web API 进行交互***
+  - `-g` 使用 GET 方法（默认方法） `curl -a https://www.xxx.com`
+  - `-d` 发送 POST 数据 `curl -d "param1=value1&param2=value2..." http://www.xxx.com`
 ## 文件目录管理
+
+
