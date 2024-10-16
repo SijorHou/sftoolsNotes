@@ -26,6 +26,15 @@
     - 属性：attribute，对应数据库表中的一列/字段（column、field）
   - 表的关联关系：1v1, 1vm, mvm, slef-reference（一对一、多， 多对多， 自我引用）
 
+
+
+
+
+
+
+
+
+
 ### MySQL Intro
 
 - MySQL：开源DBMS，执行快，已安装，易使用

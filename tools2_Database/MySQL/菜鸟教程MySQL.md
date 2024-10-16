@@ -9,12 +9,13 @@
 
 ### MySQL 管理
 
-***启动/关闭 MySQL***
+***NET commands***
 - 命令行服务管理
   - 管理员身份打开命令行
-  - `NET HELP` 查看 `NET` 命令帮助
+  - `NET HELP` 查看 `NET` 命令帮助（小写也可以）
   - `NET START /HELP` 查看指定命令 `NET START` 的帮助信息
     - `NET START` 显示当前开启的服务
+      - `NET START | find "MySQL/service_partial_name"`直接查找相关命令
     - `NET START service` 开启服务
     - `NET START "service1 service2"` 开启多个服务需用双引号指示多个名称
     - `NET STOP service` 关闭服务
@@ -23,13 +24,22 @@
   - `NET START MySQL90` 开启MySQL服务
   - `NET STOP MySSQL90` 关闭MySQL服务
 
+***mysqladmin commands***
+- `mysqladmin -u root -p [check_content]` `-u` 是用户，`-p`是密码
+- `mysqladmin -u root -p version` 查看完整的数据库主机信息
+- `mysqladmin -u root -p status` 显示MySQL服务器的运行装填
+- `mysqladmin -u root -p processlist` 显示MySQL服务器中正在运行的进程列表
+
 
 ### MySQL连接
 本地MySQL用户名：root
 本地MySQL密码：123456
 
-***命令行连接***
-- `mysql -u [username:root] -p` 然后键入密码进入 MySQL
+***命令行连接、退出***
+- `mysql -u [username(root)] -p` 然后键入密码进入 MySQL
+  - `mysql -u root -p 123456 -P 3306 -h localhost` 完整连接命令，如果就是在本机的3306端口，后两个可以省略（参考上面 数据库主机信息查看命令）
+- `mysql -V/--version`
+- `quit/exit` 退出MySQL
 
 ***命令实例***
 - `SHOW DATABASES;` 列出所有可用数据库
