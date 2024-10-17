@@ -335,28 +335,65 @@ Docker 镜像层都是只读的，容器层是可写的
     <img src="/tools4_projtools/pic_src/私有库交互1-tag生成.png" alt="图片描述" style="margin-bottom: 1px;">
     <p>tag生成</p>
 </div>
+
 <div style="text-align:center">
     <img src="/tools4_projtools/pic_src/私有库交互2-直接push失败.png" alt="图片描述" style="margin-bottom: 1px;">
     <p>直接push失败</p>
 </div>
+
 <div style="text-align:center">
     <img src="/tools4_projtools/pic_src/私有库交互3-docker配置允许http.png" alt="图片描述" style="margin-bottom: 1px;">
     <p>docker配置允许http</p>
 </div>
+
+<div style="text-align:center">
     <img src="/tools4_projtools/pic_src/私有库交互4-重启服务后push.png" alt="图片描述" style="margin-bottom: 1px;">
     <p>重启服务后push</p>
 </div>
 
-
-
 ## 容器数据卷
 
+***运行一个带有容器卷存储功能的容器实例***
+- `docker run -it/-d -v --mount type=bind,src=/host_dir/,dst=/container_dir/ --privileged=true IMAGE`
+- `docker run -it/-d -v /host_dir/:/container_dir/ --privileged=true IMAGE`
+ 
+环境打包成镜像，run后形成容器实例，希望这些数据能够持久化，如果不备份，容器实例删除则数据也消失，为了能保存数据，在 docker中使用 卷
+
+***intro***
+- 是什么： 容器数据卷可以将 docker 容器中的数据存储在 宿主机中，实现数据持久化
+- 能做什么：
+  - 数据卷 可在容器之间共享或重用数据
+  - 卷中更改会直接实时生效
+  - 数据卷中的更改不会包含在镜像的更新中
+  - 数据卷生命周期一直持续到没有容器使用它为止
+
+***examples***
+- 宿主机，容器之间映射添加容器卷
+  - 直接添加
+    - `docker run -it -v /hd/:/cd/ --privileged=true --name=container_name registry` 
+    - `docker  IMAGE/CONTAINER_ID` 查看数据卷是否成功挂载
+    - 容器和宿主机之间数据共享： docker 和 主机之间，任一方修改数据，另一方都会自动更新获取。若主机在 docker关闭期间修改数据，则重启后 docker容器会进行数据同步
+- 读写规则映射添加说明
+  - 上述直接添加的命令是默认 `rw`，可读可写
+  - **只读**的话需要限制容器实例内部只能读不能写
+  - `docker run -it -v /host_dir/:/container_dir:ro/ --privileged=true IMAGE` 其中 `:ro` 声明了该容器实例目录只读（read only）
+- 卷的继承
+  - container1 完成和 host 的映射（执行上述添加容器卷操作）
+  - `--volumes-from` container2 继承容器1 的卷规则 
+    - `docker run -it --privileged=true --volumes-from container1 --name=container2 IMAGE`
 
 
+<div style="text-align:center">
+    <img src="/tools4_projtools/pic_src/容器卷的继承.png" alt="图片描述" style="margin-bottom: 1px;">
+    <p>容器卷的继承</p>
+</div>
 
+可以看到 `--volumes-from src_container` 参数，直接从源容器继承过来其所有内容
 
-
-
+## Dcoker 常用软件安装
+- `docker pull IMAGE_NAME`
+- `docker images`
+- `docker run images`
 
 
 
