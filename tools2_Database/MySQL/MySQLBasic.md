@@ -37,7 +37,7 @@
 
 ### MySQL 管理
 
-***NET commands***
+#### NET commands
 - 命令行服务管理
   - 管理员身份打开命令行
   - `NET HELP` 查看 `NET` 命令帮助（小写也可以）
@@ -52,7 +52,7 @@
   - `NET START MySQL90` 开启MySQL服务
   - `NET STOP MySSQL90` 关闭MySQL服务
 
-***mysqladmin commands***
+#### mysqladmin commands
 - `mysqladmin -u root -p [check_content]` `-u` 是用户，`-p`是密码
 - `mysqladmin -u root -p version` 查看完整的数据库主机信息
 - `mysqladmin -u root -p status` 显示MySQL服务器的运行装填
@@ -63,7 +63,7 @@
 本地MySQL用户名：root
 本地MySQL密码：123456
 
-***命令行连接、退出***
+#### 命令行连接、退出
 - `mysql -u [username(root)] -p` 然后键入密码进入 MySQL
   - `mysql -u root -p 123456 -P 3306 -h localhost` 完整连接命令，如果就是在本机的3306端口，后两个可以省略（参考上面 数据库主机信息查看命令）
 - `mysql -V/--version`
@@ -72,6 +72,10 @@
   - `;` 结束
   - `help` 或 `\h` 获取帮助，如 `help/HELP SELECT;` 、`\h SELECT`
   - `QUIT/quit/EXIT/exit` 退出数据库
+
+#### 数据导入指令
+- `source absolute_path_of_src_file.sql`
+  - `source D:\xxx.sql`
 
 ### MySQL 操作实例
 - `SHOW DATABASES;` 
@@ -99,6 +103,47 @@ ENCRYPTION = 'Y';                    -- 启用加密，适用于MySQL 8.0及以�
 ```
 
 
+<div style="text-align:center">
+    <img src="../pic/mysql密码重置步骤.png" alt="mysql密码重置步骤" style="margin-bottom: 1px;">
+    <p>mysql密码重置步骤</p>
+</div>
+
+### SQL 语句
+#### SELECT
+- `SELECT seg(col),... FROM table_name` 以 "SELECT" 为关键字
+  - 后跟 列名 （若不是 * 则为查询所有列），也可以写为列的别名 `SELECT seg seg_alias, ...`
+  - 空值 NULL 参与运算， 含NULL运算结果仍为NULL
+  - 着重号 ``
+  - 查询常数
+  - `DESC/DESCRIBE`
+  - `WHERE`
 
 
- 
+```sql
+-- 1. 基本查询语句
+SELECT * FROM employees;
+SELECT employee_id, first_name, emai, job_id FROM employees;
+
+-- 2. 列别名
+SELECT employee_id emp_id, first_name fst_name, job_id FROM employees;
+SELECT employee_id AS emp_id, first_name AS fst_name, job_id FROM employees;
+SELECT employee_id "emp_id", first_name "fst_name", job_id FROM employees;
+SELECT employee_id "emp_id", first_name "fst_name", salary * 12 "annual salary" FROM employees; 
+
+-- 3. NULL 参与运算（year salary 中，commission_pact 中为NULL的结果均为NULL）
+SELECT employee_id, salary "month salary", salary * (1 + commission_pct) * 12 "year salary", commission_pct FROM employees;
+
+-- 4. 着重号 ``，标注表名避免被识别为关键字
+SELECT * FROM `order`;
+
+-- 6. 查询常数，用于在查询结果中返回一个常量值，而无需存储在表中
+SELECT 'SIJORHOU', '136315', employee_id, last_name FROM employees;
+
+-- 7. 显示表结构，显示表中各个字段详细信息
+DESC regions;
+DESCRIBE employees;
+
+-- 8. WHERE 过滤数据，WHERE 必须声明在 FROM 后面
+SELECT * FROM employees WHERE department_id = 90;
+SELECT * FROM employees WHERE last_name = 'King';
+```

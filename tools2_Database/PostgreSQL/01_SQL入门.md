@@ -151,7 +151,7 @@ DELETE FROM student WHERE student_name='sijorhou';
 
 ### 查询语句
 #### 单表查询、过滤条件查询
-- `SELECT` 以 "SELECT" 为关键字
+- `SELECT seg(col),... FROM table_name` 以 "SELECT" 为关键字
   - 后跟 列名 （若不是 * 则为查询所有列）
   - 再跟 "FROM" table_name  
   - 后跟 "WHERE" 语句指定要查询的行记录（如果没有则为查询对应列名的所有数据）
