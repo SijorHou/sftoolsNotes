@@ -86,7 +86,7 @@
 - `SELECT * FROM table_name;`
 - `INSERT INTO table_name VALUES(1001, 'sijorhou');`
   - `SHOW CREATE TABLE table_name` 快速显示常见table_name的完整命令和表结构
-  - `SHOW VARIABLES LIKE 'character_%';`  用于显示所有以 character 为前缀的系统变量（显示MySQL服务器使用的字符集，如 `character_set_database：默认数据库的字符集`, `character_set_connection：服务器内部使用的客户与服务器之间的通信字符集`）
+  - `SHOW VARIABLES LIKE 'character_set_%';`  用于显示所有以 character 为前缀的系统变量（显示MySQL服务器使用的字符集，如 `character_set_database：默认数据库的字符集`, `character_set_connection：服务器内部使用的客户与服务器之间的通信字符集`）
   - `SHOW VARIABLES LIKE 'collation_%';` 校对（collation）是指字符数据的比较和排序规则，该命令显示所有校对所依赖的字符集，如`collation_database：默认数据库的校对规则`, `collation_connection：客户与服务器之间通信的校对规则`
   - mysql数据库目录下的 `my.ini` 文件中可以修改默认字符集
 - `DROP DATABASE db_name;`

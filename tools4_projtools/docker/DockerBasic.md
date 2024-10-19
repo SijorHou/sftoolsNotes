@@ -394,8 +394,66 @@ Docker 镜像层都是只读的，容器层是可写的
 - `docker pull IMAGE_NAME`
 - `docker images`
 - `docker run images`
+  
+### docker MySQL 使用
+
+[使用教程](https://hub.docker.com/_/mysql)
+
+***使用MySQL镜像***
+- **简单命令**
+```shell
+# 查看MySQL端口使用情况，如果本地没有MySQL，可以使用 3306 端口
+# 运行一个MySQL容器实例
+# 交互方式进入MySQL容器
+# 执行语句然后输入密码进入 mysql
+
+ps -ef | grep mysql
+docker run -it --name=MySQLInstance -p 3306:3306 -e MYSQL_ROOT_PASSWORD=123456 -d mysql:latest
+docker exec -it MySQLInstance /bin/bash   
+mysql -u root -p
+```
+
+- **实战命令**
+
+```shell
+# 新建 mysql 容器实例
+# 实际执行有三个挂载目录： /ForTest/mysql/log, data, conf/ 
+# 分别对应容器目录为 /var/log/mysql, /var/lib/mysql, /etc/mysql/conf.d
+# 其中 conf.d 是mysql的配置文件，用于存放 mysql配置信息（如字符配置）
+
+docker run -d --name=MySQLInstance -p 3306:3306 --privileged=true -v /host_dir/:/container_dir/ -e MYSQL_ROOT_PASSWORD=123456 mysql:latest;
+
+docker run -d --name=MySQLInstance -p 3306:3306 --privileged=true -v /ForTest/mysql/log/:/var/log/mysql -v /ForTest/mysql/data/:/var/lib/mysql -v /ForTest/mysql/conf/:/etc/mysql/conf.d -e MYSQL_ROOT_PASSWORD=123456 mysql:latest
+
+# /ForTest/mysql/conf 中新建 my.cnf（内容如下），通过容器卷同步给mysql容器实例
+[client]
+default_character_set=utf8
+[mysqld]
+collation_server = utf8_general_ci
+character_set_server = utf8
+
+# 在 WSL 中进入 /ForTest/mysql/data/ 目录下，新建atguigudb.sql 并paste代码
+# atguigudb.sql 在 mysql中是 /var/lib/mysql/atguigudb.sql
+vim atguigudb.sql
+
+# 启动进入mysql并查看配置文件，导入 atguigudb.sql
+docker exec -it MySQLInstance
+mysql -u root -p
+mysql> SHOW VARIABLES LIKE 'character_set_%';
+mysql> SOURCE /var/lib/mysql/atguigudb.sql
+```
+<div style="text-align:center">
+    <img src="/tools4_projtools/pic_src/docker挂载目录编写mysql配置文件.png" alt="图片描述" style="margin-bottom: 1px;">
+    <p>docker挂载目录编写mysql配置文件</p>
+</div>
 
 
+
+***问题***
+- 插入中文字符报错：执行 `SHOW VARIABLES LIKE 'character_set_%';` 发现许多都是 latin 字符编码选项，需要修改（前面创建mysql容器实例时候挂载目录，在host_dir的挂载目录中新建配置文件）
+- 删除容器，mysql容器中数据如何备份？
+  - 只要设定了容器卷保存数据，即使删除mysql容器，再次新建msyql容器实例，也会具有宿主机中存储的原来数据
+  - 或者 commit生成新的镜像，下次直接根据原镜像构造容器
 
 
 
