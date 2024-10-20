@@ -147,3 +147,5 @@ DESCRIBE employees;
 SELECT * FROM employees WHERE department_id = 90;
 SELECT * FROM employees WHERE last_name = 'King';
 ```
+
+#### 运算符
