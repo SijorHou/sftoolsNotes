@@ -3,7 +3,7 @@
 
 - [菜鸟教程](https://www.runoob.com/mysql/mysql-connection.html)
 - [MySQL安装教程](https://blog.csdn.net/weixin_47406082/article/details/131867849?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522171647672116800225532250%2522%252C%2522scm%2522%253A%252220140713.130102334..%2522%257D&request_id=171647672116800225532250&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~top_positive~default-2-131867849-null-null.142^v100^pc_search_result_base8&utm_term=MySQL%E5%AE%89%E8%A3%85&spm=1018.2226.3001.4187)
-- [navicat安装教程](https://blog.csdn.net/qq_41918107/article/details/140439212?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522E2289A8D-F972-4905-B1BF-7EDC56BD0C0F%2522%252C%2522scm%2522%253A%252220140713.130102334..%2522%257D&request_id=E2289A8D-F972-4905-B1BF-7EDC56BD0C0F&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~top_positive~default-1-140439212-null-null.142^v100^pc_search_result_base5&utm_term=navicat%E5%AE%89%E8%A3%85&spm=1018.2226.3001.4187)
+- [navicat安装教程](https://mp.weixin.qq.com/s/Of1282kGihYiXnmxvB9Csw)
 - [navicat使用教程](https://blog.csdn.net/qq_45069279/article/details/105919312?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522171657178116800182137881%2522%252C%2522scm%2522%253A%252220140713.130102334..%2522%257D&request_id=171657178116800182137881&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~top_positive~default-2-105919312-null-null.142^v100^pc_search_result_base8&utm_term=navicat&spm=1018.2226.3001.4187)
 - [卸载教程](https://blog.csdn.net/m0_52861000/article/details/131354710?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522172110015316800180631045%2522%252C%2522scm%2522%253A%252220140713.130102334..%2522%257D&request_id=172110015316800180631045&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~top_positive~default-2-131354710-null-null.142^v100^pc_search_result_base8&utm_term=%E5%8D%B8%E8%BD%BDmysql&spm=1018.2226.3001.4187)
 ### 数据库基础
@@ -38,8 +38,13 @@
 ### MySQL 管理
 
 #### NET commands
+***[重装系统后无MySQL服务问题解决](https://blog.csdn.net/SH_King/article/details/48178711?ops_request_misc=&request_id=&biz_id=102&utm_term=net%20start%20%E6%89%BE%E4%B8%8D%E5%88%B0%20MySQL%20%E6%9C%8D%E5%8A%A1&utm_medium=distribute.pc_search_result.none-task-blog-2~all~sobaiduweb~default-4-48178711.142^v100^pc_search_result_base5&spm=1018.2226.3001.4187)***
+
+
+
+
 - 命令行服务管理
-  - 管理员身份打开命令行
+  - ***管理员身份***打开命令行
   - `NET HELP` 查看 `NET` 命令帮助（小写也可以）
   - `NET START /HELP` 查看指定命令 `NET START` 的帮助信息
     - `NET START` 显示当前开启的服务
@@ -49,13 +54,13 @@
     - `NET STOP service` 关闭服务
 - 启动 MySQL 服务
   - 查看开启服务，本地MySQL服务全称为 MySQL90
-  - `NET START MySQL90` 开启MySQL服务
-  - `NET STOP MySSQL90` 关闭MySQL服务
+  - `NET START MySQL91` 开启MySQL服务
+  - `NET STOP MySSQL91` 关闭MySQL服务
 
 #### mysqladmin commands
 - `mysqladmin -u root -p [check_content]` `-u` 是用户，`-p`是密码
 - `mysqladmin -u root -p version` 查看完整的数据库主机信息
-- `mysqladmin -u root -p status` 显示MySQL服务器的运行装填
+- `mysqladmin -u root -p status` 显示MySQL服务器的运行状态
 - `mysqladmin -u root -p processlist` 显示MySQL服务器中正在运行的进程列表
 
 
@@ -133,19 +138,90 @@ SELECT employee_id "emp_id", first_name "fst_name", salary * 12 "annual salary" 
 -- 3. NULL 参与运算（year salary 中，commission_pact 中为NULL的结果均为NULL）
 SELECT employee_id, salary "month salary", salary * (1 + commission_pct) * 12 "year salary", commission_pct FROM employees;
 
+-- 若要筛选涉及 NULL 的数据， 使用 IS, IS NOT, <=> 
+SELECT employee_id, salary "month salary", salary * (1 + commission_pct) * 12 "year salary", commission_pct FROM employees WHERE commission_pct IS NOT NULL;
+
 -- 4. 着重号 ``，标注表名避免被识别为关键字
 SELECT * FROM `order`;
 
 -- 6. 查询常数，用于在查询结果中返回一个常量值，而无需存储在表中
 SELECT 'SIJORHOU', '136315', employee_id, last_name FROM employees;
 
--- 7. 显示表结构，显示表中各个字段详细信息
+--7. 去重查询，使用 DISTINCT 关键字
+SELECT DISTINCT department_id AS dp_id FROM employees;
+SELECT DISTINCT department_id AS dp_id, salary FROM employees; -- 对所有记录，两个字段作为一个整体去重查询
+SELECT department_id AS dp_id, DISTINCT salary FROM employees; -- 错误， 前后不一致
+
+-- 8. 显示表结构，显示表中各个字段详细信息
 DESC regions;
 DESCRIBE employees;
 
--- 8. WHERE 过滤数据，WHERE 必须声明在 FROM 后面
+-- 9. WHERE 过滤数据，WHERE 必须声明在 FROM 后面
 SELECT * FROM employees WHERE department_id = 90;
 SELECT * FROM employees WHERE last_name = 'King';
 ```
 
 #### 运算符
+```sql
+-- 1. 算数运算符： + - * / DIV % MOD 
+SELECT 100, 100 + 50, 100 -35, 3 * 18, 100 / 2, 100 DIV 2, 19 % 5, MOD(26, 7) FROM DUAL;
+SELECT 100, 100 + '50', 100 -35, 3 * '18', 99 / '7', 19 % 5, MOD(26, 7) FROM DUAL;	-- 隐式转换 '' 会将数字字符 自动转换成数值类型  
+
+SELECT employee_id, last_name AS lst_name, salary FROM employees WHERE employee_id % 2 = 0;		-- 筛选偶数工资的员工
+
+
+-- 2. 比较运算符 = <=> != < <= > >=
+SELECT 
+	1 = 2, 1 != 2, 
+	1 = '1', 1 = 'a', 0 = 'a',  -- 若字符转换为数值失败，则看做 0
+	'a' = 'a', 'a' = 'ab',			-- 若均为字符/串，则按照字符/串进行比较
+	1 = NULL, NULL = NULL				-- 只要NULL参与运算，结果均为NULL
+FROM DUAL;		
+
+SELECT last_name, salary, commission_pct FROM employees WHERE commission_pct IS NOT NULL AND salary >= 7000;    
+SELECT 1 <=> NULL, NULL <=> NULL FROM DUAL; -- “安全等于 <=> ” 可以用于判断是不是 NULL
+
+
+-- 3. 关键字 
+-- 3.1 IS NULL \ IS NOT NULL \ ISNULL(expr)
+SELECT employee_id, last_name, commission_pct FROM employees;
+SELECT employee_id, last_name, commission_pct FROM employees WHERE ISNULL(commission_pct);
+SELECT employee_id, last_name, commission_pct FROM employees WHERE commission_pct IS NULL;
+SELECT employee_id, last_name, commission_pct FROM employees WHERE commission_pct <=> NULL;
+SELECT employee_id, last_name, commission_pct FROM employees WHERE commission_pct IS NOT NULL;
+
+-- 3.2 LEAST(value1,value2,...) \ GREATEST(value1,value2,...) 找最大最小
+SELECT LEAST(1, 10, 9, -5, 89), GREATEST(1, 10, 9, -5, 89), LEAST('b', 'g', 'z', 't', 'l'), GREATEST('b', 'g', 'z', 't', 'l') FROM DUAL;
+
+SELECT 
+	last_name, first_name, 
+	LEAST(last_name, first_name), 
+	LEAST(LENGTH(first_name), LENGTH(last_name)) 
+	FROM employees WHERE commission_pct IS NOT NULL;
+
+-- 3.3 BETWEEN ... AND 范围查询
+SELECT employee_id, last_name, first_name, salary 
+FROM employees WHERE salary BETWEEN 6000 AND 10000;		-- 如果是 BETWEEN 10000 AND 6000 则查询无果
+
+SELECT employee_id, last_name, first_name, salary 
+FROM employees WHERE salary < 6000 OR salary > 10000;	
+
+-- 3.4 IN \ NOT IN  在集合中与否
+SELECT last_name, department_id AS dp_id FROM employees WHERE department_id = 20 OR department_id = 50 OR department_id = 100;  -- 直接使用 IN (set) \ NOT IN (set)
+
+SELECT last_name, department_id FROM employees WHERE department_id IN (20, 50, 100);
+SELECT last_name, department_id, salary FROM employees WHERE salary NOT IN (6000, 7000, 8000)
+
+-- 3.5 LIKE 模糊查询， % 表示未知字符（若干个）， _ 表示一个未知字符， \ 表示转义字符
+SELECT last_name FROM employees WHERE last_name LIKE '%a%';		-- 查询 last_name中包含 a 字符的数据
+SELECT last_name FROM employees WHERE last_name LIKE 'a%';		-- 查询 last_name中以 a 字符开头的数据
+SELECT last_name FROM employees WHERE last_name LIKE '%a%' AND last_name LIKE '%e%';  -- 既包含 a 又包含 e，等效写法如下
+SELECT last_name FROM employees WHERE last_name LIKE '%a%e%' OR last_name LIKE '%e%a%';
+
+SELECT last_name FROM employees WHERE last_name LIKE '_a%';		-- 查询 last_name中第二个字符为 a 的数据
+
+-- 若要查询第三个字符为 e 的数据， 直接使用 __e （新版本）
+SELECT last_name FROM employees WHERE last_name LIKE '__a%';
+
+
+```
