@@ -115,4 +115,96 @@
 - `<div></div>`
 - `<span></span>`
 
-### special characters
+### notes
+```html
+<!--
+            <h1> 标题
+            <br> 换行
+            <hr> 水平线
+            
+            列表
+                <ol> 有序列表
+                <ul> 无序列表
+                <li> 列表项
+            
+            超链接 <a></a> 有两个属性：
+                    1. href 定义要跳转的目标资源地址
+                        1) 完整url www.baidu.com
+                        2) 相对路径
+                        3) 绝对路径
+                    2. target 定义目标资源打开方式
+                        1) _self 当前窗口打开
+                        2) _blank 新窗口打开
+            
+            图像 <img ..attrs.. />
+                    1. src 定义图片路径
+                        1) url
+                        2) 相对路径
+                        3) 绝对路径
+                    2. title 定义鼠标悬停在图片上时候显示的文字
+                    3. alt 定义图片加载失败时候的提示文字
+                    4. width height 定义为像素或百分比
+
+                    更精细的格式控制可以通过 CSS 实现
+
+            表格标签
+                    table 整张表格
+                        thead 表头
+                        tbody 表体
+                        tfoot 表尾
+                            tr 表格中一行
+                                td 行中的一个单元格
+                                th 自带加粗效果的td
+                                    colspan="x" 横向占用x个单元格
+                                    rowspan="x" 纵向占用x个单元格
+                
+            表单标签 form （可以让用户在界面上输入各种信息并提交的一种标签，是向服务器发送数据主要的方式之一）
+                    
+                    name: 表单项一定要定义name属性，定义提交 时的参数名（key）       
+                    value: 表单项还需要定义value属性，定义提交时的实参值（value）
+
+                    form 标签，内部定义用于让用户输入信息的 ‘表单项标签’
+                        action: form-attr，定义信息提交的服务器地址 （url， 相对路径， 绝对路径）
+                        method: form-attr， 定义信息提交方式 （GET， POST）
+                            get: 
+                                get 方式， 数据会加在 url 后，以为 ? 作为参数开始表示，多个参数使用 & 隔开
+                                    url?key=value&key=value&...
+                                特点：
+                                    get提交会显示明文，直接暴露在地址栏，不安全
+                                    地址栏显示内容长度有限，可提交数据量有限制
+                                    地址栏get明文提交只能提交文字
+
+                            post: 
+                                post 方式， 数据会通过请求体发送，不会加在 url后面
+                                特点：
+                                    参数默认不会放到 url 后面
+                                    数据不会直接暴露在地址栏上，相对安全（网络数据包可抓，并不绝对安全）
+                                    数据是单独打包通过请求体发送的（请求体容量很大，可以提交大量数据）
+                                    请求体中数据可以是字符、字节数据、文件
+
+            
+                    input 标签， 主要的表单项标签，用于定义表单项
+                        name: input-attr， 定义提交的参数名
+                        type: input-attr， 定义表单项类型
+                            text
+                            password
+                            submit
+                            reset
+                            radio: 单选框， 多个单选框使用相同name属性值时，就会有互斥效果
+                            checkbox: 复选框，多个选项
+                            hidden: 隐藏域， 不显示在页面上，但是会一起被提交。希望用户提交特定信息，为了避免数据被修改，设置为隐藏域信息  
+                            file: 上传文件    
+                        value attr
+                        checked: 表明默认选项 attr
+                        readonly: 只读选项 attr
+                        disabled: 使input选项失效 attr
+                    
+                    textarea 标签，多行文本框
+                    select 下拉框
+                        option: 定义选项
+                        selected: 标记默认显示的选项，和checked本质相同
+
+                    
+        
+        -->
+```

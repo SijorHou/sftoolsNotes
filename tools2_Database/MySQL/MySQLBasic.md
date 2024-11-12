@@ -129,7 +129,7 @@ ENCRYPTION = 'Y';                    -- 启用加密，适用于MySQL 8.0及以�
 SELECT * FROM employees;
 SELECT employee_id, first_name, emai, job_id FROM employees;
 
--- 2. 列别名
+-- 2. 列别名（只能在 ORDER BY 中使用，WHERE中不醒）
 SELECT employee_id emp_id, first_name fst_name, job_id FROM employees;
 SELECT employee_id AS emp_id, first_name AS fst_name, job_id FROM employees;
 SELECT employee_id "emp_id", first_name "fst_name", job_id FROM employees;
@@ -224,4 +224,53 @@ SELECT last_name FROM employees WHERE last_name LIKE '_a%';		-- 查询 last_name
 SELECT last_name FROM employees WHERE last_name LIKE '__a%';
 
 
+-- 4. 逻辑运算符 OR ||	AND &&	NOT !		XOR
+SELECT employee_id, salary, department_id FROM employees WHERE department_id = 50 AND salary > 4000;
+SELECT last_name, salary, department_id FROM employees WHERE salary BETWEEN 10000 AND 30000;
+
+
+-- 5. 位运算符 & | ^ ~ >> 
+SELECT 12 & 5, 12 | 5, 12 ^ 5, ~12, 12 << 1, 12 << 2, 12 >> 1, 12 >> 2 FROM DUAL;		-- 换算成二进制进行 按位与、或、取反、
+
 ```
+***逻辑运算符优先级***
+<div style="text-align:center">
+    <img src="../pic/运算符优先级.png" alt="mysql密码重置步骤" style="margin-bottom: 1px;">
+    <p>mysql密码重置步骤</p>
+</div>
+
+#### 排序与分页
+
+```sql
+-- 1. 排序 ORDER BY 对查询到的数据进行排序,  DESC 降序排序， ASC 升序排序（默认）
+SELECT employee_id, last_name, salary FROM employees ORDER BY salary DESC;		-- 按照 salary 降序排序
+SELECT employee_id, last_name, salary FROM employees ORDER BY salary ASC;		-- 按照 salary 降序排序
+SELECT employee_id, salary, salary * 12 "annual salary" FROM employees ORDER BY "annual salary";		-- 使用列别名，按照别名进行排序
+
+SELECT employee_id, last_name, salary FROM employees WHERE department_id IN (50, 60, 70) ORDER BY department_id DESC;
+
+-- 1.2 多列排名
+-- 二级排序，先对某个字段排序，然后对另一个字段排序 （三级、...多级排序 均为 “多列排序”）
+-- 例：现根据 department_id 降序排序， 然后在相同的 department_id 中根据 salary 升序排序
+SELECT employee_id, salary, department_id FROM employees ORDER BY department_id DESC, salary ASC;
+
+
+-- 2. 分页
+-- 若符合查询条件的数据非常多， 返回数据的开销很大， 可以分页返回
+-- 使用 LIMIT 实现数据分页显示
+SELECT employee_id, last_name FROM employees LIMIT 0, 20; 	-- 代表从 0偏移20个位置，即显示第一页20条数据
+SELECT employee_id, last_name FROM employees LIMIT 20, 20;	-- 显示第二页20条数据
+
+-- 每页显示 pageSize 条记录， 当前显示 pageNo 页 ： 公式： LIMIT (pageNo-1) * pageSize, pageSize;
+SELECT employee_id, last_name, salary FROM employees WHERE salary > 6000 ORDER BY salary DESC LIMIT 0, 10;
+
+SELECT employee_id, last_name FROM employees LIMIT 31, 2;		-- 从31偏移两个位置， 即显示第32， 33 条数据
+SELECT employee_id, last_name FROM employees LIMIT 2 OFFSET 31;		-- 从31偏移两个位置， 即显示第32， 33 条数据
+
+-- 查询最高工资员工信息： 降序排序， 分页仅显示第一条
+SELECT * FROM employees ORDER BY salary DESC LIMIT 1; 	-- 省略基准位置， 默认从 0 开始
+
+```
+
+
+
