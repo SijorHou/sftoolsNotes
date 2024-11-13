@@ -273,4 +273,23 @@ SELECT * FROM employees ORDER BY salary DESC LIMIT 1; 	-- 省略基准位置， 
 ```
 
 
+#### 多表查询/关联查询
 
+多表查询，即 ***关联查询***，指两个或更多表一起完成查询操作（前提是一起查询的表之间有一对一、一对多等关系，***多表之间有关联字段***）
+
+为什么有些数据要分多个表存储不同字段： 如果都在一个表中，那么一条记录占据内存就比较大，一次所能查询的记录个数就比较少，那么当需要查询大量记录时候，就需要进行多次 IO，开销较大
+
+
+```sql
+-- example: 查询某一个名为 'Abel' 的员工在哪个城市工作 （如何将三条查询语句写成 关联查询？）
+
+-- employees 表中的记录包含一个 department_id 字段，该字段关联 departments 表（记录中也有 department_id字段）
+-- departments 表中记录包含一个 location_id 字段，该字段关联 locations 表（记录中也有 location字段）
+SELECT * FROM employees WHERE last_name = 'Abel';
+SELECT * FROM departments WHERE department_id = 80;
+SELECT * FROM locations WHERE location_id = 2500;
+
+-- 多表查询
+SELECT employee_id, department_name, city  FROM employees, departments, locations;
+
+```
