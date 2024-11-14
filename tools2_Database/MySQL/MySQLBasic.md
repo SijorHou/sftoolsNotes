@@ -281,7 +281,7 @@ SELECT * FROM employees ORDER BY salary DESC LIMIT 1; 	-- 省略基准位置， 
 
 
 ```sql
--- example: 查询某一个名为 'Abel' 的员工在哪个城市工作 （如何将三条查询语句写成 关联查询？）
+-- 1. example: 查询某一个名为 'Abel' 的员工在哪个城市工作 （如何将三条查询语句写成 关联查询？）
 
 -- employees 表中的记录包含一个 department_id 字段，该字段关联 departments 表（记录中也有 department_id字段）
 -- departments 表中记录包含一个 location_id 字段，该字段关联 locations 表（记录中也有 location字段）
@@ -289,7 +289,259 @@ SELECT * FROM employees WHERE last_name = 'Abel';
 SELECT * FROM departments WHERE department_id = 80;
 SELECT * FROM locations WHERE location_id = 2500;
 
--- 多表查询
-SELECT employee_id, department_name, city  FROM employees, departments, locations;
+
+-- 2. 笛卡尔积
+-- 错误方式，每个员工和每个部门都匹配了一遍（笛卡尔积/交叉链接 \ CROSS JOIN）
+-- 错误原因：缺少多表的连接条件
+SELECT employee_id, department_name FROM employees, departments;
+
+-- -- 正确方式，加上 连接条件
+SELECT employee_id, department_name FROM employees, departments WHERE employees.department_id = departments.department_id;
+
+-- 3. 表名使用
+-- 这里会报错，因为要显示的 employee_id he  department_name 分别在 employees 和 departments 表中，但是 department_id 在多个表中，需要指明显示哪个表中的 department_id
+
+-- SELECT employee_id, department_name, department_id 
+-- FROM employees, departments 
+-- WHERE employees.department_id = departments.department_id;
+
+-- 正确方式
+SELECT employee_id, department_name, employees.department_id 
+FROM employees, departments
+WHERE employees.department_id = departments.department_id;
+
+-- 实际上建议每个要显示的数据都指明所在表
+SELECT employees.employee_id, departments.department_name, employees.department_id 
+FROM employees, departments 
+WHERE employees.department_id = departments.department_id;
+
+-- 使用表名导致查询语句过长的时候，可以使用别名（如果使用过程中给表起了别名，那么使用表名时候就必须使用别名）
+SELECT emp.employee_id, dept.department_name, emp.department_id 
+FROM employees emp, departments dept 
+WHERE emp.department_id = dept.department_id;
+
+
+-- 4. example 中的正确写法，多表查询
+SELECT emp.employee_id, dept.department_name, emp.department_id, locs.city
+FROM employees emp, departments dept, locations locs
+WHERE emp.last_name = 'Abel'
+AND emp.department_id = dept.department_id
+AND dept.location_id = locs.location_id;
+
+
+```
+##### 多表查询分类
+```sql
+-- 多表查询分类
+-- 1. 等值连接 vs 非等值连接
+-- 2. 自连接 vs 非自连接
+-- 3. 内连接 vs 外连接
+
+-- 1. 等值连接 vs 非等值连接
+-- 非等值连接 实例
+SELECT emp.last_name, emp.salary, jg.grade_level
+FROM employees emp, job_grades jg
+WHERE emp.salary BETWEEN jg.lowest_sal AND jg.highest_sal;
+
+-- 2. 自连接 vs 非自连接
+-- 自连接 实例：employees表中，每条员工记录都有一个 manager_id，该id 代表的管理者也在employees表中
+SELECT emp.employee_id, emp.last_name, emp.manager_id, mgr.employee_id, mgr.last_name
+FROM employees emp, employees mgr
+WHERE emp.manager_id = mgr.employee_id;
+
+
+-- 3. 内连接 vs 外连接
+-- 内连接：前面的例子都是内连接，即 “合并具有同一列的两个以上的表的行，结果集中不包含一个表与另一个表不匹配的行”；即 结果集只包含两个表的交集部分
+
+-- 外连接：“合并具有同一列的两个以上的表的行，结果集中除了包含一个表与另一个表匹配的行，还查询到了左表 或 右表中不匹配的行”
+-- 外连接分类： 左外连接、右外连接、满外连接
+
+
+-- 查询所有员工的last_name, department_name 信息
+-- employees 中有一个记录中 department_id 记录为Null，最后查询记录数位 106 （employees中107）
+SELECT emp.employee_id, dept.department_name
+FROM employees emp, departments dept
+WHERE emp.department_id = dept.department_id;
+
+-- SQL99语法实现内连接
+-- 使用 INNER JOIN ... ON ...  INNER JOIN 代表关联两个表（INNER 可以省略），ON 取代 WHERE 指明查询条件
+SELECT emp.employee_id, emp.last_name, dept.department_name
+FROM employees emp INNER JOIN departments dept ON emp.department_id = dept.department_id
+INNER JOIN locations loc ON dept.location_id = loc.location_id;
+
+-- SQL99语法实现外连接
+-- 左外连接（就是 额外加入左表中不符合连接条件的记录）
+-- （连接条件：emp.department_id = dept.department_id， 不匹配记录：department_id 为 Null 的 178 Grant， departments中没有 Null department_id）
+-- (这里记录数位 107 和 employees中相同，即不仅包含匹配的行，还包含左表中不匹配的行，所以为“左外连接”)
+
+SELECT emp.employee_id, emp.last_name, dept.department_id
+FROM employees emp LEFT OUTER JOIN departments dept ON emp.department_id = dept.department_id;
+
+-- 右外连接
+SELECT emp.employee_id, emp.last_name, dept.department_id
+FROM employees emp RIGHT OUTER JOIN departments dept ON emp.department_id = dept.department_id;
+
+
+-- 满外连接
+-- 不支持 FULL OUTER JOIN， 需要额外实现
+SELECT emp.employee_id, emp.last_name, dept.department_id
+FROM employees emp RIGHT OUTER JOIN departments dept ON emp.department_id = dept.department_id;
+```
+
+
+##### 7种joins连接
+<div style="text-align:center">
+    <img src="../pic/7-joins.png" style="margin-bottom: 1px;">
+    <p>mysql密码重置步骤</p>
+</div>
+
+```sql
+-- 7种 SQL JOINS
+
+-- 1. 合并查询结
+-- 使用 UNION 关键字，将多条 SELECT 语句的结果组合成单个结果集
+-- 合并时，两表对应的列数和数据类型必须相同
+-- 各个 SELECT 语句之间使用 UNION（会执行去重） 或 UNION ALL（不会执行去重） 关键字分割
+-- SELECT column ... FROM table1 UNION SELECT column FROM table2;
+
+-- 查询部门编号 > 90 或 邮箱包含 a 的员工信息
+-- 方式 1
+SELECT * 
+FROM employees emp 
+WHERE emp.department_id > 90 OR emp.email LIKE '%a%';
+
+-- 方式2
+SELECT * FROM employees emp WHERE emp.department_id > 90
+UNION
+SELECT * FROM employees emp WHERE emp.email LIKE '%a%';
+
+-- 2. 7 种实现
+
+-- 2.1 中图：内连接
+SELECT emp.employee_id, dept.department_name
+FROM employees emp JOIN departments dept
+ON emp.department_id = dept.department_id;
+
+-- 2.2 左上图：左外连接
+SELECT emp.employee_id, dept.department_name
+FROM employees emp LEFT OUTER JOIN departments dept
+ON emp.department_id = dept.department_id;
+
+-- 2.3 右上图：左右外连接
+SELECT emp.employee_id, dept.department_name
+FROM employees emp RIGHT OUTER JOIN departments dept
+ON emp.department_id = dept.department_id;
+
+
+-- 2.4 左中图：（相当于左上图去掉AB共同包含的部分）
+SELECT emp.employee_id, dept.department_name
+FROM employees emp LEFT OUTER JOIN departments dept
+ON emp.department_id = dept.department_id
+WHERE dept.department_id IS NULL;
+
+
+-- 2.5 右中图：（相当于右中图去掉AB共同包含的部分）
+SELECT emp.employee_id, dept.department_name
+FROM employees emp RIGHT OUTER JOIN departments dept
+ON emp.department_id = dept.department_id
+WHERE emp.department_id IS NULL;
+
+
+-- 2.6 左下图：满外连接
+-- 2.6.1 UNION ALL 左上+右中
+SELECT emp.employee_id, dept.department_name FROM employees emp LEFT OUTER JOIN departments dept ON emp.department_id = dept.department_id
+UNION ALL
+SELECT emp.employee_id, dept.department_name FROM employees emp RIGHT OUTER JOIN departments dept ON emp.department_id = dept.department_id WHERE emp.department_id IS NULL;
+
+-- 2.6.2 UNION ALL 右上+左中
+SELECT emp.employee_id, dept.department_name FROM employees emp RIGHT OUTER JOIN departments dept ON emp.department_id = dept.department_id
+UNION ALL
+SELECT emp.employee_id, dept.department_name FROM employees emp LEFT OUTER JOIN departments dept ON emp.department_id = dept.department_id WHERE dept.department_id IS NULL;
+
+
+-- 2.7 右下图：左中+右中
+SELECT emp.employee_id, dept.department_name FROM employees emp LEFT JOIN departments dept ON emp.department_id = dept.department_id WHERE dept.department_id IS NULL
+UNION ALL
+SELECT emp.employee_id, dept.department_name FROM employees emp RIGHT JOIN departments dept ON emp.department_id = dept.department_id WHERE emp.department_id IS NULL;
+```
+##### 2个 SQL99新特性
+```sql
+-- SQL99新特性：自然连接 NATURAL JOIN、 USING 
+
+-- 1. NATURAL JOIN
+-- employees 和 departments 表中有两个相同的字段：department_id 和 manager_id
+
+-- 原来查询语句需要使用 JOIN ON 关联查询
+SELECT emp.employee_id, emp.last_name, dept.department_name
+FROM employees emp JOIN departments dept
+ON emp.department_id = dept.department_id AND emp.manager_id = dept.manager_id;
+
+-- 使用 NATURAL JOIN 可以自动关联两表，查询两表中的相同字段后进行 等值连接
+SELECT emp.employee_id, emp.last_name, dept.department_name
+FROM employees emp NATURAL JOIN departments dept;
+
+-- 2. USING
+-- 关联查询内容，等值连接如果字段名字在两表中相同，直接使用 USING
+SELECT emp.employee_id, emp.last_name, dept.department_name
+FROM employees emp JOIN departments dept
+USING (department_id);
+```
+
+#### 函数
+不同 DBMS 之间的函数的差异性远大于 SQL语言在不同 DBMS 之间的差异
+##### MySQL内置函数及其分类
+从 ***实现的功能** 的角度分类：
+- 数值函数
+- 字符串函数
+- 日期和时间函数
+- 流程控制函数（如 加密与解密函数、获取MySQL信息函数、聚合函数）
+
+再分为两类：***单行函数、聚合函数/分组函数***
+
+##### 数值函数
+###### 
+```txt
+ABS(x)    
+SIGN(x)
+Pi()
+CEIL(x), CEILING(x)
+FLOOR(x)
+LEAST(v1, v2, v3, ...)
+GREATEST(v1, v2, v3, ...)
+MOD(x, y)
+RAND()          返回0-1随机值
+RAND(x)         返回0-1随机值，x为种子，相同x会产生相同随机数
+ROUND(x)        四舍五入x
+ROUND(x, y)     四舍五入x，保留小数点后y位
+TRUNCAT(x, y)   返回数字 x 截断 y 位小数的结果
+SQRT(x)         返回 x 平方根，若为负数，返回NULL
+```
+
+```sql
+-- 1. 数值函数
+SELECT ABS(-123), ABS(21),
+SIGN(-123), SIGN(32),
+PI(),
+CEIL(-32.23), CEIL(89.65),
+FLOOR(18.7), FLOOR(-5.4)
+FROM DUAL;
+
+SELECT MOD(12,5),
+LEAST(32,-18,0), GREATEST(38,99,12),
+TRUNCATE(1.89427613,5),
+SQRT(9)
+FROM DUAL;
+
+
+-- 第一个产生 不同随机数，第二个每次产生的随机数相同
+SELECT RAND(), RAND(6) FROM DUAL;
+SELECT RAND(), RAND(6) FROM DUAL;
+
+SELECT 
+ROUND(123.456), ROUND(123.456, 0), 
+ROUND(123.456, 1), ROUND(123.456, 2),
+ROUND(123.456, -1), ROUND(123.456, -2)
+FROM DUAL;
+
 
 ```
