@@ -191,29 +191,40 @@ Linux的目录结构以树形方式呈现，以下是Linux系统中一些常见�
     <p>关机重启</p>
 </div>
 
-## 用户登录和注销
+## 用户及用户组相关
+### 用户登录和注销
 
 - `su user` 登录一个用户（root、user）
 - `logout/exit` 注销用户（无UI界面/UI界面），返回上一个登录的用户、退出系统 
 
 
-## 用户管理
-- `useradd username` 添加用户
+### 用户管理
+
+***账号管理***
+
+- `useradd [option] username` 添加用户
+  - `-c -d -g -s` 分别是： 指定一段注释性描述、指定创建目录、指定用户所属的组、指定用户登录的shell
   - `useradd -d home-path username` 一般添加用户的时候会指定该用户的家目录，通常是同名，如 `useradd -d /home/tom tom`, 也可以不同名， 不加设置默认同名
   - `useradd -g group_name` 创建用户时指定属组，否则默认创建一个与username同名的属组
-- `userdel username` 删除用户
+- `userdel [option] username` 删除用户
   - 默认删除，该用户的家目录不会被删除，`/etc/passwd, group, shadow` 中对应的用户的相关信息会删除
   - `userdel -r username` 删除用户时候连通用户的家目录一起删除
 - `who am i` 查看当前用户（显示第一次登录的用户信息，避免切换用户造成混淆）
 - `usermod [option]` 修改用户相关属性
   - 如 `usermod -s /bin/ksh -d /home/z –g developer`
   - 此命令将用户sam的登录Shell修改为ksh，主目录改为/home/z，用户组改为developer
-<div style="text-align:center">
-    <img src="/tools3_Linux/pic_source/用户和组相关文件.png" alt="用户和组相关文件" style="margin-bottom: 1px;">
-    <p>用户和组相关文件</p>
-</div>
 
-## 用户组
+***密码口令管理 `passwd`***
+- `passwd [option] username` 超级用户可以为自己和其他用户设置 口令，但是普通用户只能为自己设置
+- `passwd` 用户为自己设置口令
+- `passwd [-ludf] username` 
+  - `-l, -u` 分别是锁定用户（无法登录） 、解锁用户
+  - `-d` 移除用户口令
+
+### 用户组
+
+***组管理***
+
 - `groupadd [option] groupname` 新增一个用户组
   - `-g`修改组的GID用户标识, 如`groupadd -g 1005 userrr`
   - `-o` 一般与-g选项同时使用，表示新用户组的GID可以与系统已有用户组的GID相同
@@ -224,7 +235,25 @@ Linux的目录结构以树形方式呈现，以下是Linux系统中一些常见�
   - `-o` 一般与-g选项同时使用，表示新用户组的GID可以与系统已有用户组的GID相同
 - `newgrp othergroup` 一个用户有多个属组，切换到 `othergroup`
 
-## 运行级别
+***用户账号相关文件***
+
+- 完成用户管理的工作有许多种方法，但是每一种方法实际上都是对有关的系统文件进行修改
+- 与用户和用户组相关的信息都存放在一些系统文件中，这些文件包括：
+  - `/etc/passwd`
+  - `/etc/shadow`
+  - `/etc/group`
+- 可以使用查看命令查看文件
+  - 如 `cat /etc/passwd`，`tail -n 10 /etc/group`
+- 用户信息
+  - `/etc/passwd`中如 `sijorhou:x:1000:1000:sijorhou:/home/sijorhou:/bin/bash`
+  - 含义为：`用户名:口令:用户标识号:组标识号:注释性描述:主目录:登录Shell`
+
+<div style="text-align:center">
+    <img src="/tools3_Linux/pic_source/用户和组相关文件.png" alt="用户和组相关文件" style="margin-bottom: 1px;">
+    <p>用户和组相关文件</p>
+</div>
+
+### 运行级别
 
 ***指定运行级别***
 
@@ -245,6 +274,39 @@ Linux的目录结构以树形方式呈现，以下是Linux系统中一些常见�
   - `multi-user.target` 表多用户模式 3
 - `systemctl set-defult xxx.target` 设置当前target
   - 如执行 `systemctl set-defult multi-user.target` 然后重启，则切换到命令行多用户模式
+
+
+### 找回用户密码
+1. 启动系统，进入开机界面，按 'e' 进入编辑界面
+2. 进入编辑界面，键盘上下键移动光标向下，找到 'Linux16' 开头内容所在行数，在最后面输入 `init=/bin/sh`
+3. 输入后按下 `Ctl + x` 进入单用户模式
+4. 光标闪烁位置中输入 `mount -o remount,rw /`
+5. 新一行最后输入新的 password，再次输入确认
+6. 执行完 5 后进入新状态，在光标闪烁位置中输入 `touch ./autorelabel` 后回车
+7. 继续在光标闪烁位置中输入 `exec /sbin/init` 后回车，等待系统自动修改密码并重启
+
+
+## 帮助指令
+- `man command` 查看 command的手册页
+- `info command` 没有手册页可以查看 info页
+- `command --help` 显示command的基本用法和选项
+- `cd ..` 返回上一级目录
+  
+  <div style="text-align:center">
+    <img src="/tools3_Linux/pic_source/返回上级目录.png" alt="返回上级目录" style="margin-bottom: 1px;">
+    <p>返回上级目录</p>
+</div>
+
+
+
+## 文件目录管理
+
+
+
+
+
+
+
 
 ## systemctl command detail
 
@@ -275,6 +337,4 @@ systemed系统重，服务 service 通常指后台运行的进程，可以是系
 - `curl [options] [URL]` 是一个用于传输数据的命令行工具。***常用于测试和调试网络服务，或在命令行中与 Web API 进行交互***
   - `-g` 使用 GET 方法（默认方法） `curl -a https://www.xxx.com`
   - `-d` 发送 POST 数据 `curl -d "param1=value1&param2=value2..." http://www.xxx.com`
-## 文件目录管理
-
 
