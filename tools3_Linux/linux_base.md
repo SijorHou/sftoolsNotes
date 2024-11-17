@@ -308,6 +308,8 @@ Linux的目录结构以树形方式呈现，以下是Linux系统中一些常见�
 
 
 
+
+
 ## systemctl command detail
 
 语法： ***`systemctl COMMAND name.service`***

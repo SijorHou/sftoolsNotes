@@ -72,6 +72,17 @@ Linux文件属性有两种设置方法，一种是数字，一种是符号。
   - 对于不存在的文件，会创建该空文件（无需`vim file_name` 进入然后退出）
 
 ### Linux 文件查看命令
+<div style="text-align:center">
+    <img src="/tools3_Linux/pic_source/文件目录类-more指令.png" alt="文件目录类-more指令" style="margin-bottom: 1px;">
+    <p>文件目录类-more指令</p>
+</div>
+<div style="text-align:center">
+    <img src="/tools3_Linux/pic_source/文件目录类-less指令.png" alt="文件目录类-less指令" style="margin-bottom: 1px;">
+    <p>文件目录类-less指令</p>
+</div>
+
+***建议查看较大文件时候，直接使用 `less file_name`***
+- `more, less [option] file` 文件显示
 - `cat [-AbnvET] file`
   - `-A` 整合了 `vET` 的选项，列出特殊字符而不只是空白
   - `-b -n` 都是显示行号
@@ -80,16 +91,17 @@ Linux文件属性有两种设置方法，一种是数字，一种是符号。
   - `tail -f file` 会一直循环读取文件末尾内容，即一直监控该文件的内容变化（可能在其他终端中在修改该文件）
 - `nl file` 显示行号，但是有更丰富的行号显示的设置选项
 - `head/taiil -n number file` 显示文件的前/后几行
-- `more, less [option] file` 文件显示
+  - `tail` 可以实时监控文件内容末尾变化（`-f`参数）
 - `echo [option] [output_content]` 输出内容到控制台
   - `echo "hi, sijorhou!"` 控制台会输出 字符串内容
   - `echo $PATH / $HOSTNAME` 控制台会输出 路径 / 主机名
 - `>` 输出重定向
   - `echo "xxx" > file_name` 原本命令输出内容到控制台，现在重定向为一个文件，即输出内容到该文件中（覆盖写入）
   - `ls -al > file_name` 将目录行列表内容覆盖写入 file_name 文件
-- `>>` 输出内追加重定向
+- `>>` 输出内容追加重定向
   - `cat file_name1 >> file_name2` 会将 file_name1 中的内容追加输入到 file_name2 文件的末尾
   - `echo "str content" >> file_name` 将命令行输入内容追加到文件末尾
+- 输出重定向、输出内容追加重定向，如果文件不存在则自动创建
  
 
 ## Linux 磁盘管理
