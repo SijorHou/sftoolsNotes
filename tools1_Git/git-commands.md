@@ -64,6 +64,9 @@
   - `git checkout branch_name` 切换到分支 `branch_name`
   - `git checkout -` 切换回上一个分支
 - `git merge --no-ff branch_name` 合并分支，带有参数用于录入合并记录
+- `git branch -m old_branch_name new_branch_name` ***修改分支名称为新分支名称***
+  - `git push origin :old_branch_name` 直接推送，删除远程仓库中旧名称分支
+  - `git push origin new_branch_name` 直接推送新名称分支到远程仓库
 
 
 ### 更改提交操作
@@ -99,3 +102,20 @@ fork 别人的项目有了更新，将当前分支同步为最新版本
   - 将GitHub上的项目克隆到本地，系统默认设置远程仓库标识符为 origin，处于 master分支下
   - `git checkout -b feature-D origin/feature-D` `git push` 本地创建并切换到和远程仓库分支同名的 feature-D， 然后将本地分支内容推送到远程仓库
 - `git pull origin feature-D` 获取最新远程仓库分支
+
+
+### 添加 .gitignore
+
+- 新建 `.gitignore` 文件，在其中加入规则 (规则示例： `.vscode/` 表版本控制交互中忽略 vscode目录中的所有文件， `*.md` 表忽略所有 md文件)
+  - `git add .gitignore`
+  - `git commit -m "add .gitignore file"`
+  - `git push -u origin branch_name`
+
+
+***如果有些文件已经存在于版本控制系统中***
+- 先新建、添加、提交、推送 `.gitignore` 文件（注意其中列完整所有需要忽略的文件及目录
+- `git rm -r --cached <file/dir_name>` 执行命令， 一个个删除版本控制系统中的 相关文件
+- 然后添加提交本地再推送远程仓库执行删除（本地依然存在这些文件或目录）
+  - `git add --all` 
+  - `git commit -m "remove xxx file from Git tracking"`
+  - `git push origin branch_name`
