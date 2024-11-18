@@ -236,7 +236,7 @@ SELECT 12 & 5, 12 | 5, 12 ^ 5, ~12, 12 << 1, 12 << 2, 12 >> 1, 12 >> 2 FROM DUAL
 ***逻辑运算符优先级***
 <div style="text-align:center">
     <img src="../pic/运算符优先级.png" alt="mysql密码重置步骤" style="margin-bottom: 1px;">
-    <p>mysql密码重置步骤</p>
+    <p>运算符优先级</p>
 </div>
 
 #### 排序与分页
@@ -392,7 +392,7 @@ FROM employees emp RIGHT OUTER JOIN departments dept ON emp.department_id = dept
 ##### 7种joins连接
 <div style="text-align:center">
     <img src="../pic/7-joins.png" style="margin-bottom: 1px;">
-    <p>mysql密码重置步骤</p>
+    <p>7-joins</p>
 </div>
 
 ```sql
@@ -489,7 +489,7 @@ USING (department_id);
 
 #### 函数
 不同 DBMS 之间的函数的差异性远大于 SQL语言在不同 DBMS 之间的差异
-##### MySQL内置函数及其分类
+##### MySQL内置函数与分类
 从 ***实现的功能** 的角度分类：
 - 数值函数
 - 字符串函数
@@ -608,7 +608,101 @@ BIN(12), HEX(12), OCT(10), CONV(1100, 2, 16)
 FROM DUAL;
 ```
 
+##### 字符串函数
+
+| 函数         | 用法                                                                 |
+|--------------|----------------------------------------------------------------------|
+| ASCII(S)     | 返回字符串S中的第一个字符的ASCII码值                                 |
+| CHAR_LENGTH(s) | 返回字符串s的字符数。作用与CHARACTER_LENGTH(s)相同                  |
+| LENGTH(s)    | 返回字符串s的字节数，和字符集有关                                    |
+| CONCAT(s1,s2,...Sn) | 连接s1,s2...sn为一个字符串                                       |
+| CONCAT_WS(x, S1,S2,...sn) | 同CONCAT(s1,s2...)函数，但是每个字符串之间要加上x             |
+| INSERT(str, idx, len, replacestr) | 将字符串str从第idx位置开始，len个字符长的子串替换为字符串replacestr |
+| REPLACE(str,a,b) | 用字符串b替换字符串str中所有出现的字符串a                         |
+| UPPER(s)或UCASE(s) | 将字符串s的所有字母转成大写字母                                   |
+| LOWER(s)或LCASE(s) | 将字符串s的所有字母转成小写字母                                   |
+| LEFT(str,n)  | 返回字符串str最左边的n个字符                                         |
+| RIGHT(str,n) | 返回字符串str最右边的n个字符                                         |
+| LPAD(str,len,pad) | 用字符串pad对str最左边进行填充，直到str的长度为len个字符          |
+| RPAD(str ,len, pad) | 用字符串pad对str最右边进行填充，直到str的长度为len个字符         |
+| LTRIM(s)            | 去掉字符串s左侧的空格                                               |
+| RTRIM(s)            | 去掉字符串s右侧的空格                                               |
+| TRIM(s)             | 去掉字符串s开始与结尾的空格                                         |
+| TRIM(s1 FROM s)    | 去掉字符串s开始与结尾的s1                                           |
+| TRIM(LEADING s1 FROM s) | 去掉字符串s开始处的s1                                           |
+| TRIM(TRAILING s1 FROM s) | 去掉字符串s结尾处的s1                                           |
+| REPEAT(str,n)       | 返回str重复n次的结果                                                 |
+| SPACE(n)            | 返回n个空格                                                          |
+| STRCMP(s1,s2)       | 比较字符串s1,s2的ASCII码值的大小                                     |
+| SUBSTR(s,index,len) | 返回从字符串s的index位置其len个字符，作用与SUBSTRING(s,nlen）、MID(s,n,len)相同 |
+| LOCATE(substr,str) | 返回字符串substr在字符串str中首次出现的位置，作用于POSITION(substr IN str)、INSTR（str,substr）相同。未找到，返回0 |
+| ELT(m,s1,s2,...,sn) | 返回指定位置的字符串，如果m=1，则返回s1，如果m=2，则返回s2，如果m=n，则返回sn |
+| FIELD(s,s1,s2,...,sn) | 返回字符串s在字符串列表中第一次出现的位置                         |
+| FIND_IN_SET(s1,s2)  | 返回字符串s1在字符串s2中出现的位置。其中，字符串s2是一个以逗号分隔的字符串 |
 
 
+***实例***
+```sql
+-- ASCII(str) 返回 A 的 ASCII码
+-- CHAR_LENGTH(str) 获取字符长度，无论中英文，一个字符就是一个长度
+-- LENGTH(str) 获取字节长度，英文一个字符就是一个长度，而一个中文字符占据 3 个字节，所以 LENGTH('你好世杰') 长度为 12
+SELECT 
+ASCII('Abcdfsf'), 
+CHAR_LENGTH('hello, sijorhou'), CHAR_LENGTH('你好世杰'),
+LENGTH('hello, sijorhou'), LENGTH('你好世杰')
+FROM DUAL;
 
 
+-- CONCAT(str1,str2,...) 将多个字符串拼接在一起
+SELECT 
+CONCAT(emp.last_name, ', employee_id is ', emp.employee_id, ', works for ', mgr.last_name)
+FROM employees emp JOIN employees mgr ON emp.manager_id = mgr.employee_id;
+
+
+-- CONCAT_WS(separator,str1,str2,...) 使用分隔符 separator 将多个字符串连接起来
+SELECT CONCAT_WS('-', 'hello' , 'sijorhou', '!!!') FROM DUAL;
+-- 嵌套
+SELECT CONCAT('today is ', CONCAT_WS('-', '2024', '11', '18')) FROM DUAL;
+
+
+-- INSERT(str,pos,len,newstr) 使用功能 newstr 取代 str 中从 pos开始往后的len长度的字符串
+-- MySQL 中字符串索引是从 1 开始的
+-- res:
+-- 123456--hello, sijorhou!!!--654321
+-- 123456--hello, sijorhou!!!--654321
+-- --hello, sijorhou!!!--AAA654321
+-- hello--AAA--hello
+SELECT INSERT('123456AAA654321', 7, 3, '--hello, sijorhou!!!--') FROM DUAL;
+SELECT REPLACE('123456AAA654321', 'AAA', '--hello, sijorhou!!!--') FROM DUAL;
+SELECT REPLACE('123456AAA654321', '123456', '--hello, sijorhou!!!--') FROM DUAL;
+-- 嵌套
+SELECT 
+REPLACE(REPLACE('123456AAA654321', '123456', 'hello--') , '654321', '--hello') FROM DUAL;
+
+
+-- UPPER(str), LOWER(str) 分别将字符串 str 转换成大写和小写
+SELECT UPPER('Hello, sijorhou'), LOWER('HELLO, SIJORHOU') FROM DUAL; 
+-- res: HELLO, SIJORHOU, hello, sijorhou
+
+
+-- LEFT(str,len), RIGHT(str,len) 分别返回 str 左边或右边的 len长度的 子串
+SELECT 
+CHAR_LENGTH('abcdefghigklmnopqrstuvwxyz'), 
+UPPER('abcdefghigklmnopqrstuvwxyz'),
+LEFT('abcdefghigklmnopqrstuvwxyz', 13), RIGHT('abcdefghigklmnopqrstuvwxyz', 13),
+CHAR_LENGTH(LEFT('abcdefghigklmnopqrstuvwxyz', 13)),
+LENGTH(RIGHT('abcdefghigklmnopqrstuvwxyz', 13))
+FROM DUAL;
+-- res: 26	ABCDEFGHIGKLMNOPQRSTUVWXYZ	abcdefghigklm	nopqrstuvwxyz	13	13
+
+
+-- LPAD(str,len,padstr), RPAD(str,len,padstr) 会在字符串 str 的左边或 右边，填充 padstr 直到长度达到 len，拖过 len长度小于 str，则无论左右只保留 len长度的子串
+SELECT 
+emp.employee_id, emp.last_name, 
+LPAD(emp.salary, 10, '*'), LPAD(emp.salary, 6, '*'), RPAD(emp.salary, 6, '*')
+FROM employees emp;
+-- res: 100	King	**24000.00	24000.	24000.
+
+SELECT employee_id, last_name, LPAD(last_name, 20, '-'), RPAD(last_name, 20, '-') FROM employees;
+-- res: 100	King	----------------King	King----------------
+```
