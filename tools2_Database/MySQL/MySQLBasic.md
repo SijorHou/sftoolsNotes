@@ -498,8 +498,9 @@ USING (department_id);
 
 再分为两类：***单行函数、聚合函数/分组函数***
 
-##### 数值函数
-###### 
+##### 数值函数 
+
+###### 基本函数
 ```txt
 ABS(x)    
 SIGN(x)
@@ -518,7 +519,7 @@ SQRT(x)         返回 x 平方根，若为负数，返回NULL
 ```
 
 ```sql
--- 1. 数值函数
+-- 基本函数
 SELECT ABS(-123), ABS(21),
 SIGN(-123), SIGN(32),
 PI(),
@@ -543,5 +544,71 @@ ROUND(123.456, 1), ROUND(123.456, 2),
 ROUND(123.456, -1), ROUND(123.456, -2)
 FROM DUAL;
 
-
+-- 单行函数可以嵌套
+SELECT ROUND(123.45678, 3);
+SELECT TRUNCATE(ROUND(123.45678, 3), 1);
 ```
+
+###### 三角函数
+
+```txt
+弧度-角度转换
+RADIANS(X)
+DEGREES(X)
+
+三角函数(X均为弧度值)
+SIN(X)
+ASIN(X)
+COS(X)
+ACOS(X)
+TAN(X)
+ATAN(X)
+ATAN2(m, n) 返回两个数的反正切值
+COT(X)
+
+指数函数 和 对数
+POW(m, n) 返回 m 的 n 次方
+POWER(m, n)
+EXP(num) 返回 e 的 num次方
+
+LN(X)
+LOG(X), LOG10(X), LOG2(4)
+
+
+进制间的转换
+BIN(X)
+HEX(X)
+OCT(X)
+CONV(X, f1, f2) 把 x 由 f1进制的数，转变成 f2进制的数
+```
+
+
+```sql
+-- 1. 弧度-角度转换
+-- RADIANS(X) 角度->弧度，X为角度值；DEGREES(X) 弧度->角度，X为弧度值
+SELECT RADIANS(60) / PI() FROM DUAL;
+SELECT DEGREES(PI() * 0.25) FROM DUAL;
+
+-- 2. 三角函数
+SELECT 
+SIN(RADIANS(30)), DEGREES(ASIN(0.5)), 
+COS(RADIANS(60)), DEGREES(ACOS(SQRT(0.5))) 
+FROM DUAL;
+
+SELECT TAN(RADIANS(45)), DEGREES(ATAN(1)) FROM DUAL;
+
+
+-- 3. 指数函数 和 对数函数
+SELECT POW(2,3), POWER(2,10), EXP(0) FROM DUAL;
+SELECT LN(EXP(3)), LOG(EXP(2)), LOG10(10), LOG2(4) FROM DUAL;
+
+-- 4. 进制间的转换
+SELECT
+BIN(12), HEX(12), OCT(10), CONV(1100, 2, 16)
+FROM DUAL;
+```
+
+
+
+
+
