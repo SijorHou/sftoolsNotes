@@ -705,4 +705,267 @@ FROM employees emp;
 
 SELECT employee_id, last_name, LPAD(last_name, 20, '-'), RPAD(last_name, 20, '-') FROM employees;
 -- res: 100	King	----------------King	King----------------
+
+
+-- TRIM(str) 去掉字符串开始与结尾的空格
+-- TRIM([remstr FROM] str) 去掉 str字符串首尾 的 remstr 子串
+-- TRIM([{BOTH | LEADING | TRAILING} [remstr] FROM] str) 去掉str 首尾、首部、尾部的 remstr子串
+SELECT 
+LTRIM('     hello, sijorhou, how are you!!    '),
+TRIM('     hello, sijorhou, how are you!!    '), RTRIM('     hello, sijorhou, how are you!!    '),
+TRIM('oh' FROM 'ohelloh'), 
+TRIM(LEADING 'oh' FROM 'ohelloh'), TRIM(TRAILING 'oh' FROM 'ohelloh'), TRIM(BOTH 'oh' FROM 'ohelloh')
+FROM DUAL;
+-- res:
+-- hello, sijorhou, how are you!!    . '.'之前是全部返回结果
+-- hello, sijorhou, how are you!!.
+--      hello, sijorhou, how are you!!.
+-- ell.
+-- elloh.
+-- ohell.
+-- ell.
+
+
+-- REPEAT(str,count) 重复 count 次 str 的结果
+-- SPACE(N) 重复n次空格
+-- STRCMP(expr1,expr2) 比较 expr1 和 expr2 的ASCII码值大小
+-- SUBSTR(str,pos,len) 返回 字符串 str从 pos 位置开始的len长度的子串（包含第 pos 个）
+SELECT 
+CONCAT_WS(REPEAT('sijorhou-', 2), SPACE(2), REPEAT('-repeat_str', 2)),
+STRCMP('abc', 'abcd'), STRCMP('abc', 'abb'),
+SUBSTR('abcdefghijklmnopqrstuvwxyz', 14, 13)
+FROM DUAL; 
+-- res:
+--   sijorhou-sijorhou--repeat_str-repeat_str.
+-- -1
+-- 1
+-- nopqrstuvwxyz.
+
+
+-- LOCATE(substr,str) 返回 substr子串在str中首次出现的位置
+-- ELT(N,str1,str2,str3,...) 返回指定位置的字符串，若 N=1，则返回 str
+-- FIELD(str,str1,str2,str3,...) 返回 str 在字符串列表 [str1, str2, str3, str4, ...] 中首次出现的位置，出现是指完全相同
+-- FIND_IN_SET(str,strlist) 返回 str 在 strlist中首次出现的位置 (strlist是用 , 分割的一个字符串， 注意 空格也包含在字符串中)
+SELECT LOCATE('0', '123456789'), LOCATE('6', '123456789'),		-- 0 6
+ELT(1, '1', '2', '3', '4'), ELT(2, '1', '2', '3', '4'), 			-- 1 2
+ELT(3, '1', '2', '3', '4'), ELT(4, '1', '2', '3', '4'),				-- 3 4
+FIELD('a', 'abc', 'def', 'ghi', 'jkl'), FIELD('def', 'abc', 'def', 'ghi', 'jkl'),		-- 0 2
+FIND_IN_SET('are', 'hellosijorhouhowareyou'),									-- 0
+FIND_IN_SET('are', 'hello,sijorhou,how,are,you'),							-- 4
+FIND_IN_SET('are', 'hello, sijorhou, how, are, you') 					-- 0
+FROM DUAL;
 ```
+
+##### 日期和时间函数
+
+###### 获取日期、时间
+| 函数                             | 用法                             |
+|----------------------------------|----------------------------------|
+| CURDATE(), CURRENT_DATE()        | 返回当前日期，只包含年、月、日   |
+| CURTIME(), CURRENT_TIME()        | 返回当前时间，只包含时、分、秒   |
+| NOW() / SYSDATE() / CURRENT_TIMESTAMP() / LOCALTIME() / LOCALTIMESTAMP() | 返回当前系统日期和时间 |
+| UTC_DATE()                       | 返回UTC（世界标准时间）日期       |
+| UTC_TIME()                       | 返回UTC（世界标准时间）时间       |
+
+***example***
+```sql
+-- 1. 获取日期、时间 
+SELECT 
+CURDATE(), CURRENT_DATE(),		-- 2024-11-19
+CURTIME(), CURRENT_TIME(),		-- 23:08:53
+NOW(), SYSDATE(), 		-- 2024-11-19 23:08:53
+UTC_DATE(), UTC_TIME()	-- 2024-11-19,  15:08:53
+FROM DUAL;
+```
+
+###### 日期-时间戳转换
+| 函数                   | 用法                                                         |
+|------------------------|--------------------------------------------------------------|
+| UNIX_TIMESTAMP()       | 以UNIX时间戳的形式返回当前时间。SELECT UNIX_TIMESTAMP()->1634348884 |
+| UNIX_TIMESTAMP(date)   | 将时间date以UNIX时间戳的形式返回。                           |
+| FROM_UNIXTIME(timestamp) | 将UNIX时间戳的时间转换为普通格式的时间                       |
+
+***example***
+```sql
+-- 2. 日期与时间戳的转换
+-- 首次运行返回时间、时间戳：2024-11-19 23:02:33, 1732028553
+SELECT 
+NOW(),
+UNIX_TIMESTAMP(), 
+UNIX_TIMESTAMP('2026-12-25 14:12:33'),		-- 可以生成指定时间的时间戳
+FROM_UNIXTIME(1732028553)     -- 返回首次运行时间 2024-11-19 23:02:33
+FROM DUAL;
+```
+
+###### 获取月份、星期、星期数、天数等函数
+| 函数                   | 用法                                                         |
+|------------------------|--------------------------------------------------------------|
+| YEAR(date) / MONTH(date) / DAY(date) | 返回具体的日期值                                     |
+| HOUR(time) / MINUTE(time) / SECOND(time) | 返回具体的时间值                               |
+| MONTHNAME(date)        | 返回月份：January, ...                                      |
+| DAYNAME(date)          | 返回星期几：MONDAY, TUESDAY...SUNDAY                        |
+| WEEKDAY(date)          | 返回周几，注意，周1是0，周2是1，... 周日是6                  |
+| QUARTER(date)          | 返回日期对应的季度，范围为1~4                               |
+| WEEK(date), WEEKOFYEAR(date) | 返回一年中的第几周                                   |
+| DAYOFYEAR(date)        | 返回日期是一年中的第几天                                   |
+| DAYOFMONTH(date)       | 返回日期位于所在月份的第几天                               |
+| DAYOFWEEK(date)        | 返回周几，注意：周日是1，周一是2，... 周六是7               |
+
+```sql
+-- 3. 获取月份、星期、星期数、天数等函数
+-- YEAR(date), MONTH(date), DAY(date), HOUR(time), MINUTE(time), SECOND(time) 返回年月日时分秒
+SELECT 
+YEAR(CURRENT_DATE()), MONTH(CURRENT_DATE()), DAY(CURRENT_DATE()),
+HOUR(CURTIME()), MINUTE(CURTIME()), SECOND(CURRENT_TIME())
+FROM DUAL;
+
+-- 设定时间： '2025-11-11'
+SELECT 
+MONTHNAME('2025-11-11'), DAYNAME('2025-11-11'), WEEKDAY('2025-11-11'), -- 将字符串 '2025-11-11' 隐式转换成日期
+QUARTER(CURDATE()), WEEK(CURDATE()), 
+DAYOFYEAR(NOW()), DAYOFMONTH(NOW()), DAYOFWEEK(NOW())
+FROM DUAL;
+```
+###### 日期的操作函数
+
+| 函数                   | 用法                                                         |
+|------------------------|--------------------------------------------------------------|
+| EXTRACT(type FROM date)| 返回指定日期中特定的部分，type指定返回的值                    |
+
+
+```sql
+-- 4. 日期操作函数
+-- EXTRACT(unit FROM date)  代表从提起中提取所需类型的单元
+-- unit 有:
+-- MICROSECOND, SECOND, MINUTE, HOUR, 
+-- DAY, MONTH, QUARTER, YEAR, 
+-- SECOND_MICROSECOND, MINUTE_MICROSECOND, MINUTE_SECOND
+SELECT
+EXTRACT(HOUR FROM NOW()), EXTRACT(MINUTE FROM NOW()), 
+EXTRACT(SECOND FROM NOW()), EXTRACT(MICROSECOND FROM NOW()),
+EXTRACT(YEAR FROM NOW()), EXTRACT(MONTH FROM NOW()), EXTRACT(DAY FROM NOW()),
+EXTRACT(QUARTER FROM NOW()), EXTRACT(SECOND_MICROSECOND FROM NOW()), 
+EXTRACT(MINUTE_SECOND FROM NOW()), EXTRACT(MINUTE_MICROSECOND FROM NOW())
+FROM DUAL;
+```
+###### 时间转换函数
+| 函数                   | 用法                                                         |
+|------------------------|--------------------------------------------------------------|
+| TIME_TO_SEC(time)      | 将time转化为秒并返回结果值。转化的公式为：小时*3600+分钟*60+秒 |
+| SEC_TO_TIME(seconds)   | 将seconds描述转化为包含小时、分钟和秒的时间                  |
+
+
+###### 计算时间和日期的函数
+***第一组***
+| 函数                                      | 用法                                                         |
+|-------------------------------------------|--------------------------------------------------------------|
+| DATE_ADD(datetime, INTERVAL expr type), ADDDATE(date, INTERVAL expr type) | 返回与给定日期时间相差INTERVAL时间段的日期时间                  |
+| DATE_SUB(date, INTERVAL expr type), SUBDATE(date, INTERVAL expr type) | 返回与date相差INTERVAL时间间隔的日期                           |
+
+***第二组***
+| 函数                   | 用法                                                         |
+|------------------------|--------------------------------------------------------------|
+| ADDTIME(time1, time2)  | 返回time1加上time2的时间。当time2为一个数字时，代表的是秒，可以为负数 |
+| SUBTIME(time1, time2)  | 返回time1减去time2后的时间。当time2为一个数字时，代表的是秒，可以为负数 |
+| DATEDIFF(date1, date2) | 返回date1 - date2的日期间隔天数                               |
+| TIMEDIFF(time1, time2) | 返回time1 - time2的时间间隔                                   |
+| FROM_DAYS(N)           | 返回从0000年1月1日起，N天以后的日期                           |
+| TO_DAYS(date)          | 返回日期date距离0000年1月1日的天数                           |
+| LAST_DAY(date)         | 返回date所在月份的最后一天的日期                             |
+| MAKEDATE(year, n)      | 针对给定年份与所在年份中的天数返回一个日期                    |
+| MAKETIME(hour, minute, second) | 将给定的小时、分钟和秒组合成时间并返回                  |
+| PERIOD_ADD(time, n)    | 返回time加上n后的时间                                         |
+
+###### 日期的格式化与解析
+格式化：日期 -> 字符串
+解析： 字符串 -> 日期
+
+| 函数                   | 用法                                                         |
+|------------------------|--------------------------------------------------------------|
+| DATE_FORMAT(date, fmt) | 按照字符串fmt格式化日期date值                                 |
+| TIME_FORMAT(time, fmt) | 按照字符串fmt格式化时间time值                                 |
+| GET_FORMAT(date_type, format_type) | 返回日期字符串的显示格式                     |
+| STR_TO_DATE(str, fmt)  | 按照字符串fmt对str进行解析，解析为一个日期                    |
+
+***fmt常用格式符***
+| 格式符 | 说明                             | 格式符 | 说明                             |
+|--------|----------------------------------|--------|----------------------------------|
+| %Y     | 4位数字表示年份                  | %y     | 表示两位数字表示年份            |
+| %M     | 月名表示月份 (January,....)     | %m     | 两位数字表示月份 (01,02,03,...) |
+| %b     | 缩写的月名 (Jan.,Feb.,....)     | %c     | 数字表示月份 (1,2,3,...)        |
+| %D     | 英文后缀表示月中的天数 (1st,2nd,3rd,...) | %d     | 两位数字表示月中的天数 (01,02,...) |
+| %e     | 数字形式表示月中的天数 (1,2,3,4,5,...) |        |                                  |
+| %H     | 两位数字表示小时,24小时制 (01,02,..) | %h 和 %I | 两位数字表示小时,12小时制 (01,02,..) |
+| %k     | 数字形式的小时,24小时制 (1,2,3) | %I     | 数字形式表示小时,12小时制 (1,2,3,4,...) |
+| %i     | 两位数字表示分钟 (00,01,02)     | %S 和 %s | 两位数字表示秒 (00,01,02,...)   |
+| %W     | 一周中的星期名称 (Sunday,...)   | %a     | 一周中的星期缩写 (Sun., Mon., Tues.,..) |
+| %w     | 以数字表示周中的天数 (0=Sunday,1=Monday,...) | %U     | 以数字表示年中的第几周，（1,2,3。。）其中Sunday为周中第一天 |
+| %j     | 以3位数字表示年中的天数(001,002...)       |        |                                          |
+| %u     | 以数字表示年中的第几周，（1,2,3。。）其中Monday为周中第一天 |        |                                          |
+| %T     | 24小时制                                 | %r     | 12小时制                                 |
+| %p     | AM或PM                                   | %%     | 表示%                                     |
+
+```sql
+SELECT * FROM employees WHERE hire_date = '1994-08-17';  -- 隐式转换，字符串转换成了日期
+-- 关于不按照'1994-08-17' 格式的字符串，就需要进行显示转换，自行设置逻辑去匹配
+
+-- 格式化
+-- res：
+-- 2024-11-20	
+-- 24,November,20th	
+-- Nov,11,20	
+-- 00:00:56	
+-- 00 hour, 00 min, 56 second
+SELECT 
+CURRENT_DATE(), DATE_FORMAT(CURDATE(), '%y,%M,%D'), DATE_FORMAT(CURDATE(), '%b,%m,%d'), 
+CURRENT_TIME(), TIME_FORMAT(CURTIME(), '%H hour, %i min, %s second')
+FROM DUAL;
+
+
+-- res:
+-- 2024-November-20th	
+-- 2024-11-20	
+-- 12:08:24	
+-- 2024-November-20th 12:08:24 Wednesday 3 00:08:24 12:08:24 AM
+SELECT DATE_FORMAT(CURDATE(), '%Y-%M-%D'),
+DATE_FORMAT(NOW(), '%Y-%m-%d'), TIME_FORMAT(CURTIME(), '%h:%i:%s'),
+DATE_FORMAT(NOW(), '%Y-%M-%D %h:%i:%S %W %w %T %r')
+FROM DUAL;
+
+
+-- 解析：格式化的逆过程
+SELECT 
+STR_TO_DATE('2024-November-20th', '%Y-%M-%D'),
+STR_TO_DATE('12:08:24', '%h:%i:%S'),
+STR_TO_DATE('Wednesday 3', '%W %w'),	-- 这一条结果为 Null
+STR_TO_DATE('12:08:24', '%T'),
+STR_TO_DATE('AM', '%r')   -- 这一条结果为 Null
+FROM DUAL;
+
+```
+
+***GET_FORMAT(date_type, format_type)中 date_type 和 format_type 参数取值举例***
+| 日期类型    | 格式化类型 | 返回的格式化字符串       |
+|-------------|------------|--------------------------|
+| DATE        | USA        | %m.%d.%Y                 |
+| DATE        | JIS        | %Y-%m-%d                 |
+| DATE        | ISO        | %Y-%m-%d                 |
+| DATE        | EUR        | %d.%m.%Y                 |
+| DATE        | INTERNAL   | %Y%m%d                   |
+| TIME        | USA        | %h:%i:%s%p               |
+| TIME        | JIS        | %H:%i:%s                 |
+| TIME        | ISO        | %H:%i:%s                 |
+| TIME        | EUR        | %H.%i.%s                 |
+| TIME        | INTERNAL   | %H%i%s                   |
+| DATETIME    | USA        | %Y-%m-%d%H.%i.%s         |
+
+##### 流程控制函数
+
+
+
+
+
+
+
+
+
