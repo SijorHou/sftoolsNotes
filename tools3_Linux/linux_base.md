@@ -393,6 +393,7 @@ Linux的目录结构以树形方式呈现，以下是Linux系统中一些常见�
 
 
 ## 查找指令
+***find command***
 - `find`
   - `find [path...] [expression]` 
   - `[path...]` path是搜索范围，find会从制定目录向下递归遍历各个子目录，将满足条件的文件、目录显示
@@ -404,12 +405,67 @@ Linux的目录结构以树形方式呈现，以下是Linux系统中一些常见�
 - `-size<文件大小>` 按照制定的文件大小查找文件
   - `find /mnt -size +-nbk` 在 /mnt 目录下查找 大于（+）或小于（-）或等于 nb 或 nk 大小的文件
 
+***locate, which***
+- `locate`
+  - `updatedb` 使用 `locate` 之前必须先执行 `updatedb`
+  - `locate "*.txt"` 可以快速定位 txt文件 ...
+- `which`
+  - 可以查看某个指令在哪个目录下， 如 `which ls`
 
+***grep |***
+- `grep` 
+  - 过滤查找，往往 和管道符 `|` 共同使用，即 `grep` 的处理结果传递给 `|` 后面的命令处理
+  - `grep [option] searching-content src-file`
+  - `-n` 显示匹配以及行号
+  - `-i` 忽略字母大小写
+- ***example**
+  - `cat /mnt/hgfs/vmshared/test-file.txt | grep -in "re"`
+  - 可以观察到，`cat` 输出内容，交给 `grep` 进行过滤查找， 以及两种 参数也起到了 显示匹配行号 以及 忽略大小写查找的作用
+  - `grep -i -n "this" /mnt/hgfs/vmshared/test-file.txt` 效果是一样的
 
+<div style="text-align:center">
+    <img src="/tools3_Linux/pic_source/grep.png" alt="文件目录类-less指令" style="margin-bottom: 1px;">
+    <p>grep</p>
+</div>
 
+## 压缩和解压类
+***gzip/gunzip***
+- `gzip` 是最常用的压缩工具之一，可以压缩文件，减小文件大小，***通常用于文本文档***，压缩比率很高
+  - `gzip filename` 会创建一个filename.gz的压缩文件，原始文件会被删除
+  - `gzip -c filename > filename.gz ` 会压缩filename并输出到filename.gz，同时保留原始文件
+  - `gunzip filename.gz` 会解压缩filename.gz，恢复原始文件
 
+***zip/unzip***
+- `zip` 用于压缩文件（目录）， `unzip`用于解压缩
+  - `zip [option] filename.zip file1 file2 file3` 创建一个包含 file1、file2 和 file3 的 archivename.zip 归档文件
+  - `-r` 递归压缩（压缩目录），如 `zip -r myhome.zip /home/, [将home目录及其包含的文件、目录都压缩]`
+- `unzip [option] filename.zip` 解压缩 archivename.zip，恢复所有文件和目录
+  - `-d` 指定解压后的文件存放的目录，如 `unzip /opt/tmp /home/myhome.zip, [将 /home/下的myhome.zip 文件解压到 /opt/tmp/目录下]`
 
+  <div style="text-align:center">
+    <img src="/tools3_Linux/pic_source/zip-lrn.png" alt="文件目录类-less指令" style="margin-bottom: 1px;">
+    <p>zip/unzip的使用</p>
+</div>
 
+注意：归档 和 压缩 是相关但不同的概念，前者合并多个文件、目录为一个单一的文件，并不会减小文件大小，而压缩会减小文件大小
+
+- `tar -cvf archivename.tar file1 file2 file3 `创建一个包含 file1、file2 和 file3 的archivename.tar 归档文件
+- `tar -czvf archivename.tar.gz file1 file2 file3`  创建一个 gzip 压缩的 archivename.tar.gz 归档文件
+- `tar -xvf archivename.tar`解压缩 archivename.tar
+- `tar -xzvf archivename.tar.gz` 解压缩 gzip 压缩的 archivename.tar.gz
+- 参数：
+  - `-c` 产生 .tar 打包文件
+  - `-v` 显示详细信息
+  - `-f` 指定压缩后的文件名
+  - `-z` 打包同时压缩
+  - `-x` 解包 .tar 文件
+- example：
+  - `tar -czvf /home/pig.tar.gz /home/pig.txt /home/cat.txt` 压缩多个文件，将 /home/pig.txt 和 /home/cat.txt 压缩成 pc.tar.gz
+  - `tar -czvf myhome.tar.gz /home/` 将 /home 的文件夹 压缩成 myhome.tar.gz
+  - `tar -xzvf pc.tra.gc` 将 pc.tar.gz 解压到当前目录
+  - `tar -xzvf myhome.tar.gz -C /opt/tmp2` 将 myhome.tar.gz 解压到 /opt/tmp2目录下
+
+## 文件目录类
 
 
 
