@@ -205,14 +205,16 @@ Linux的目录结构以树形方式呈现，以下是Linux系统中一些常见�
 - `useradd [option] username` 添加用户
   - `-c -d -g -s` 分别是： 指定一段注释性描述、指定创建目录、指定用户所属的组、指定用户登录的shell
   - `useradd -d home-path username` 一般添加用户的时候会指定该用户的家目录，通常是同名，如 `useradd -d /home/tom tom`, 也可以不同名， 不加设置默认同名
-  - `useradd -g group_name` 创建用户时指定属组，否则默认创建一个与username同名的属组
+  - `useradd -g group_name username` 创建用户时指定属组，否则默认创建一个与username同名的属组
 - `userdel [option] username` 删除用户
   - 默认删除，该用户的家目录不会被删除，`/etc/passwd, group, shadow` 中对应的用户的相关信息会删除
   - `userdel -r username` 删除用户时候连通用户的家目录一起删除
 - `who am i` 查看当前用户（显示第一次登录的用户信息，避免切换用户造成混淆）
-- `usermod [option]` 修改用户相关属性
-  - 如 `usermod -s /bin/ksh -d /home/z –g developer`
-  - 此命令将用户sam的登录Shell修改为ksh，主目录改为/home/z，用户组改为developer
+- `usermod [option] [username]` 修改用户相关属性
+  - 如 `usermod -s /bin/ksh -d /home/z –g developer sam`,此命令将用户sam的登录Shell修改为ksh，主目录改为/home/z，用户组改为developer
+  - `usermod -g new_group username` 修改用户的属组为 new_group
+  - `usermod -d new_home_dir username` 修改用户的家目录为 new_home_group
+
 
 ***密码口令管理 `passwd`***
 - `passwd [option] username` 超级用户可以为自己和其他用户设置 口令，但是普通用户只能为自己设置
@@ -418,7 +420,7 @@ Linux的目录结构以树形方式呈现，以下是Linux系统中一些常见�
   - `grep [option] searching-content src-file`
   - `-n` 显示匹配以及行号
   - `-i` 忽略字母大小写
-- ***example**
+- ***example***
   - `cat /mnt/hgfs/vmshared/test-file.txt | grep -in "re"`
   - 可以观察到，`cat` 输出内容，交给 `grep` 进行过滤查找， 以及两种 参数也起到了 显示匹配行号 以及 忽略大小写查找的作用
   - `grep -i -n "this" /mnt/hgfs/vmshared/test-file.txt` 效果是一样的
@@ -465,7 +467,94 @@ Linux的目录结构以树形方式呈现，以下是Linux系统中一些常见�
   - `tar -xzvf pc.tra.gc` 将 pc.tar.gz 解压到当前目录
   - `tar -xzvf myhome.tar.gz -C /opt/tmp2` 将 myhome.tar.gz 解压到 /opt/tmp2目录下
 
-## 文件目录类
+## 文件目录类基本属性
+[文档基本属性](https://www.runoob.com/linux/linux-file-attr-permission.html)
+
+- `ls -l` 长格式显示文件属性信息，列出当前目录中的所有有文件目录
+  - `-a` 显示全部
+  - `-s` 显示块大小
+  - `-h` 和 `-l` 连用，文件大小以 K M G 的易读格式显示
+
+### 更改文件属组、属主
+
+- `chgrp [-R] new_group file` 将 file的 属组修改为 new_group。[] 是可选项，-R 表递归地修改 file中内容的对应属性
+- `chown [-R] new_owner file` 将 file的 属主修改为 new_owner
+- `chown [-R] new_owner:new_group file` 同时修改（除此之外上面两命令都只修改一种）
+
+<div style="text-align:center">
+    <img src="/tools3_Linux/pic_source/文件属组属主更改.png" height=60% width=60% alt="文件属组属主更改" style="margin-bottom: 1px;">
+    <p>文件属组属主更改</p>
+</div>
+
+<div style="text-align:center">
+    <img src="/tools3_Linux/pic_source/文件属主属组.png"  alt="文件属组属主" style="margin-bottom: 1px;">
+    <p>文件属主属组</p>
+</div>
+
+- 当在一个用户下创建文件/目录时候，其属主和属组都默认为该用户
+- 对于一个文件/目录，不同的用户、不同的组可以设置对该文件的不同权限
+- 注意相关命令的区别：
+  - `groupmod` 修改属组的属性（-g 修改group的GID， -n 修改group的name）
+  - `usermod` 修改用户的属组等属性 （-g newgroup 修改user的group 为 newgroup， -G 添加新属组）
+  - `chgrp [-R] new_group file, chown [-R] newuser:newgroup file` 修改 文件/目录 的属组、用户等属性
+
+### 更改文件权限属性
+<div style="text-align:center">
+    <img src="/tools3_Linux/pic_source/ls-l命令内容结构.png"  alt="ls-l命令内容结构" style="margin-bottom: 1px;">
+    <p>ls-l命令内容结构</p>
+</div>
+
+- 从前向后看属主、属组、其他对文件的权限（root对任何文件、目录有绝对权限）
+  - 属主权限
+  - 属组权限：用户是按组分类的，一个用户属于一个或多个组。文件所有者以外的用户又可以分为文件所属组的同组用户和其他用户。如 `drwxr-xr-x 3 mysql mysql 4096 Apr 21  2014 mysql` mysql 文件是一个目录文件，属主和属组都为 mysql，属主有可读、可写、可执行的权限；与属主同组的其他用户有可读和可执行的权限；其他用户也有可读和可执行的权限
+
+<div style="text-align:center">
+    <img src="/tools3_Linux/pic_source/文件属性.png"  alt="文件属性" style="margin-bottom: 1px;">
+    <p>文件属性</p>
+</div>
+
+- `chmod [-R] xyz file_or_dir` 更改文件权限属性
+
+Linux文件属性有两种设置方法，一种是数字，一种是符号。
+
+**Linux 文件的基本权限就有九个**，分别是 owner/group/others(拥有者/组/其他) 三种身份各有自己的 read/write/execute 权限
+
+***rwxrwx---***  
+- 分别代表 owner(rwx)group(rwx)other(---)
+- 其中 r:4、w:2、x:1 为各自的分数
+- rwxrwx---代表 770，即（rwx = 4 + 2 = 1 = 7）, - 则为0
+- 所以，以数字的方式修改权限： `chmod 754 xxx.txt/dir` 即为 修改属性权限为 `-rwxr-xr-- `
+
+***实际上使用属组囊括了各种组合关系，本质是二进制***
+- 1 `x`
+- 2 `w`
+- 3 `wx`
+- 4 `r`
+- 5 `rx`
+- 6 `rw`
+- 7 `rwx`
+
+
+***符号类型修改权限***
+- user、group、others可以用 u、g、o 代替。（a 为 all）
+- 读写权限可以写成 r、w、x
+- 例：`chmod 754 xxx.txt/dir` 相当于 `chmod u=rwx,g=rx,o=r xxx.txt/dir`
+
+***案例***
+给abc文件的所有者读写执行的权限，给所在组读执行权限，给其它组读执行权限
+- `chmod 755 abc`
+- `chmod u=rwx, g=rx, o=rx abc`
+
+给abc文件的所有者除去执行的权限，增加组写的权限
+- `chmod u-x, g+w abc`
+
+给abc文件的所有用户添加读的权限
+- `chmod a+r abc`
+
+## 权限管理应用实例
+
+
+
 
 
 
@@ -529,52 +618,6 @@ systemed系统重，服务 service 通常指后台运行的进程，可以是系
 - `curl [options] [URL]` 是一个用于传输数据的命令行工具。***常用于测试和调试网络服务，或在命令行中与 Web API 进行交互***
   - `-g` 使用 GET 方法（默认方法） `curl -a https://www.xxx.com`
   - `-d` 发送 POST 数据 `curl -d "param1=value1&param2=value2..." http://www.xxx.com`
-
-
-
-
-
-## 文件基本属性
-[文档基本属性](https://www.runoob.com/linux/linux-file-attr-permission.html)
-
-- `ls -l` 长格式显示文件属性信息，列出当前目录中的所有有文件目录
-  - `-a` 显示全部
-  - `-s` 显示块大小
-  - `-h` 和 `-l` 连用，文件大小以 K M G 的易读格式显示
-
-### 更改文件属组、属主
-
-- `chgrp [-R] new_group file` 将 file的 属组修改为 new_group。[] 是可选项，-R 表递归地修改 file中内容的对应属性
-- `chown [-R] new_owner file` 将 file的 属主修改为 new_owner
-- `chown [-R] new_owner:new_group file` 同时修改
-
-<div style="text-align:center">
-    <img src="/tools3_Linux/pic_source/文件属组属主更改.png" height=60% width=60% alt="文件属组属主更改" style="margin-bottom: 1px;">
-    <p>文件属组属主更改</p>
-</div>
-
-### 更改文件权限属性
-- `chmod [-R] xyz file_or_dir`
-
-Linux文件属性有两种设置方法，一种是数字，一种是符号。
-
-**Linux 文件的基本权限就有九个**，分别是 owner/group/others(拥有者/组/其他) 三种身份各有自己的 read/write/execute 权限
-
-***rwxrwx---***  
-- 分别代表 owner(rwx)group(rwx)other(---)
-- 其中 r:4、w:2、x:1 为各自的分数
-- rwxrwx---代表 770，即（rwx = 4 + 2 = 1 = 7）, - 则为0
-- 所以，以数字的方式修改权限： `chmod 754 xxx.txt/dir` 即为 修改属性权限为 `-rwxr-xr-- `
-
-***符号类型修改权限***
-- user、group、others可以用 u、g、o 代替。（a 为 all）
-- 读写权限可以写成 r、w、x
-- 例：`chmod 754 xxx.txt/dir` 相当于 `chmod u=rws,g=rx,o=r xxx.txt/dir`
-
-
-
-
-
 
 ## apt command
 `apt [options] [command] [package ...]`
