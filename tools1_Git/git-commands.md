@@ -119,3 +119,28 @@ fork 别人的项目有了更新，将当前分支同步为最新版本
   - `git add --all` 
   - `git commit -m "remove xxx file from Git tracking"`
   - `git push origin branch_name`
+
+
+### Remote命令
+- 默认远程仓库名称（`origin` `upstream`）
+  - 克隆一个仓库，默认名称`origin`
+  - 推送/拉取代码，默认与 `origin` 交互
+  -  上游仓库 `upstream`，通常指基于它开发的远程仓库
+- `git remote -v` 查看远程仓库配置
+- `git remote add reposity-name<origin/upstream> url` 添加上游仓库或个人普通远程仓库
+- `git remote set-url reposity-name<origin/upstream> new-url` 修改仓库URL
+- `git remote remove reposity-name<origin/upstream> url` 删除远程仓库
+
+***典型工作流***
+- 个人项目只需要一个 `origin`，直接与其交互
+- 协作项目则是与 `upstrream`交互
+
+
+***remote相关命令***
+- `git remote` 查看远程仓库 `-v` 参数为查看详细信息
+- `git remote add <add> <url>` 添加远程仓库
+- `git remote remove <add> <url>` 删除远程仓库
+- `git remote rename <old-name> <new-name>` 修改远程仓库名称
+- `git remote set-url <name> <new-url>` 修改远程仓库 url
+- `git remote show <name` 查看远程仓库详细信息
+- `git fetch <remote-name>` 获取远程仓库最新更改

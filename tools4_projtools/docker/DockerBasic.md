@@ -307,7 +307,7 @@ Docker 镜像层都是只读的，容器层是可写的
 - `docker pull registry` 下载私有仓库工具
 - 运行私有库Registry，相当于本地有个私有的 Docker Hub
 - `docker run -d -p hostPort:containerPort -v host_dir:container_dir --privileged=true registry`
-  - `-d` 后台运行勇气，返回容器ID（启动守护式容器）
+  - `-d` 后台运行容器，返回容器ID（启动守护式容器）
   - `-p` 指定端口映射，先访问 `hostPort` 主机端口，再访问 `containerPort` 容器端口（实际上含义为：将宿主机的端口映射到容器的端口，使得可以通过宿主机的端口访问容器内部的registry服务）***对于不同私有仓库，意味着不同的registry容器服务，端口号也是不同的***
   - `-v` 绑定挂载一个容器卷， 指定仓库所创建的 registry容器的 `host_dir:container_dir` 目录下（默认是 `var/lib/registry`）
   - `--previleged=true` 给予容器特权模式，***允许容器访问宿主机所有设备，并且可移植性一些通常需要高级权限的操作（长用于需要特殊权限的容器，如运行Docker守护进程的容器）***
