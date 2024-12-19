@@ -675,7 +675,7 @@ drwx------. 17 sjor  sjor   4096 12月  1 21:09 sjor
    - 使用 `crontab -e` 命令打开当前用户的 `crontab` 文件进行编辑。如果是第一次使用，可能会提示选择一个编辑器。
 
 2. **添加定时任务**：
-   - 在 `crontab` 文件中添加一行，格式为 `cron` 表达式后跟要执行的命令。
+   - 在 `crontab` 文件中添加一行，***格式为 `cron` 表达式后跟要执行的命令***。
    - 例如，要每天中午12点执行 `/usr/bin/backup.sh` 脚本，可以添加以下行：
      ```
      0 12 * * * /usr/bin/backup.sh
@@ -691,7 +691,7 @@ drwx------. 17 sjor  sjor   4096 12月  1 21:09 sjor
    - 使用 `crontab -r` 命令删除当前用户的 `crontab` 文件，这将移除所有定时任务。
 
 6. **管理其他用户的 `crontab`**：
-   - 使用 `sudo` 命令来编辑或查看其他用户的 `crontab` 文件，例如 `sudo crontab -u username -e`。
+   - 使用 `sudo` 命令来编辑或查看其他用户的 `crontab` 文件，例如 `sudo crontab -u username -e/l`。
 
 ### 注意事项
 
@@ -704,9 +704,17 @@ drwx------. 17 sjor  sjor   4096 12月  1 21:09 sjor
 通过 `crond` 和 `crontab`，你可以实现自动化任务调度，这对于系统维护、数据备份、定期报告等场景非常有用。
 
 ### 实例
-- `crontab -l` 查看当前用户有没有 `crontab`
-- `crontab -e` 创建并编辑 `crontab`文件
-- `echo "--- sijor!!! ---" >> ~/command-lrn/crond-lrn/crondTestOutputFile`
+***每隔一分钟，将当前日期信息，追加到 `/tmp/mydate`***
+- `crontab -e`
+- `*/1 * * * * date >> /tmp/mydate`
+
+***每隔一分钟，将当前日期、日历信息，追加到 `/tmp/mycal`***
+两个方案：1. 两条指令 2. 执行shell脚本
+- 1. 两条指令
+  - 
+  - 
+2. 执行shell脚本
+
 
 
 
