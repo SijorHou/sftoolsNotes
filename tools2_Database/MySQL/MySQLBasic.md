@@ -1,12 +1,12 @@
-## MySQL
-### Reference
+# MySQL
+## Reference
 
 - [菜鸟教程](https://www.runoob.com/mysql/mysql-connection.html)
 - [MySQL安装教程](https://blog.csdn.net/weixin_47406082/article/details/131867849?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522171647672116800225532250%2522%252C%2522scm%2522%253A%252220140713.130102334..%2522%257D&request_id=171647672116800225532250&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~top_positive~default-2-131867849-null-null.142^v100^pc_search_result_base8&utm_term=MySQL%E5%AE%89%E8%A3%85&spm=1018.2226.3001.4187)
 - [navicat安装教程](https://mp.weixin.qq.com/s/Of1282kGihYiXnmxvB9Csw)
 - [navicat使用教程](https://blog.csdn.net/qq_45069279/article/details/105919312?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522171657178116800182137881%2522%252C%2522scm%2522%253A%252220140713.130102334..%2522%257D&request_id=171657178116800182137881&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~top_positive~default-2-105919312-null-null.142^v100^pc_search_result_base8&utm_term=navicat&spm=1018.2226.3001.4187)
 - [卸载教程](https://blog.csdn.net/m0_52861000/article/details/131354710?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522172110015316800180631045%2522%252C%2522scm%2522%253A%252220140713.130102334..%2522%257D&request_id=172110015316800180631045&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~top_positive~default-2-131354710-null-null.142^v100^pc_search_result_base8&utm_term=%E5%8D%B8%E8%BD%BDmysql&spm=1018.2226.3001.4187)
-### 数据库基础
+## 数据库基础
 
 - DBMS(Data Base Manage System) 数据库软件管理系统，是软件系统，如 MySQL等各类我们常称的“数据库”
 - DBMS 存放的文件成为 “表（table）”， 结构化的文件，存储某种特定类型的数据
@@ -35,9 +35,9 @@
     - 属性：attribute，对应数据库表中的一列/字段（column、field）
   - 表的关联关系：1v1, 1vm, mvm, slef-reference（一对一、多， 多对多， 自我引用）
 
-### MySQL 管理
+## MySQL 管理
 
-#### NET commands
+### NET commands
 ***[重装系统后无MySQL服务问题解决](https://blog.csdn.net/SH_King/article/details/48178711?ops_request_misc=&request_id=&biz_id=102&utm_term=net%20start%20%E6%89%BE%E4%B8%8D%E5%88%B0%20MySQL%20%E6%9C%8D%E5%8A%A1&utm_medium=distribute.pc_search_result.none-task-blog-2~all~sobaiduweb~default-4-48178711.142^v100^pc_search_result_base5&spm=1018.2226.3001.4187)***
 
 
@@ -57,7 +57,7 @@
   - `NET START MySQL91` 开启MySQL服务
   - `NET STOP MySSQL91` 关闭MySQL服务
 
-#### mysqladmin commands
+### mysqladmin commands
 - `mysqladmin -u root -p [check_content]` `-u` 是用户，`-p`是密码
 - `mysqladmin -u root -p version` 查看完整的数据库主机信息
 - `mysqladmin -u root -p status` 显示MySQL服务器的运行状态
@@ -68,7 +68,7 @@
 本地MySQL用户名：root
 本地MySQL密码：123456
 
-#### 命令行连接、退出
+### 命令行连接、退出
 - `mysql -u [username(root)] -p` 然后键入密码进入 MySQL
   - `mysql -u root -p 123456 -P 3306 -h localhost` 完整连接命令，如果就是在本机的3306端口，后两个可以省略（参考上面 数据库主机信息查看命令）
 - `mysql -V/--version`
@@ -78,11 +78,11 @@
   - `help` 或 `\h` 获取帮助，如 `help/HELP SELECT;` 、`\h SELECT`
   - `QUIT/quit/EXIT/exit` 退出数据库
 
-#### 数据导入指令
+### 数据导入指令
 - `source absolute_path_of_src_file.sql`
   - `source D:\xxx.sql`
 
-### MySQL 操作实例
+## MySQL 操作实例
 - `SHOW DATABASES;` 
 - `CREATE DATABASE [IF NOT EXISTS] db_name;`
 - `USE db_name;`
@@ -113,13 +113,14 @@ ENCRYPTION = 'Y';                    -- 启用加密，适用于MySQL 8.0及以�
     <p>mysql密码重置步骤</p>
 </div>
 
-### SQL 语句
-#### SELECT
+## SQL 语句
+### SELECT
 - `SELECT seg(col),... FROM table_name` 以 "SELECT" 为关键字
   - 后跟 列名 （若不是 * 则为查询所有列），也可以写为列的别名 `SELECT seg seg_alias, ...`
   - 空值 NULL 参与运算， 含NULL运算结果仍为NULL
   - 着重号 ``
   - 查询常数
+  - `DISTINCT`
   - `DESC/DESCRIBE`
   - `WHERE`
 
@@ -127,9 +128,9 @@ ENCRYPTION = 'Y';                    -- 启用加密，适用于MySQL 8.0及以�
 ```sql
 -- 1. 基本查询语句
 SELECT * FROM employees;
-SELECT employee_id, first_name, emai, job_id FROM employees;
+SELECT employee_id, first_name, email, job_id FROM employees;
 
--- 2. 列别名（只能在 ORDER BY 中使用，WHERE中不醒）
+-- 2. 列别名（只能在 ORDER BY 中使用，WHERE中不行）
 SELECT employee_id emp_id, first_name fst_name, job_id FROM employees;
 SELECT employee_id AS emp_id, first_name AS fst_name, job_id FROM employees;
 SELECT employee_id "emp_id", first_name "fst_name", job_id FROM employees;
@@ -161,7 +162,19 @@ SELECT * FROM employees WHERE department_id = 90;
 SELECT * FROM employees WHERE last_name = 'King';
 ```
 
-#### 运算符
+### 运算符
+- `DUAL` 虚表
+- 算数运算符
+- 比较运算符
+- 关键字：
+  - `IS NULL \ IS NOT NULL \ ISNULL(expr)`
+  - `LEAST(value1,value2,...) \ GREATEST(value1,value2,...)`, `LENGTH`
+  - `BETWEEN ... AND`
+  - `IN \ NOT IN`
+  - `LIKE`, `%, _, \`
+- 逻辑运算符
+- 位运算符
+
 ```sql
 -- 1. 算数运算符： + - * / DIV % MOD 
 SELECT 100, 100 + 50, 100 -35, 3 * 18, 100 / 2, 100 DIV 2, 19 % 5, MOD(26, 7) FROM DUAL;
@@ -224,7 +237,7 @@ SELECT last_name FROM employees WHERE last_name LIKE '_a%';		-- 查询 last_name
 SELECT last_name FROM employees WHERE last_name LIKE '__a%';
 
 
--- 4. 逻辑运算符 OR ||	AND &&	NOT !		XOR
+-- 4. 逻辑运算符 OR ||,	AND &&,	NOT !,		XOR
 SELECT employee_id, salary, department_id FROM employees WHERE department_id = 50 AND salary > 4000;
 SELECT last_name, salary, department_id FROM employees WHERE salary BETWEEN 10000 AND 30000;
 
@@ -239,7 +252,9 @@ SELECT 12 & 5, 12 | 5, 12 ^ 5, ~12, 12 << 1, 12 << 2, 12 >> 1, 12 >> 2 FROM DUAL
     <p>运算符优先级</p>
 </div>
 
-#### 排序与分页
+### 排序与分页
+- `ORDER BY ... DESC/ASC;`, `ORDER BY ... DESC, ... ASC;`
+
 
 ```sql
 -- 1. 排序 ORDER BY 对查询到的数据进行排序,  DESC 降序排序， ASC 升序排序（默认）
@@ -273,7 +288,7 @@ SELECT * FROM employees ORDER BY salary DESC LIMIT 1; 	-- 省略基准位置， 
 ```
 
 
-#### 多表查询/关联查询
+### 多表查询/关联查询
 
 多表查询，即 ***关联查询***，指两个或更多表一起完成查询操作（前提是一起查询的表之间有一对一、一对多等关系，***多表之间有关联字段***）
 
