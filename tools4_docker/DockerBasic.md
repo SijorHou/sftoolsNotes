@@ -37,7 +37,7 @@
 "搬家 ——> 搬楼 " 的比喻： 即 "软件带环境安装(安装软件的时候，将原始开发环境一模一样地复制过来)"
  
  <div style="text-align:center">
-    <img src="/tools4_projtools/pic_src/Docker作用.png" alt="图片描述" style="margin-bottom: 1px;">
+    <img src="/tools4_docker/pic_src/Docker作用.png" alt="图片描述" style="margin-bottom: 1px;">
     <p>Docker作用</p>
 </div>
 
@@ -61,7 +61,7 @@
 ***docker architecture***
 
  <div style="text-align:center">
-    <img src="/tools4_projtools/pic_src/Docker架构.png" alt="图片描述" style="margin-bottom: 1px;">
+    <img src="/tools4_docker/pic_src/Docker架构.png" alt="图片描述" style="margin-bottom: 1px;">
     <p>Docker架构</p>
 </div>
 
@@ -102,7 +102,7 @@ sudo yum-config-manager --add-repo https://mirrors.aliyun.com/docker-ce/linux/ce
 
 ## hello-world 分析
 <div style="text-align:center">
-    <img src="/tools4_projtools/pic_src/hello_world过程.png" alt="图片描述" style="margin-bottom: 1px;">
+    <img src="/tools4_docker/pic_src/hello_world过程.png" alt="图片描述" style="margin-bottom: 1px;">
     <p>hello_world过程</p>
 </div>
 
@@ -118,7 +118,7 @@ sudo yum-config-manager --add-repo https://mirrors.aliyun.com/docker-ce/linux/ce
 ## 常用 docker 命令
 
 <div style="text-align:center">
-    <img src="/tools4_projtools/pic_src/docker结构.png" alt="图片描述" style="margin-bottom: 1px;">
+    <img src="/tools4_docker/pic_src/docker结构.png" alt="图片描述" style="margin-bottom: 1px;">
     <p>docker结构</p>
 </div>
 
@@ -215,7 +215,7 @@ sudo yum-config-manager --add-repo https://mirrors.aliyun.com/docker-ce/linux/ce
   - `cat xxx.tar | docker import - repository_name:tag_version`
 
 <div style="text-align:center">
-    <img src="/tools4_projtools/pic_src/容器导入导出.png" alt="图片描述" style="margin-bottom: 1px;">
+    <img src="/tools4_docker/pic_src/容器导入导出.png" alt="图片描述" style="margin-bottom: 1px;">
     <p>容器导入导出</p>
 </div>
 
@@ -238,7 +238,7 @@ UnionFS 是一种分层、轻量级并且高性能的文件系统，***支持对
 ***UnionFS 是Docker镜像的基础，镜像可以通过分层来进行集成，基于基础镜像可以制作各种具体的应用镜像***
 
 <div style="text-align:center">
-    <img src="/tools4_projtools/pic_src/Docker镜像加载原理.png" alt="图片描述" style="margin-bottom: 1px;">
+    <img src="/tools4_docker/pic_src/Docker镜像加载原理.png" alt="图片描述" style="margin-bottom: 1px;">
     <p>Docker镜像加载原理</p>
 </div>
 
@@ -264,12 +264,12 @@ Docker 镜像层都是只读的，容器层是可写的
   - `docker commit -m="added vim, tree, clear cmds" -a="sijorhou" myCentos centos-with-cmds:1.1`
 
 <div style="text-align:center">
-    <img src="/tools4_projtools/pic_src/docker-commit定制镜像.png" alt="图片描述" style="margin-bottom: 1px;">
+    <img src="/tools4_docker/pic_src/docker-commit定制镜像.png" alt="图片描述" style="margin-bottom: 1px;">
     <p>docker commit定制镜像</p>
 </div>
 
 <div style="text-align:center">
-    <img src="/tools4_projtools/pic_src/定制镜像使用.png" alt="图片描述" style="margin-bottom: 1px;">
+    <img src="/tools4_docker/pic_src/定制镜像使用.png" alt="图片描述" style="margin-bottom: 1px;">
     <p>使用定制镜像</p>
 </div>
 
@@ -282,7 +282,7 @@ Docker 镜像层都是只读的，容器层是可写的
 
 ### 本地镜像发布到阿里云
 <div style="text-align:center">
-    <img src="/tools4_projtools/pic_src/本地镜像发布到阿里云流程.png" alt="图片描述" style="margin-bottom: 1px;">
+    <img src="/tools4_docker/pic_src/本地镜像发布到阿里云流程.png" alt="图片描述" style="margin-bottom: 1px;">
     <p>本地镜像发布到阿里云流程</p>
 </div>
 
@@ -332,22 +332,22 @@ Docker 镜像层都是只读的，容器层是可写的
 
 ### 完整过程
 <div style="text-align:center">
-    <img src="/tools4_projtools/pic_src/私有库交互1-tag生成.png" alt="图片描述" style="margin-bottom: 1px;">
+    <img src="/tools4_docker/pic_src/私有库交互1-tag生成.png" alt="图片描述" style="margin-bottom: 1px;">
     <p>tag生成</p>
 </div>
 
 <div style="text-align:center">
-    <img src="/tools4_projtools/pic_src/私有库交互2-直接push失败.png" alt="图片描述" style="margin-bottom: 1px;">
+    <img src="/tools4_docker/pic_src/私有库交互2-直接push失败.png" alt="图片描述" style="margin-bottom: 1px;">
     <p>直接push失败</p>
 </div>
 
 <div style="text-align:center">
-    <img src="/tools4_projtools/pic_src/私有库交互3-docker配置允许http.png" alt="图片描述" style="margin-bottom: 1px;">
+    <img src="/tools4_docker/pic_src/私有库交互3-docker配置允许http.png" alt="图片描述" style="margin-bottom: 1px;">
     <p>docker配置允许http</p>
 </div>
 
 <div style="text-align:center">
-    <img src="/tools4_projtools/pic_src/私有库交互4-重启服务后push.png" alt="图片描述" style="margin-bottom: 1px;">
+    <img src="/tools4_docker/pic_src/私有库交互4-重启服务后push.png" alt="图片描述" style="margin-bottom: 1px;">
     <p>重启服务后push</p>
 </div>
 
@@ -384,7 +384,7 @@ Docker 镜像层都是只读的，容器层是可写的
 
 
 <div style="text-align:center">
-    <img src="/tools4_projtools/pic_src/容器卷的继承.png" alt="图片描述" style="margin-bottom: 1px;">
+    <img src="/tools4_docker/pic_src/容器卷的继承.png" alt="图片描述" style="margin-bottom: 1px;">
     <p>容器卷的继承</p>
 </div>
 
@@ -443,7 +443,7 @@ mysql> SHOW VARIABLES LIKE 'character_set_%';
 mysql> SOURCE /var/lib/mysql/atguigudb.sql
 ```
 <div style="text-align:center">
-    <img src="/tools4_projtools/pic_src/docker挂载目录编写mysql配置文件.png" alt="图片描述" style="margin-bottom: 1px;">
+    <img src="/tools4_docker/pic_src/docker挂载目录编写mysql配置文件.png" alt="图片描述" style="margin-bottom: 1px;">
     <p>docker挂载目录编写mysql配置文件</p>
 </div>
 

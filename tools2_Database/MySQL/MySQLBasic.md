@@ -83,11 +83,18 @@
   - `source D:\xxx.sql`
 
 ## MySQL 操作实例
-- `SHOW DATABASES;` 
-- `CREATE DATABASE [IF NOT EXISTS] db_name;`
+- `SHOW`
+  - `SHOW DATABASES;` 
+  - `SHOW TABLES;`
+  - `SHOW COLUMNS FROM table_name` <=> `DESCRIBE table_name`
+  - `SHOW STATUS`
 - `USE db_name;`
-- `CREATE TABLE table_name(id int, name varchar(15));`
-- `SHOW TABLES;`
+
+- `CREATE`
+  - `CREATE DATABASE [IF NOT EXISTS] db_name;`
+  - `CREATE TABLE table_name(id int, name varchar(15));`
+
+- `SELECT DATABASE()` 查看当前所使用的数据库名字，直接 `SHOW TABLES;` 也会在第一行告知所使用的数据库
 - `SELECT * FROM table_name;`
 - `INSERT INTO table_name VALUES(1001, 'sijorhou');`
   - `SHOW CREATE TABLE table_name` 快速显示常见table_name的完整命令和表结构
@@ -121,8 +128,9 @@ ENCRYPTION = 'Y';                    -- 启用加密，适用于MySQL 8.0及以�
   - 着重号 ``
   - 查询常数
   - `DISTINCT`
-  - `DESC/DESCRIBE`
+  - `DESC/DESCRIBE` <=> `SHOW COLUMNS FROM table_name`
   - `WHERE`
+  - `table_name.column_name` 限定列名，即指定查询的列
 
 
 ```sql
@@ -168,10 +176,10 @@ SELECT * FROM employees WHERE last_name = 'King';
 - 比较运算符
 - 关键字：
   - `IS NULL \ IS NOT NULL \ ISNULL(expr)`
-  - `LEAST(value1,value2,...) \ GREATEST(value1,value2,...)`, `LENGTH`
+  - `LEAST(value1,value2,...) \ GREATEST(value1,value2,...)`, `LENGTH()`
   - `BETWEEN ... AND`
   - `IN \ NOT IN`
-  - `LIKE`, `%, _, \`
+  - `LIKE`, `%, _, \` 通配符：用来匹配值的一部分的特殊符号
 - 逻辑运算符
 - 位运算符
 
@@ -210,7 +218,7 @@ SELECT
 	last_name, first_name, 
 	LEAST(last_name, first_name), 
 	LEAST(LENGTH(first_name), LENGTH(last_name)) 
-	FROM employees WHERE commission_pct IS NOT NULL;
+FROM employees WHERE commission_pct IS NOT NULL;
 
 -- 3.3 BETWEEN ... AND 范围查询
 SELECT employee_id, last_name, first_name, salary 
@@ -246,6 +254,7 @@ SELECT last_name, salary, department_id FROM employees WHERE salary BETWEEN 1000
 SELECT 12 & 5, 12 | 5, 12 ^ 5, ~12, 12 << 1, 12 << 2, 12 >> 1, 12 >> 2 FROM DUAL;		-- 换算成二进制进行 按位与、或、取反、
 
 ```
+
 ***逻辑运算符优先级***
 <div style="text-align:center">
     <img src="../pic/运算符优先级.png" alt="mysql密码重置步骤" style="margin-bottom: 1px;">
@@ -253,13 +262,24 @@ SELECT 12 & 5, 12 | 5, 12 ^ 5, ~12, 12 << 1, 12 << 2, 12 >> 1, 12 >> 2 FROM DUAL
 </div>
 
 ### 排序与分页
-- `ORDER BY ... DESC/ASC;`, `ORDER BY ... DESC, ... ASC;`
+- `ORDER BY`
+  - `ORDER BY ... DESC/ASC;`
+  - `ORDER BY ... DESC, ... ASC;`
+- `LIMIT`
+  - `LIMIT n;` 返回前 n 行
+  - `LIMIT offset, n;` 返回 offser 行后的 n 行
+  - `LIMIT n OFFSET offset;` 使用关键字指定 offset
+- 分页
+  - `ORDER BY` 和 `LIMIT` 组合在一起使用可以对数据进行动态分页查询
+  - `ORDER BY ... DESC, ... ASC LIMIT ... ;`
 
+***关于多级排序***：
+**在多级排序中，每个新的排序列会在上一个排序列相同的行中起作用。第三列排序仅影响那些在前两列的值相同的行，不会改变前两列的排序顺序**
 
 ```sql
 -- 1. 排序 ORDER BY 对查询到的数据进行排序,  DESC 降序排序， ASC 升序排序（默认）
 SELECT employee_id, last_name, salary FROM employees ORDER BY salary DESC;		-- 按照 salary 降序排序
-SELECT employee_id, last_name, salary FROM employees ORDER BY salary ASC;		-- 按照 salary 降序排序
+SELECT employee_id, last_name, salary FROM employees ORDER BY salary ASC;		-- 按照 salary 升序排序
 SELECT employee_id, salary, salary * 12 "annual salary" FROM employees ORDER BY "annual salary";		-- 使用列别名，按照别名进行排序
 
 SELECT employee_id, last_name, salary FROM employees WHERE department_id IN (50, 60, 70) ORDER BY department_id DESC;
@@ -286,7 +306,6 @@ SELECT employee_id, last_name FROM employees LIMIT 2 OFFSET 31;		-- 从31偏移�
 SELECT * FROM employees ORDER BY salary DESC LIMIT 1; 	-- 省略基准位置， 默认从 0 开始
 
 ```
-
 
 ### 多表查询/关联查询
 
@@ -343,9 +362,9 @@ WHERE emp.last_name = 'Abel'
 AND emp.department_id = dept.department_id
 AND dept.location_id = locs.location_id;
 
-
 ```
-##### 多表查询分类
+
+#### 多表查询分类
 ```sql
 -- 多表查询分类
 -- 1. 等值连接 vs 非等值连接
@@ -404,7 +423,7 @@ FROM employees emp RIGHT OUTER JOIN departments dept ON emp.department_id = dept
 ```
 
 
-##### 7种joins连接
+#### 7种joins连接
 <div style="text-align:center">
     <img src="../pic/7-joins.png" style="margin-bottom: 1px;">
     <p>7-joins</p>
@@ -479,7 +498,7 @@ SELECT emp.employee_id, dept.department_name FROM employees emp LEFT JOIN depart
 UNION ALL
 SELECT emp.employee_id, dept.department_name FROM employees emp RIGHT JOIN departments dept ON emp.department_id = dept.department_id WHERE emp.department_id IS NULL;
 ```
-##### 2个 SQL99新特性
+#### 2个 SQL99新特性
 ```sql
 -- SQL99新特性：自然连接 NATURAL JOIN、 USING 
 
@@ -502,9 +521,9 @@ FROM employees emp JOIN departments dept
 USING (department_id);
 ```
 
-#### 函数
+### 函数
 不同 DBMS 之间的函数的差异性远大于 SQL语言在不同 DBMS 之间的差异
-##### MySQL内置函数与分类
+#### MySQL内置函数与分类
 从 ***实现的功能** 的角度分类：
 - 数值函数
 - 字符串函数
@@ -513,9 +532,9 @@ USING (department_id);
 
 再分为两类：***单行函数、聚合函数/分组函数***
 
-##### 数值函数 
+#### 数值函数 
 
-###### 基本函数
+##### 基本函数
 ```txt
 ABS(x)    
 SIGN(x)
@@ -564,7 +583,7 @@ SELECT ROUND(123.45678, 3);
 SELECT TRUNCATE(ROUND(123.45678, 3), 1);
 ```
 
-###### 三角函数
+##### 三角函数
 
 ```txt
 弧度-角度转换
@@ -623,7 +642,7 @@ BIN(12), HEX(12), OCT(10), CONV(1100, 2, 16)
 FROM DUAL;
 ```
 
-##### 字符串函数
+#### 字符串函数
 
 | 函数         | 用法                                                                 |
 |--------------|----------------------------------------------------------------------|
@@ -771,9 +790,9 @@ FIND_IN_SET('are', 'hello, sijorhou, how, are, you') 					-- 0
 FROM DUAL;
 ```
 
-##### 日期和时间函数
+#### 日期和时间函数
 
-###### 获取日期、时间
+##### 获取日期、时间
 | 函数                             | 用法                             |
 |----------------------------------|----------------------------------|
 | CURDATE(), CURRENT_DATE()        | 返回当前日期，只包含年、月、日   |
@@ -793,7 +812,7 @@ UTC_DATE(), UTC_TIME()	-- 2024-11-19,  15:08:53
 FROM DUAL;
 ```
 
-###### 日期-时间戳转换
+##### 日期-时间戳转换
 | 函数                   | 用法                                                         |
 |------------------------|--------------------------------------------------------------|
 | UNIX_TIMESTAMP()       | 以UNIX时间戳的形式返回当前时间。SELECT UNIX_TIMESTAMP()->1634348884 |
@@ -812,7 +831,7 @@ FROM_UNIXTIME(1732028553)     -- 返回首次运行时间 2024-11-19 23:02:33
 FROM DUAL;
 ```
 
-###### 获取月份、星期、星期数、天数等函数
+##### 获取月份、星期、星期数、天数等函数
 | 函数                   | 用法                                                         |
 |------------------------|--------------------------------------------------------------|
 | YEAR(date) / MONTH(date) / DAY(date) | 返回具体的日期值                                     |
@@ -841,7 +860,7 @@ QUARTER(CURDATE()), WEEK(CURDATE()),
 DAYOFYEAR(NOW()), DAYOFMONTH(NOW()), DAYOFWEEK(NOW())
 FROM DUAL;
 ```
-###### 日期的操作函数
+##### 日期的操作函数
 
 | 函数                   | 用法                                                         |
 |------------------------|--------------------------------------------------------------|
@@ -863,14 +882,14 @@ EXTRACT(QUARTER FROM NOW()), EXTRACT(SECOND_MICROSECOND FROM NOW()),
 EXTRACT(MINUTE_SECOND FROM NOW()), EXTRACT(MINUTE_MICROSECOND FROM NOW())
 FROM DUAL;
 ```
-###### 时间转换函数
+##### 时间转换函数
 | 函数                   | 用法                                                         |
 |------------------------|--------------------------------------------------------------|
 | TIME_TO_SEC(time)      | 将time转化为秒并返回结果值。转化的公式为：小时*3600+分钟*60+秒 |
 | SEC_TO_TIME(seconds)   | 将seconds描述转化为包含小时、分钟和秒的时间                  |
 
 
-###### 计算时间和日期的函数
+##### 计算时间和日期的函数
 ***第一组***
 | 函数                                      | 用法                                                         |
 |-------------------------------------------|--------------------------------------------------------------|
@@ -891,7 +910,7 @@ FROM DUAL;
 | MAKETIME(hour, minute, second) | 将给定的小时、分钟和秒组合成时间并返回                  |
 | PERIOD_ADD(time, n)    | 返回time加上n后的时间                                         |
 
-###### 日期的格式化与解析
+##### 日期的格式化与解析
 格式化：日期 -> 字符串
 解析： 字符串 -> 日期
 
@@ -974,7 +993,7 @@ FROM DUAL;
 | TIME        | INTERNAL   | %H%i%s                   |
 | DATETIME    | USA        | %Y-%m-%d%H.%i.%s         |
 
-##### 流程控制函数
+#### 流程控制函数
 
 
 

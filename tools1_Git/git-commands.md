@@ -138,8 +138,8 @@ fork 别人的项目有了更新，将当前分支同步为最新版本
 
 ***remote相关命令***
 - `git remote` 查看远程仓库 `-v` 参数为查看详细信息
-- `git remote add <add> <url>` 添加远程仓库
-- `git remote remove <add> <url>` 删除远程仓库
+- `git remote add <origin> <url>` 添加远程仓库
+- `git remote remove <origin> <url>` 删除远程仓库
 - `git remote rename <old-name> <new-name>` 修改远程仓库名称
 - `git remote set-url <name> <new-url>` 修改远程仓库 url
 - `git remote show <name` 查看远程仓库详细信息

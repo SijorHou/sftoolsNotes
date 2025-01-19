@@ -90,7 +90,7 @@ add_executable(main main.c ${SRC_LIST} ${SRC_LIST1})
 
 
 <div style="text-align:center">
-    <img src="/tools4_projtools/pic_src/项目级结构.png" alt="项目级结构" style="margin-bottom: 1px;">
+    <img src="/zothertools_projtools/cmake/pic_src/项目级结构.png" alt="项目级结构" style="margin-bottom: 1px;">
     <p>项目级结构</p>
 </div>
 
