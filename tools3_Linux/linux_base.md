@@ -214,6 +214,7 @@ Linux的目录结构以树形方式呈现，以下是Linux系统中一些常见�
   - 如 `usermod -s /bin/ksh -d /home/z –g developer sam`,此命令将用户sam的登录Shell修改为ksh，主目录改为/home/z，用户组改为developer
   - `usermod -g new_group username` 修改用户的属组为 new_group
   - `usermod -d new_home_dir username` 修改用户的家目录为 new_home_group
+  - `usermod -aG group_name user_name` 将用户加入 group_name 属组当中
 
 
 ***密码口令管理 `passwd`***

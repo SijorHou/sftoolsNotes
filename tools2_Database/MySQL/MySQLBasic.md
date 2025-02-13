@@ -116,7 +116,7 @@ ENCRYPTION = 'Y';                    -- 启用加密，适用于MySQL 8.0及以�
 
 
 <div style="text-align:center">
-    <img src="../pic/mysql密码重置步骤.png" alt="mysql密码重置步骤" style="margin-bottom: 1px;">
+    <img src="./pic/mysql密码重置步骤.png" alt="mysql密码重置步骤" style="margin-bottom: 1px;">
     <p>mysql密码重置步骤</p>
 </div>
 
@@ -257,7 +257,7 @@ SELECT 12 & 5, 12 | 5, 12 ^ 5, ~12, 12 << 1, 12 << 2, 12 >> 1, 12 >> 2 FROM DUAL
 
 ***逻辑运算符优先级***
 <div style="text-align:center">
-    <img src="../pic/运算符优先级.png" alt="mysql密码重置步骤" style="margin-bottom: 1px;">
+    <img src="./pic/运算符优先级.png" alt="mysql密码重置步骤" style="margin-bottom: 1px;">
     <p>运算符优先级</p>
 </div>
 
@@ -425,7 +425,7 @@ FROM employees emp RIGHT OUTER JOIN departments dept ON emp.department_id = dept
 
 #### 7种joins连接
 <div style="text-align:center">
-    <img src="../pic/7-joins.png" style="margin-bottom: 1px;">
+    <img src="./pic/7-joins.png" style="margin-bottom: 1px;">
     <p>7-joins</p>
 </div>
 

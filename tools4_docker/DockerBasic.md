@@ -7,6 +7,8 @@
 
 [Docker菜鸟教程](https://www.runoob.com/docker/docker-tutorial.html)
 
+[网友笔记](https://www.yuque.com/tmfl/cloud)
+
 ## 问题解决
 [docker run hello-world 无法从镜像源拉取报错](https://blog.csdn.net/qq_52712971/article/details/141862621?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522C64B1263-50CA-4288-B8E9-ED1B552F555E%2522%252C%2522scm%2522%253A%252220140713.130102334..%2522%257D&request_id=C64B1263-50CA-4288-B8E9-ED1B552F555E&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~top_positive~default-1-141862621-null-null.142^v100^control&utm_term=docker%3A%20Error%20response%20from%20daemon%3A%20Get%20https%3A%2F%2Fregistry-1.docker.io%2Fv2%2F%3A%20net%2Fhttp%3A%20request%20canceled%20while%20waiting%20for%20connection%20%28Client.Timeout%20exceeded%20while%20awaiting%20headers%29.&spm=1018.2226.3001.4187)
 
@@ -162,6 +164,7 @@ sudo yum-config-manager --add-repo https://mirrors.aliyun.com/docker-ce/linux/ce
     - `-t` 为容器分配一个伪输入终端，通常与`-i`同时使用
     - `-P` 随机端口映射
     - `-p` 指定端口映射 `-p hostPort:containerPort`
+    - `-e` 设置容器的环境变量
   - `docker run --name=myCentos -it centos /bin/bash` 
 - `docker ps [options]` docker container list, 列出容器
   - `-a, docker ps -a` 列出所有容器
@@ -224,7 +227,7 @@ sudo yum-config-manager --add-repo https://mirrors.aliyun.com/docker-ce/linux/ce
 ### 镜像概念
 #### 镜像分层
 执行`docker pull IMAGE_NAME` 命令的时候，Docker 会逐层下载镜像，***每一层都是一个 tar 归档文件***
-执行`docker push IMAGE_NAME` 命令的时候，Docker 会将镜像分解为多个层并账户层上传
+执行`docker push IMAGE_NAME` 命令的时候，Docker 会将镜像分解为多个层并逐层上传
 
 镜像分层允许Docker镜像由多个层组成，每一层代表 Dockerfile中的一个指令，镜像分层技术使得Docker由如下几个优势：
 - 可维护性，如果需要更新一个镜像依赖，只需要重构相关层即可
@@ -454,6 +457,33 @@ mysql> SOURCE /var/lib/mysql/atguigudb.sql
 - 删除容器，mysql容器中数据如何备份？
   - 只要设定了容器卷保存数据，即使删除mysql容器，再次新建msyql容器实例，也会具有宿主机中存储的原来数据
   - 或者 commit生成新的镜像，下次直接根据原镜像构造容器
+
+### docker redis 使用
+
+- 容器卷记得加入 `--privileged=true`
+- 宿主机下新建目录 `/app/redis`
+- 将一个 `redis.conf`配置文件模板拷贝到 `/app/redis`目录下，并在该目录下修改配置文件
+- 拉取镜像，创建容器
+- ***测试 redis-cli 连接***
+
+
+- **实战命令**
+
+```bash
+# redis有时需要修改配置文件 redis.conf ，需要进行一定挂载
+
+# redis配置文件的指定运行
+docker run -d --name=sijor_redis -p 6379:6379 redis
+docker exec -it sijor_redis /bin/bash
+
+mkdir -p /app/redis
+cp /myredis/redis.conf /app/redis
+
+# 拷贝配置文件（准备好的redis.conf 放到 /app/redis 目录下）？？？
+# 修改配置文件
+
+```
+
 
 
 
