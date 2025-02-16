@@ -465,8 +465,6 @@ mysql> SOURCE /var/lib/mysql/atguigudb.sql
 - 将一个 `redis.conf`配置文件模板拷贝到 `/app/redis`目录下，并在该目录下修改配置文件
 - 拉取镜像，创建容器
 - ***测试 redis-cli 连接***
-
-
 - **实战命令**
 
 ```bash
@@ -481,6 +479,10 @@ cp /myredis/redis.conf /app/redis
 
 # 拷贝配置文件（准备好的redis.conf 放到 /app/redis 目录下）？？？
 # 修改配置文件
+docker run -d -p 6379:6379 --name redis --privileged=true \
+  -v /app/redis/redis.conf:/etc/redis/redis.conf \
+  -v /app/redis/data:/data redis:6.0.8 \
+  redis-server /etc/redis/redis.conf
 
 ```
 

@@ -94,4 +94,28 @@ skip-character-set-client-handshake
 skip-name-resolve
 ```
 
+### docker 安装 redis
+[conf文件下载地址](https://raw.githubusercontent.com/antirez/redis/4.0/redis.conf)
+
+```bash
+# 先修改并配置 conf 文件 （参考 docker、redis笔记）
+# 创建容器，挂载 /mydata/redis/的 data、conf文件
+docker run -p 6379:6379 --privileged=true --name=sijor_redis\
+-v ~/mydata/redis/data:/data \
+-v ~/mydata/redis/conf:/etc/redis/redis.conf \
+-d redis:latest \
+redis-server /etc/redis/redis.conf
+
+# 连接容器
+docker exec -it redis redis-cli [-a 123456 -p 6379]
+
+# redis 内部关闭或外部关闭
+127.0.0.1:6379> shutdown
+
+docker exec -it sijor_redis redis-cli shutdown
+
+# 容器中的存储都是存于内存的，需要配置持久化
+# redis.conf 中的 appendonly 设置为 yes
+```
+
 

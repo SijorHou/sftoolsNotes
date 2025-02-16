@@ -128,7 +128,7 @@ ENCRYPTION = 'Y';                    -- 启用加密，适用于MySQL 8.0及以�
   - 着重号 ``
   - 查询常数
   - `DISTINCT`
-  - `DESC/DESCRIBE` <=> `SHOW COLUMNS FROM table_name`
+  - `DESC/DESCRIBE table_name` <=> `SHOW COLUMNS FROM table_name`
   - `WHERE`
   - `table_name.column_name` 限定列名，即指定查询的列
 

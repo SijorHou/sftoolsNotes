@@ -74,5 +74,86 @@ Redis 是一个高性能的缓存系统，适用于在高并发读操作的场�
 
 
 ### Linux安装和卸载
+在Linux上安装，需要配置gcc环境、下载Redis的tar包、解压到opt目录、修改和使用conf文件副本
 
+使用需要先启动 redis-server，然后连接 redis-cli
+
+
+
+***安装和配置***
+
+1. Linux环境安装Redis必须先具备gcc编译环境， 查看Linux的gcc环境，没有则安装。查看主机CPU尾数确定所需版本
+    - `gcc -v`
+    - `sudo apt install g++`
+    - `getconf LONG_BIT`
+
+2. 网络下载 Redis 归档文件，并拷贝到 /opt 目录中然后解压，后面都需要 sudo权限
+    - `wget http://download.redis.io/releases/redis-7.0.0.tar.gz`
+    - `sudo cp redis.7.0.0.tar.gz /opt`
+    - `sudo tar -xzvf redis.7.0.0.tar.gz`
+
+3. 进入解压的目录中，编译并安装 Redis，Redis会被默认安装在 `/usr/local/bin` 目录中
+    - `sudo make && sudo make install`
+<div style="text-align:center">
+    <img src="./pic/redis解压后目录内容.png" style="margin-bottom: 1px;" width=80%>
+    <p>redis解压后目录内容</p>
+</div>
+
+<div style="text-align:center">
+    <img src="./pic/Redis安装内容.png" style="margin-bottom: 1px;" width=80%>
+    <p>redis安装内容</p>
+</div>
+
+    redis-benchmark:性能测试工具，服务启动后运行该命令，看看自己电脑性能如何
+    redis-check-aof:修复有问题的AOF文件，RDB和AOF后续学习
+    redis-check-dump:修复有问题的dump.rdb文件
+    redis-cli:客户端操作入口
+    redis-sentinel:redis集群使用
+    reids-server:redis服务器启动命令
+
+4. 准备 conf 配置文件的副本，修改并使用
+    - `sudo cp redis.conf /myredis/redis7.conf`
+    - `sudo vim /myredis/redis7.conf`
+    - `/ + keywords + enter` 在文本中查找关键词配置
+
+```txt
+    1. 默认daemonize no 改为 daemonize yes
+    2. 默认protected-mode yes 改为 protected-mode no
+    3. 默认bind 127.0.0.1 改为 直接注释掉(默认bind 127.0.0.1只能本机访问)或改成本机IP，否则影响远程IP连接
+    4. 默认redis密码 改为 requirepass 自己设定的密码
+```
+
+***使用和关闭***
+
+1. 启动和连接服务。完成配置修改后，启动server服务，连接cli 并使用redis
+    - `redis-server /myredis/redis7.conf`
+    - `ps -ef | grep redis` 查看运行的server进程
+    - `redis-cli -a 123456 -p 6379`
+
+<div style="text-align:center">
+    <img src="./pic/启动连接redis.png" style="margin-bottom: 1px;" width=80%>
+    <p>启动连接redis</p>
+</div>
+
+2. 退出和关闭redis实例
+    直接在 redis-cli 中输入 `quit` 只是退出，明没有关闭
+    - `127.0.0.1 > SHUTDOWN`
+
+    或者命令行关闭
+    - `redis-cli -a 123456789 shutdown` 单例关闭
+    - `redis-cli -p 6379 shutdown` 多例关闭
+    - 搜索进程关闭
+        - `ps -ef | grep redis-server` 获取6379端口进程的编号
+        - `kill -9 PID-6379`
+
+***卸载***
+
+1. 卸载前需要先关闭 server的服务，然后删除文件目录下所有 redis内容 (/usr/local/bin/redis-*) 
+    - `ls -l /usr/local/bin/redis-*`
+    - `sudo rm -rf /usr/local/bin/redis-*`
+
+<div style="text-align:center">
+    <img src="./pic/卸载redis.png" style="margin-bottom: 1px;" width=80%>
+    <p>卸载redis</p>
+</div>
 
