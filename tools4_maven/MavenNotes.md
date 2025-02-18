@@ -10,6 +10,8 @@
 
 [csdn IDEA 配置Maven教程](https://blog.csdn.net/qq_38190185/article/details/115943152?spm=1001.2014.3001.5501)
 
+[依赖查询 maven-repository](https://mvnrepository.com/)
+
 ## Maven Notes
 ### Basic Introduction
 
@@ -172,3 +174,114 @@ Maven 就是一个软件，需要掌握的是：安装、配置、基本功能�
 #### IDEA配置Maven
 
 [csdn IDEA 配置Maven教程](https://blog.csdn.net/qq_38190185/article/details/115943152?spm=1001.2014.3001.5501)
+
+<div style="text-align:center">
+    <img src="/tools4_maven/pics/IDEA设置Maven.png" alt="图片描述" style="margin-bottom: 1px;">
+    <p>IDEA设置Maven</p>
+</div>
+
+<div style="text-align:center">
+    <img src="/tools4_maven/pics/新项目设置.png" alt="图片描述" style="margin-bottom: 1px;">
+    <p>新项目设置</p>
+</div>
+
+也可以在IDEA中设置每个新项目都使用Maven
+
+#### GAVP
+在 Maven 中，**GAVP** 是用来标识一个 Maven 工程或库的唯一标识符，由四个部分组成，分别是 **G**（Group ID）、**A**（Artifact ID）、**V**（Version） 和 **P**（Packaging）。
+
+1. **GAVP 的组成**
+
+- **G (Group ID)**：表示项目所属的组或组织，通常使用公司或组织的域名反转形式（例如 `com.example`）。***它用于唯一标识一个项目的所有模块或组件***。
+
+- **A (Artifact ID)**：表示项目或库的名称，它是项目的唯一标识符，***通常对应项目的名称或模块名称***。这个 ID 是在同一组（Group ID）下唯一的。
+
+- **V (Version)**：表示项目的版本号，通常遵循语义化版本（Semantic Versioning）规则，如 `1.0.0`、`1.2.3` 等。`主版本号.次版本号.修订版本`
+
+- **P (Packaging)**：表示项目的打包类型，指定项目最终生成的构建产物类型。常见的值有：
+  - `jar`：Java ARchive 文件（最常见的格式）
+  - `war`：Web ARchive 文件（用于 Web 项目）
+  - `pom`：用于 POM 文件本身（通常用于父项目）
+  - `ear`：Enterprise ARchive 文件
+  - `zip`：压缩包等
+
+2. **GAVP 的作用**
+
+GAVP 在 Maven 中的作用是唯一标识一个构件（Artifact）。每个构件的 GAVP 组合在 Maven 中都是唯一的，这使得 Maven 可以从远程仓库下载、管理和依赖不同版本的库。
+
+例如，在 POM 文件中声明一个依赖时，需要提供该依赖的 GAVP 信息，Maven 就能够根据这些信息从中央仓库（或其他仓库）下载相应的构件。
+
+3. **GAVP 示例**
+
+假设你想在 Maven 项目中引用 Apache Commons Lang 库，相关的 GAVP 信息如下：
+
+```xml
+<dependency>
+    <groupId>org.apache.commons</groupId>
+    <artifactId>commons-lang3</artifactId>
+    <version>3.12.0</version>
+    <packaging>jar</packaging>
+</dependency>
+```
+
+这里的 GAVP 是：
+- **Group ID**：`org.apache.commons`
+- **Artifact ID**：`commons-lang3`
+- **Version**：`3.12.0`
+- **Packaging**：`jar`
+
+4. **为什么使用 GAVP**
+
+- **唯一性**：每个库或项目在 Maven 中都是通过 GAVP 来唯一标识的，因此可以确保不同版本的相同库不发生冲突。
+- **依赖管理**：当你在项目的 `pom.xml` 文件中声明依赖时，Maven 会根据 GAVP 信息查找并下载正确的依赖版本。
+- **构建过程管理**：Maven 通过 GAVP 来管理项目构建中的各个模块和依赖关系，确保构建过程中的一致性和完整性。
+
+5. **总结**
+
+- **GAVP** 是 Maven 用来唯一标识构件（Artifact）的四个关键属性：Group ID（组织/组标识）、Artifact ID（项目标识）、Version（版本号）和 Packaging（打包类型）。
+- 通过 GAVP，Maven 可以精确地查找和管理项目中的依赖，确保构建过程中的一致性、可复现性和模块化管理。
+
+GAVP 模式帮助 Maven 在构建和管理 Java 项目时保持结构清晰、依赖管理方便、版本控制一致。
+
+
+### 创建 Maven Java工程 
+
+#### 新建 Maven 模块
+
+<div style="text-align:center">
+    <img src="/tools4_maven/pics/项目中新建Maven模块.png" alt="图片描述" style="margin-bottom: 1px;">
+    <p>项目中新建Maven模块</p>
+</div>
+
+- 在当前项目结构中，新建 module
+- 设置对应的 GAVP (P 默认就是 jar packaging了)
+- 新建使用Maven的module在项目中结构如下
+
+<div style="text-align:center">
+    <img src="/tools4_maven/pics/Maven-module.png" alt="图片描述" style="margin-bottom: 1px;">
+    <p>Maven-module</p>
+</div>
+
+
+
+#### 依赖添加
+
+[依赖查询 maven-repository](https://mvnrepository.com/)
+
+<div style="text-align:center">
+    <img src="/tools4_maven/pics/maven-repository.png" alt="图片描述" style="margin-bottom: 1px;">
+    <p>Maven-repository</p>
+</div>
+
+<div style="text-align:center">
+    <img src="/tools4_maven/pics/配置依赖.png" alt="图片描述" style="margin-bottom: 1px;">
+    <p>配置依赖</p>
+</div>
+
+- Maven-repository 中查询 jar 包所需依赖，直接复制配置文件
+- 在Maven项目的的 pom.xml 配置文件中添加所需依赖
+- IDEA 右侧 Maven管理中，点解循环图标按钮，更新配置
+
+
+### 创建 Maven Web工程
+

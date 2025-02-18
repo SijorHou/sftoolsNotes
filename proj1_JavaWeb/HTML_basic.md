@@ -30,7 +30,7 @@
   - 文档声明：
   - 文档标题： title
   - 网页编码格式：charset
-  - HTML文档元数据：meta (但标签)
+  - HTML文档元数据：meta 
 ```html 
 <html>
     <head>
