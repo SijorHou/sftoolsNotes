@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <!-- Add CSS style -->
+    <style>
+        .btn1{
+            width: 300px;
+            height: 200px;
+            font-size: 50px;
+            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+            background-color: darkred;
+            color: aliceblue;
+            border: 3px solid black;
+            border-radius: 5px;
+
+            margin: 10px auto 30px 300px;
+            position: fixed;
+        }
+
+    </style>
+    <!--
+        希望点击按钮能弹出小窗
+
+        引入方式：
+            1. 内嵌方式： 在head中通过一对 script标签 定义脚本代码
+        
+            2. 引入外部脚本文件： 在head中通过一对 script标签 引入外部JS文件
+    -->
+    
+    <script>
+        /*
+            1. JS 如何声明函数？
+
+                function func_name(){}
+
+
+            2. 函数如何关联 按钮点击和 应该发生的行为动作
+
+                button 标签的属性需要设置： onclick="func_name()"
+                实现点击按钮和函数行为的关联
+        */
+
+        function suprised() {
+            // 弹窗提示
+            // alert("Hello, this is SijorHou, please keep on moving, don't afraid and hesitate.\nJust chasing your dream!!")
+            alert("FUCKING LIFE HAS NO FUCKING SUPRISE !!!")
+        }
+
+    </script>
+
+</head>
+<body>
+    <button class="btn1" onclick="suprised()">Click me to see suprise.</button>
+    <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+    <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+</body>
+</html>

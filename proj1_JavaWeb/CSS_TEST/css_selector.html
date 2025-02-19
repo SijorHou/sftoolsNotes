@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        /*
+            1. 元素选择器： 根据元素标签名字确定样式的作用元素
+                语法： 标签名{}
+                
+                缺点： 限制了作用的元素，有时候同名标签元素不一定使用统一样式，而不同名标签可能需要使用相同样式，而元素选择去无法处理
+            
+            2. id 选择器： 根据元素的id值确定样式的作用元素 （id属性具有唯一性，每个元素的id在页面中不同）
+                语法： #id{}
+
+            3. class选择器： 根据元素的class属性值确定样式的作用元素 （元素的class属性可以重复，并且一个元素的class属性可能有多个值）
+                语法： .class属性值{}
+
+                class 选择器非常灵活
+
+        */
+
+        /* input{
+            width: 150px;
+            height: 300px;
+            background-color: brown;
+            color: aliceblue;
+            font-size: 30px;
+            font-family: 'Courier New', Courier, monospace;
+            line-height: 30px;
+            border-radius: 10px;
+        } */
+
+        #btn4{
+            width: 150px;
+            height: 300px;
+            background-color: brown;
+            color: aliceblue;
+            font-size: 30px;
+            font-family: 'Courier New', Courier, monospace;
+            line-height: 30px;
+            border-radius: 10px;
+        }
+
+        .shapeClass{
+            width: 100px;
+            height: 150px;
+            border-radius: 10px;
+        }
+
+        .colorClass{
+            background-color: darkred;
+            color: aliceblue;
+            border: 5px solid aliceblue;
+        }
+
+        .fontClass{
+            font-size: 20px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 30px;
+        }
+    </style>
+</head>
+<body>
+    <input id="btn1" class="shapeClass colorClass fontClass" type="button" value="BUTTON"/>
+    <input id="btn2" type="button" value="BUTTON"/>
+    <input id="btn3" type="button" value="BUTTON"/>
+    <input id="btn4" type="button" value="BUTTON"/>
+</body>
+</html>

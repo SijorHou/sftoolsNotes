@@ -112,8 +112,8 @@
       - `selected`
 
 ### page layout
-- `<div></div>`
-- `<span></span>`
+- `<div></div>` 块元素，自己独占一行，块内宽高立即生效
+- `<span></span>` 行元素，自己不会独占一行，行内宽高不生效
 
 ### notes
 ```html

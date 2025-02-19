@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <style>
+        /*
+            position
+                static 默认定位
+                relative 相对定位: 相对元素原本的位置，原位置保留不会被侵占
+                fixed 相对定位: 相对浏览器窗口的位置，滚动条滑动，位置也不会变，但是原位置会被侵占复用
+                absolute 绝对定位: 相对页面边界位置，原位置会被侵占复用
+            
+            left: 距离左边多少像素位置
+            right：距离右边多少像素位置
+            top
+            bottom
+            （左右上下，设置对应一个方向即可，对应方向会自动适应）
+        */
+        .innerDiv{
+            width: 200px;
+            height: 100px;
+            border: 1px solid azure;            
+        }
+
+        .d1{
+            background-color: darkred;
+            position: relative;
+            top: 50px;
+            left: 500px;
+ 
+        }
+
+        .d2{
+            background-color: darkseagreen;
+            position: fixed;
+            left: 250px;
+            
+ 
+        }
+
+        .d3{
+            background-color: darkgreen;
+ 
+        }
+
+    </style>
+</head>
+<body>
+    <!--
+        定位操作，让 内部div元素显示在任意位置
+    -->
+    <div class="outerDiv">
+        <div class="innerDiv d1">INNER-DIV-A</div>
+        <div class="innerDiv d2">INNER-DIV-B</div>
+        <div class="innerDiv d3">INNER-DIV-C</div>
+    </div>
+
+    <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>  
+    <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>  
+</body>
+</html>

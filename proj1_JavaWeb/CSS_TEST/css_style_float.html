@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <style>
+        .outerDiv{
+            width: 604px;
+            height: 304px;
+            border: 1px solid aliceblue;
+            background-color: darkred;
+            color: aliceblue;
+        }
+
+        .innerDiv{
+            width: 200px;
+            height: 100px;
+            border: 1px solid azure;
+            /* block 是 div 的默认形式， 如果改成 inline，则变成行内元素了*/
+            /* display: block;      */
+            /* display: inline; */
+            
+        }
+
+        .d1{
+            background-color: black;
+            /* float: right; */
+            /*float 并不是在整个页面上浮动向右，而是在其父级块元素范围中向右浮动（最近外层div）*/
+            float: left;
+        }
+
+        .d2{
+            background-color: darkseagreen;
+            float: left;
+        }
+
+        .d3{
+            background-color: darkgreen;
+            float: left;
+        }
+
+    </style>
+</head>
+<body>
+    <!--
+        下面代码中展示出来的内部3个div小块分别各站一行，看起来就是竖着排列的三个小矩形
+        如何让他们 横向并排？？？
+
+        将 .innerDiv 中的 display 改成 inline值
+        但是修改后，内部 div 块 失去了宽高特征 ？ why？ 有时候行内元素，宽高特征不生效
+        那么这中方式就不合适
+
+        所以采用 “浮动” ！！！
+    -->
+    <div class="outerDiv">
+        <div class="innerDiv d1">INNER-DIV-A</div>
+        <div class="innerDiv d2">INNER-DIV-B</div>
+        <div class="innerDiv d3">INNER-DIV-C</div>
+    </div>
+</body>
+</html>

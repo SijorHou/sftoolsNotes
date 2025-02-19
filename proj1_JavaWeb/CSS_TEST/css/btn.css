@@ -1,0 +1,9 @@
+input{
+    width: 100px;    height: 200px;
+    background-color: darkred;
+    color: aliceblue;
+    font-size: 20px;
+    font-family: 'Times New Roman', Times, serif;
+    border: 5px solid black;
+    border-radius: 5px;
+}
