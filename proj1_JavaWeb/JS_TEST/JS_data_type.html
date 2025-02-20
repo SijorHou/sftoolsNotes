@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <script>
+        /*
+            1. JS 中的变量声明，统统使用 var （弱类型,变量声明时不指定类型，赋值时才确定类型）
+                    
+                    Java                        JavaScript
+                ================================================
+                int i = 10                  var i = 10
+                String str = "sijorhou"     var str = "sijorhou"
+                System.out.println()        console.log(var) 
+
+            2. JS 中常见的数据类型： 
+                数值类型        number (整数、小数)
+                字符串类型      string
+                布尔类型        boolean
+                引用类型        Object
+                function类型    function
+
+            3. 判断数据类型的运算符 typeof
+
+            4. JS 中使用 var 声明变量的特点
+                弱类型可以统一声明成 var
+                变量可以使用不同的数据类型多次赋值
+                JS语句结尾 ; 可有可无
+                变量标识符严格区分大小写
+                标识符明明规则参考 JAVA
+                使用未声明变量会报错
+                使用声明但为赋值变量，其值为 null
+        */
+        
+        var i = 10
+        var str = "sijorhou"
+        var bigger = 1 > 10
+        var obj = new Object()
+        var fun1 = function(){}
+        var y                   // 声明未赋值，打印显示 undefined
+        var nullVar = null
+
+
+        // 浏览器 `控制台` 中打印变量
+        console.log(i)
+        console.log(str)
+        console.log(bigger)
+        console.log(obj)
+        console.log(fun1)
+        console.log(y)
+        console.log(nullVar)
+
+        console.log(typeof(i))
+        console.log(typeof(str))
+        console.log(typeof(bigger))
+        console.log(typeof(obj))
+        console.log(typeof(fun1))
+        console.log(typeof(y))              // 类型即为 undefined
+        console.log(typeof(nullVar))        // 类型即为 Object， 但值为 null
+
+        i = str
+        console.log(i)
+        console.log(typeof(i))
+        
+        
+    </script>
+
+</head>
+<body>
+    
+</body>
+</html>

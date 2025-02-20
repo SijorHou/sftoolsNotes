@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <script>
+        /*
+            1. if
+                    if() {
+
+                    }else if(){
+                    }
+                
+                PS: if 的条件判断框中 '' 非空对象、字符串、非0数字都判断为 true
+        
+        */
+
+        // var month = 5;       // 可以直接在 浏览器中主动输入
+        // prompt 返回的结果是用户在窗口输入的值，一般以 string类型返回
+        // 采用 Number.parseInt() 进行转换
+
+        var monthStr = prompt("Please input month: ");
+        console.log("type of input is " + typeof(monthStr));
+
+        var month = Number.parseInt(monthStr);
+        console.log("type of month from input now is " + typeof(month));
+
+        if(month == 12 || month == 1 || month == 2) {
+            console.log("Winter...");
+        } else if (month >= 3 && month <= 5) {
+            console.log("Spring...");
+        } else if (month >= 6 && month <= 8) {
+            console.log("Summer...");
+        } else if (month >= 9 && month <= 11) {
+            console.log("Autumn...");
+        } else {
+            console.log("There no such a month");
+        }
+
+        switch(month) {
+            case 3:
+            case 4:
+            case 5:
+                console.log("Spring comes, can summer be far ? ");
+                break;
+            case 6:
+            case 7:
+            case 8:
+                console.log("Summer comes, can autumn be far ? ");
+                break;
+            case 9:
+            case 10:
+            case 11:
+                console.log("Autumn comes, can winter be far ? ");
+                break;
+            case 12:
+            case 1:
+            case 2:
+                console.log("Winter comes, can spring be far ? ");
+                break;
+            default:
+                console.log("Becareful...");            
+
+        }
+
+
+    </script>
+</head>
+<body>
+    
+</body>
+</html>
