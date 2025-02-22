@@ -7,9 +7,113 @@
 
     <script>
         /*
+        task: 打印九九乘法表（在页面区域上打印，而不是console.log()在控制台）
         
-        
+        使用 document.write(str) str 中直接写 html 元素即可在浏览器界面中解析出来
+
+        document.write(j + "*" + i + "=" + (j + i) + "&nbsp;");
+        其中直接使用 + " " 打印空格不会被浏览器识别，而需要使用 "&nbsp; &nbsp;" 
+        几个 "&nbsp;" 就会打印几个空格
+
         */
+
+        
+        document.write("<h1>9×9 Multiplication Table</h1>");
+        document.write("<hr>");
+        document.write("@auto SijorHou");
+        document.write("<br>");
+        document.write("@time 2025.2.22");
+        document.write("<hr><br>");
+
+        // Using while loop
+        document.write("<h2>While-loop</h2>");
+        document.write("<br>");
+        var i = 1;
+        while (i <= 9) {
+            var j = 1;
+            while (j <= i) {
+                document.write(j + "*" + i + "=" + (j * i) + "&nbsp; &nbsp; &nbsp;");
+                j++;
+            }
+            document.write("<hr>");
+            i++;
+        }
+        document.write("<br>");
+
+        // Using for loop
+        document.write("<h2>For-loop</h2>");
+        document.write("<hr>")
+        for (var i = 1; i <= 9; i++) {
+            for (var j = 1; j <= i; j++) {
+                document.write(j + "*" + i + "=" + (j * i) + "&nbsp; &nbsp; &nbsp;");
+            }
+            document.write("<hr>");
+        }
+        document.write("<br><br>");
+
+
+        document.write("<h1>List Information</h1>");
+        document.write("<hr>");
+        document.write("@auto SijorHou");
+        document.write("<br>");
+        document.write("@time 2025.2.22");
+        document.write("<hr><br>");
+        // Using for each and array
+        
+        document.write("<h2?For-each and Array</h2>");
+        
+        // 23 provience and 4 central governed cities and 5 municipalities and 2 special administrative region, total 30
+        var cgc = ["Beijing", "Tianjin", "Shanghai", "Chongqing"];
+        var provinces = ["Hebei", "Shanxi-Jin", "Liaoning", "Jilin", "Heilongjiang", "Jiangsu", "Zhejiang", "Anhui", "Fujian",
+            "Jiangxi", "Shandong", "Henan", "Hubei", "Hunan", "Guangdong", "Hainan", "Schuan", "Guizhou", "Yunnan" ,
+            "Shanxi-shan", "Gansu", "Qinghai", "Tiwan"
+        ];
+        var municipalities = ["Neimenggu", "Guangxi", "Xinjiang", "Ningxia", "Xizang"];
+        var sar = ["Hongkong", "Macau"];
+        
+        console.log("Number of Provences " + provinces.length);
+        console.log("Number of Central Governed Cities " + cgc.length);
+        console.log("Number of Municipalities " + municipalities.length);
+        console.log("Number of Special Administrate Region " + sar.length);
+
+        
+        
+        
+        document.write("<ul>");     // using ordered list
+        document.write("<li>23 Provinces");
+            document.write("<ul>");
+                for (var index = 0; index < provinces.length; index++) {
+                    document.write("<li>" + provinces[index] + "</li>");
+                }
+            document.write("</ul>");
+        document.write("</li>");
+
+        document.write("<li>4 Central Governed Cities");
+            document.write("<ul>");
+                for (var index = 0; index < cgc.length; index++) {
+                    document.write("<li>" + cgc[index] + "</li>");
+                }
+            document.write("</ul>");
+        document.write("</li>");
+
+        document.write("<li>5 Municipalities");
+            document.write("<ul>");
+                for (var index = 0; index < municipalities.length; index++) {
+                    document.write("<li>" + municipalities[index] + "</li>");
+                }
+            document.write("</ul>");
+        document.write("</li>");
+
+        document.write("<li>2 Special Administrate Region");
+            document.write("<ul>");
+                for (var index = 0; index < sar.length; index++) {
+                    document.write("<li>" + sar[index] + "</li>");
+                }
+            document.write("</ul>");
+        document.write("</li>");
+
+        document.write("</ul>");
+
 
 
     </script>

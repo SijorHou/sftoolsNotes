@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <script>
+        /*
+        functions statement:
+            1. function func_name() {}
+            2. var func_name = function() {}
+
+        compare to java:
+            1. no modifier
+            2. no void, just return
+            3. no exception list
+            4. 调用方法时候，实参和形参可以不一致（只考虑传入的对应的参数）， 方法内部通过 arguments 获取调用时的实参
+            5. 函数也可以作为参数被传递
+        
+            */
+
+        // function statement
+        function sum(a, b) {
+            console.log("sum function are passed to more than 2 params: ");
+            console.log(arguments);
+            return a + b;
+        }
+
+        var sumE = function(a, b) {
+            var sum = a + b;
+            
+
+            var numberToWords = [
+                "zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"
+            ];
+
+            // turn digit to English words
+            var sumStr = sum.toString();
+            var result = "";
+            
+            for (var i = 0; i < sumStr.length; i++) {
+                var digit = parseInt(sumStr[i]);
+                result += numberToWords[digit];
+                if (i < sumStr.length - 1) {
+                    result += "-";
+                }
+            }
+
+            return result
+        }
+
+        function add(getSum, a, b) {
+            return getSum(a, b);
+        }
+
+        // call function to receive result
+        var a = 14256;
+        var b = 87563;
+        var result = sum(a, b, 456, 5);
+        var resultE = sumE(a, b)
+        console.log("result of sum(a, b): " + result);
+        console.log("result of sumE(a, b): " + resultE);
+
+        var resultAdd = add(sum, a, b);
+        var resultEAdd = add(sumE, a, b);
+        console.log("result of add(sum, a, b): " + resultAdd);
+        console.log("result of add(sumE, a, b): " + resultEAdd);
+
+    </script>
+</head>
+<body>
+    
+</body>
+</html>

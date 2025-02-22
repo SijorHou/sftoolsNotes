@@ -6,6 +6,7 @@
 - [navicat安装教程](https://mp.weixin.qq.com/s/Of1282kGihYiXnmxvB9Csw)
 - [navicat使用教程](https://blog.csdn.net/qq_45069279/article/details/105919312?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522171657178116800182137881%2522%252C%2522scm%2522%253A%252220140713.130102334..%2522%257D&request_id=171657178116800182137881&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~top_positive~default-2-105919312-null-null.142^v100^pc_search_result_base8&utm_term=navicat&spm=1018.2226.3001.4187)
 - [卸载教程](https://blog.csdn.net/m0_52861000/article/details/131354710?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522172110015316800180631045%2522%252C%2522scm%2522%253A%252220140713.130102334..%2522%257D&request_id=172110015316800180631045&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~top_positive~default-2-131354710-null-null.142^v100^pc_search_result_base8&utm_term=%E5%8D%B8%E8%BD%BDmysql&spm=1018.2226.3001.4187)
+- [高级篇笔记](https://www.yuque.com/isljq/mysql/biar3e95d4s9z0m1)
 ## 数据库基础
 
 - DBMS(Data Base Manage System) 数据库软件管理系统，是软件系统，如 MySQL等各类我们常称的“数据库”
@@ -994,12 +995,135 @@ FROM DUAL;
 | DATETIME    | USA        | %Y-%m-%d%H.%i.%s         |
 
 #### 流程控制函数
+- `IF(condition, value1, value2)` 如果 expression 位 True， 返回 value1， 否则返回 value2
+- `IFNULL(value1, value2)` 如果 value1 不为 NULL，返回 value1， 否则返回 value2
+- `CASE WHEN condition1 result1 WHEN cond2 res2 ... [ELSE resn] END` 相当于 java 的 `if ... else if ... else...`
+- `CASE expr WHEN constant1 THEN value1 WHEN constant2 THEN value2... [ELSE valuen] END` 相当于 java的 `switch... case...`
+
+```sql
+-- 流程控制函数
+
+SELECT last_name, salary, IF(salary >= 6000,'高工资','低工资') "details" FROM employees;
+
+SELECT 
+last_name, commission_pct, IF(commission_pct IS NOT NULL, commission_pct, 0) "details",
+salary *12 * (1 + IF(commission_pct IS NOT NULL, commission_pct, 0)) "annual_sal" FROM employees;
 
 
+# IFNULL(expr1,expr2) 可以看做是 IF(expr1,expr2,expr3)的特殊情况
+SELECT last_name, commission_pct, IFNULL(commission_pct,0) "details" FROM employees; 
 
 
+# CASE WHEN expr1 THEN res1 WHEN expr2 THEN res2 ... ... ELSE resn END 
+SELECT last_name, salary, 
+	CASE 
+		WHEN salary >= 15000 THEN '白骨精'
+		WHEN salary >= 10000 THEN '潜力股'
+		WHEN salary >= 8000 THEN '小屌丝'
+		ELSE '草根'
+	END "details", department_id
+FROM employees; 
+
+# practice: 查询部门号为 10， 20， 30 的员工信息，若为 10， 打印其工资1.1倍 ，以此类推，1.2,1.3倍，其他部门 1.4倍
+SELECT employee_id, last_name, department_id, salary,
+	CASE department_id
+		WHEN 10 THEN salary * 1.1
+		WHEN 20 THEN salary * 1.2
+		WHEN 30 THEN salary * 1.3
+		ELSE salary * 1.4
+	END "details"
+FROM employees;
 
 
+SELECT employee_id, last_name, department_id, salary,
+	CASE 
+		WHEN department_id = 10 THEN salary * 1.1
+		WHEN department_id = 20 THEN salary * 1.2
+		WHEN department_id = 30 THEN salary * 1.3
+		ELSE salary * 1.4
+	END "details"
+FROM employees;
+```
+
+#### 加密与解密函数
+针对数据库中的数据进行 加密 和 解密处理
+
+| 函数     | 用法                                                                                      |
+|----------|-------------------------------------------------------------------------------------------|
+| PASSWORD(str) | 返回字符串str的加密版本，41位长的字符串。加密结果 **不可逆**，常用于用户的密码加密。                     |
+| MD5(str)      | 返回字符串str的md5加密后的值，也是一种加密方式。若参数为NULL，则返回NULL。                            |
+| SHA(str)      | 从原始文本字符串str计算返回加密后的密文字符串。当参数为NULL时，返回NULL。 **SHA加密法比MD5更安全**。    |
+| ENCODE(value, password_seed) | 返回使用password_seed作为加密密钥加密value。                                                    |
+| DECODE(value, password_seed) | 返回使用password_seed作为加密密钥解密value。                                                    |
 
 
+#### 单行函数练习
+
+```sql
+-- 1. 显示系统时间： 日期 + 时间
+SELECT NOW(), SYSDATE(), CURRENT_TIMESTAMP(), LOCALTIME(), LOCALTIMESTAMP() FROM DUAL;
+
+-- 2. 查询员工的工号、姓名、工资、涨薪百分比20% 以后的结果
+SELECT employee_id, last_name, salary, salary * (1 + 0.2) "new salary" FROM employees;
+
+-- 3. 将员工姓名按首字母排序，并写出姓名长度
+SELECT last_name, LENGTH(last_name) "Length of name" FROM employees ORDER BY UPPER(LEFT(last_name,1)) ASC;
+
+-- 4. 查询员工 id, last_name, salary 并作为一个列输出，别名 out_put
+SELECT CONCAT_WS(" ",employee_id,last_name,salary) "out_put" FROM employees;
+
+-- 5. 查询公司各个员工工作的年数、工作的天数，并按照工作年数降序排序
+SELECT employee_id AS eply_id, last_name AS lname, department_id AS dp_id, hire_date,
+DATEDIFF(CURDATE(),hire_date) "worked_days", 
+DATEDIFF(CURDATE(),hire_date) / 365 "worked_years_by_days",
+(YEAR(CURDATE()) - YEAR(hire_date)) "worked_years_by_years"
+FROM employees ORDER BY worked_days DESC;		# 取完的别名，直接拿来当做变量使用了，无需再加双引号
+
+
+-- 6. 查询员工姓名，hire_date, department_id, 满足以下条件：1997之后雇佣，department_id 为 80， 90， 或110， commission_pct 不为空
+SELECT 
+last_name, hire_date, department_id, commission_pct
+FROM employees
+WHERE YEAR(hire_date) >= 1997 
+AND (department_id IN (80, 90, 110)) 
+AND commission_pct IS NOT NULL;
+
+
+-- 7. 查询公司中入职超过10000天的员工姓名，入职时间
+SELECT last_name, hire_date, (TO_DAYS(CURDATE()) - TO_DAYS(hire_date)) "worked_days" 
+FROM employees WHERE TO_DAYS(CURDATE()) - TO_DAYS(hire_date) > 10000;
+
+SELECT last_name, hire_date
+FROM employees 
+WHERE DATEDIFF(CURDATE(),hire_date) > 10000;
+
+-- 8. 做一个查询，产生下面结果 <last_name> earns <salary> monthly but wants <salary * 3>
+SELECT 
+CONCAT_WS(" ",last_name,"earns",TRUNCATE(salary / 12,0),"monthly but wants",TRUNCATE(salary / 12 * 3,0)) "Dream salary"
+FROM employees;
+
+-- 9. 使用 case-when， 按照下面条件：
+/*
+job				grade
+AD_PRES		A
+ST_MAN		B
+IT_PROG		C
+SA_REP		D
+ST_CLERK	E
+
+产生下面的结果：
+
+*/
+SELECT last_name, job_id,
+	CASE job_id
+		WHEN "AD_PRES" THEN "A"
+		WHEN "ST_MAN"	THEN	"B"
+		WHEN "IT_PROG" THEN "C"
+		WHEN "SA_REP" THEN "D"
+		WHEN "ST_CLERK" THEN "E"
+	END "grade"
+FROM employees;
+```
+
+#### 5 大常用聚合函数
 

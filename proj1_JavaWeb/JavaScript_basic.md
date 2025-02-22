@@ -149,7 +149,25 @@ JavaScript 作为一种编程语言，主要由以下几个部分组成：
 
 
 ### JS的引入方式
+- `<script></script>`
+- `alert("output content")`
+- `function`
+
+### JS的基本数据类型
+- `console.log()`
+
+### JS的分支节后
+- `prompt`
+- `if (expression) {} else {}`
+- `switch(expresion) { case value: statements; break; case ...; default: break}`
 
 
-### 
+### JS的循环结构
+
+### JS的函数声明语法
+
+### JS_JSON
+该看这一节了
+
+
 

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <script>
+        /*
+        2 种方式创建 JS对象
+
+            方式1： new Object()
+
+            方式2： {属性名:属性值, ... ..., 函数名:function(){}}
+        
+        */
+
+        // 方式1
+        var person = new Object()
+        // 手动添加对象的 属性、方法， 有则赋值，无则添加
+        person.name = "SijorHou";
+        person.age = 26;
+        person.stdy = function(course) {
+            console.log(this.age + " years old " + this.name + " is learning " + course + ".");
+        }
+
+        var course = "JavaScript";
+        person.stdy(course);
+
+
+        // 方式2
+        var adult = {
+            name: "sijorhou",
+            age: 26,
+            stdy: function(course) {
+                console.log(this.age + " years old " + this.name + " is an adult, he is learning " + course + ".");
+            }
+        }
+
+        adult.stdy(course)
+
+
+    </script>
+</head>
+<body>
+    
+</body>
+</html>
