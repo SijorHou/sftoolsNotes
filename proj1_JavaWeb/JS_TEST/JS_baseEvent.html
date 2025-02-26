@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <script>
+        /*
+        1. 事件的绑定方式：
+            1). 通过元素绑定
+            2). 通过DOM编程动态绑定
+
+            PS:
+                一个event可以同时绑定多个函数
+                一个元素可以同时绑定多个事件
+        
+        2. 常见的事件
+            1). 鼠标事件：
+                onclick, ondbclick, onmouseover, onmousemove, onmouseleave      
+
+            2). 键盘事件：
+                onkeydown, onkeyup
+            
+            3). 表单事件：
+                onfocue, onblur, onchange, onsubmit, onreset
+            
+            4). 页面加载事件
+                onload
+                
+        3. 事件的触发 ———— 通过DOM编程动态绑定        
+        
+        confirm, enent.preventDefault()
+
+                
+        */
+
+        function click_event_fun1() {
+            // alert("CLICK TO INVOKE EVENT FUNCTION 11111111")
+            console.log("CLICK TO INVOKE EVENT FUNCTION 11111111")
+        }
+
+        function click_event_fun2() {
+            // alert("CLICK TO INVOKE EVENT FUNCTION 22222222")
+            console.log("CLICK TO INVOKE EVENT FUNCTION 22222222")
+        }
+
+        function click_event_fun3() {
+            console.log("DOUBLE CLICK TO INVOKE EVENT FUNCTION 3333333")
+        }
+
+        // 鼠标事件
+        function onmouseover_fun() {
+            console.log("This is your Baby Images, cute isn't ?")
+        }
+
+        function onmouseleave_fun() {
+            console.log("why not look more?")
+        }
+
+        // 键盘事件
+        function onkeydown_fun() {
+            console.log("Keyboard DOWN !!!")
+        }
+
+        function onkeyup_fun() {
+            console.log("Keyboard UP !!!")
+        }
+
+        // 表单事件
+        function onfocus_fun(name) {
+            console.log("CAPTURED the FOCUE of " + name + " !!!")
+        }
+
+        function onblur_fun(name) {
+            console.log("LOSE the FOCUE of " + name + " !!!")
+        }
+
+        function onchange_fun(name) {
+            console.log("content CHANGED into " + name)
+        }
+
+        function onsubmit_fun() {
+            // comfirm 会增加弹窗 取消 按钮
+            var flag = confirm("即将跳转界面")
+            if (!flag) {
+                // 阻止表单默认行为，这里表单的默认行为为 get跳转界面
+                event.preventDefault()  
+            }       
+        }
+
+        function onreset_fun() {
+            alert("Form is going to RESET!!!")
+        }
+    </script>
+</head>
+<body>
+    
+    <input
+        type="button" 
+        value="button" 
+        onclick="click_event_fun1(), click_event_fun2()"
+        ondblclick="click_event_fun3()"
+    />
+
+    <img 
+        src="pic_src/baby.jpg" width=20% 
+        onmouseover="onmouseover_fun()" 
+        onmousemove="onmouseleave_fun()"
+    />
+
+    <input 
+        type="text"
+        onkeydown="onkeydown_fun()"
+        onkeyup="onkeyup_fun()"
+    />
+
+    <br><br><br><br><hr>
+    <!-- 表单 -->
+    <form action="./JS_intro.html" method="get"  onsubmit="onsubmit_fun()" onreset="onreset_fun()" >
+        username: <input type="text" name="realName" onfocus="onfocus_fun('username')" onblur="onblur_fun('username')" /> <br>
+        login-ID: <input type="text" name="logoinName" onfocus="onfocus_fun('login-ID')" onchange="onchange_fun(this.value)"/> <br>
+        yourFrom:
+                <select onchange="onchange_fun(this.value)">
+                    <option>Bejing</option>
+                    <option>ShangHai</option>
+                    <option>Guangzhou</option>
+                </select> <br><br>
+
+        
+        <input type="submit" value="log up"/>
+        <input type="reset" value="clean up" />
+    </form>
+</body>
+</html>

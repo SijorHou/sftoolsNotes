@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <script>
+        /*
+        1. 数组的创建方式
+        2. 数组的API
+        3. 其他API
+
+        */
+
+        // 数组创建
+        var arr = new Array()
+        console.log(arr)
+        console.log(arr.length)
+
+        // 向数组中添加数据
+        arr[0] = "SijorHou"
+        arr[1] = 12
+        arr.length = 10
+        arr[9] = 'a'        // 中间空的为 空，现在属组为 10长度
+        console.log(arr)
+        console.log(arr.length)
+
+        var arr2 = new Array("SJ", 26, 'b')
+        console.log(arr2)
+        console.log(arr2.length)
+
+
+        // 数组 API
+        /*
+        .concat(array)
+        .pop()
+        .push(elem)
+        .indexOf(elem)
+        .lastIndexOf(elem)
+        .join(sign)
+        .slice(start, end)
+        .splice(star, delete_num, elems...) 从数组中添加或删除元素
+        */
+        var fruits = ["Apple", "Banana", "Orange"]
+        var fruits2 = ["A", "B", "C"]
+        var allFruits = fruits.concat(fruits2)
+        console.log(allFruits)
+
+        fruits.pop()
+        console.log(fruits)
+        console.log(fruits.indexOf("Banana"))
+
+        fruits2.push("D")
+        console.log(fruits2)
+
+        console.log(allFruits.join('-'))
+
+        console.log(allFruits.slice(1, 3))  // 左闭右开，Python切片
+        
+        // console.log(allFruits.splice(3, 1, "AAA", "BBB", "CCC")) is useless
+        allFruits.splice(3, 1, "AAA", "BBB", "CCC")
+        console.log(allFruits)
+
+
+        // Date 类型
+        var date = new Date()   // default 当前系统时间
+        console.log(date)
+        console.log(date.getFullYear())
+        console.log(date.getDay())
+        console.log(date.getHours())
+        console.log(date.getMinutes())
+        console.log(date.getSeconds())
+        
+        // Number
+        var str = '2'
+        var str_num = Number.parseFloat(str)
+        console.log(typeof(str_num))
+        console.log(str_num)
+        
+
+    </script>
+</head>
+<body>
+    
+</body>
+</html>

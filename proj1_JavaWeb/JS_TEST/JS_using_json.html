@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <script>
+        /*
+        JSON 格式的语法
+            var personStr = '{
+                "attr_name1": "attr_value1", ...,  "attr_namen": "attr_valuen", "dict_attr_name": {}, "array_attr_name": []}'
+
+            attr_name/attr_value(if is str) 需要用 "" 包裹
+            多个attr_name/attr_value之间用逗号隔开
+            JSON 中没有关于方法的讨论
+            
+        
+        */
+
+        var personStr = '{"name": "SijorHou", "age": 10, "pet": "Dog", "idol": ["Taylor Swift", "Justin Bieber", "Leonardo"], "friends": [{"fname1": "A", "age": 11}, {"fname2": "B", "age": 12}, {"fname3": "C", "age": 13}]}'
+
+        console.log(personStr)
+        console.log(typeof(personStr))
+        // console.log(personStr.name)     JSON 是字符串不是一个对象，无法直接访问其中属性
+        var person = JSON.parse(personStr)
+        console.log(person.friends)
+
+    </script>
+</head>
+<body>
+    
+</body>
+</html>
