@@ -285,3 +285,10 @@ GAVP 模式帮助 Maven 在构建和管理 Java 项目时保持结构清晰、�
 
 ### 创建 Maven Web工程
 
+***先按照前面java工程的Maven创建，在项目新建一个 module，`maven_Web`***
+
+Web 工程和 java工程的区别仅仅在于 ***java工程缺少一个 Web模块***（其中设置着 Web资源的路径），想要将 maven_Web （初创时是一个java工程） 真正变为一个 Web工程：需要在其中加入 Web模块：
+
+- 手动添加
+
+

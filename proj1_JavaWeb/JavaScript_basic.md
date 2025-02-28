@@ -129,7 +129,7 @@ JavaScript 是 Web 开发不可或缺的核心技术，适用于构建动态网�
 
 ## Course Notes
 
-
+### JavaScrpt
 ***JavaScript特点***
 
 - JavaScript是一种 ***解释型脚本语言***， 在程序运行过程中对源文件逐行解释
@@ -148,32 +148,32 @@ JavaScript 作为一种编程语言，主要由以下几个部分组成：
 
 
 
-### JS的引入方式
+#### JS的引入方式
 - `<script></script>`
 - `alert("output content")`
 - `function`
 
-### JS的基本数据类型
+#### JS的基本数据类型
 - `console.log()`
 
-### JS的分支节后
+#### JS的分支节后
 - `prompt`
 - `if (expression) {} else {}`
 - `switch(expresion) { case value: statements; break; case ...; default: break}`
 
 
-### JS的循环结构
+#### JS的循环结构
 
-### JS的函数声明语法
+#### JS的函数声明语法
 
-### JS_JSON
+#### JS_JSON
 
 
-### JS 常见对象
+#### JS 常见对象
 
 常见对象的API
 
-### 常见事件
+#### 常见事件
 
 event： 可以使浏览器行为、用户行为
 这些行为发生会自动触发 对应的 JS函数运行，即 `事件发生`
@@ -184,3 +184,166 @@ JS的事件驱动就是指行为触发代码运行的特点
 - 鼠标事件
 - 键盘事件
 - 表单事件
+
+#### DOM编程绑定和触发JS 事件
+
+事件的触发： 
+- 通过DOM编程动态绑定
+- 行为触发
+- DOM编程触发
+
+
+
+#### BOM编程
+
+即 Windows对象 及其各个属性的API 能做什么
+
+<div style="text-align:center">
+    <img src="JS_TEST/pic_src/BOM编程概念.png" alt="HTML 结构.png" style="margin-bottom: 1px;">
+    <p>BOM编程概念</p>
+</div>
+
+#### BOM 编程常见API
+- Windows对象相关API
+- Windows属性相关api
+
+
+#### DOM编程
+Document Object Model 就是使用 document对象的API完成对网页HTML文档的动态修改，从而实现网页数据和样式动态变化效果的编程
+
+
+实际开发中，开发完成后 html 页面上（在服务器上）的 元素不再变动
+
+客户端的浏览器接收到所请求的 html文档后会将其抽象为一个 document对象（存于浏览器内存中）
+浏览器展示、操作的都是 document对象
+所以用户可以在本地浏览器修改 document对象，即页面内容，但是服务器中原文档是不变的
+
+- ***DOM编程的核心在于：使用JavaScript操作DOM对象***
+- document对象代表整个html文档
+
+<div style="text-align:center">
+    <img src="JS_TEST/pic_src/对象关系.png" alt="HTML 结构.png" style="margin-bottom: 1px;">
+    <p>window对象、BOM、DOM之间的关系</p>
+</div>
+
+- document是树形结构对象，成为 DOM树，
+- 每个元素（如 `<div>, <p>, <span>`、文本内容、注释等）都是一个节点
+   - 每个节点都有其属性和方法，可以通过JavaScript访问和操作
+
+- 根节点是document对象，它代表整个HTML文档。
+- 子节点可以是元素节点（如<div>）、文本节点（如Hello）、注释节点等。
+- 元素节点可以包含其他元素节点或文本节点，形成嵌套关系。
+
+
+<div style="text-align:center">
+    <img src="JS_TEST/pic_src/DOM树结构举例.png" alt="HTML 结构.png" style="margin-bottom: 1px;">
+    <p>DOM树结构举例</p>
+</div>
+
+
+##### 获取元素的几种方式
+
+##### 操作元素属性
+
+##### 创建增加替换删除元素
+[对应小结网课](https://www.bilibili.com/video/BV1UN411x7xe?vd_source=a702a01e1846917f653c366933ef2676&spm_id_from=333.788.player.switch&p=48)
+示例笔记
+```txt
+4 操作元素的属性
+   1. 获取和设置属性
+      var attrValue = el1.getAttribute('id'); // 获取元素的属性值
+      el1.setAttribute('id', 'newId'); // 设置元素的属性值
+      el1.removeAttribute('id'); // 删除元素的属性
+
+   2. 获取和设置样式属性
+      el1.style.color = 'red'; // 设置元素的内联样式
+      var styleValue = el1.style.color; // 获取元素的内联样式值
+
+   3. 类操作
+      el1.classList.add('new-class'); // 给元素添加类
+      el1.classList.remove('existing-class'); // 从元素移除类
+      el1.classList.toggle('class-to-toggle'); // 切换元素的类
+
+5 创建、增加、替换、删除元素
+   1. 创建元素
+      var newElement = document.createElement('p'); // 创建一个新的<p>元素
+
+   2. 增加元素
+      parent.appendChild(newElement); // 将新元素添加到父元素的子元素列表的末尾
+      parent.insertBefore(newElement, referenceElement); // 在参考元素前插入新元素
+
+   3. 替换元素
+      var oldElement = parent.querySelector('p');
+      parent.replaceChild(newElement, oldElement); // 用新元素替换旧元素
+
+   4. 删除元素
+      parent.removeChild(oldElement); // 从父元素中移除子元素
+```
+
+#### 正则表达式
+[正则表达式](https://www.bilibili.com/video/BV1UN411x7xe?vd_source=a702a01e1846917f653c366933ef2676&spm_id_from=333.788.player.switch&p=50)
+```txt
+正则表达式（Regular Expressions）笔记
+
+1. 正则表达式概述
+   - 正则表达式是一种用于字符串搜索和操作的强大工具。
+   - 它使用单个字符串来描述、匹配一系列符合某个句法规则的字符串。
+
+2. 正则表达式的基本语法
+   - 字面量字符：直接匹配指定的字符。
+     例如：'abc' 匹配字符串 'abc'。
+   - 特殊字符：
+     . (点)：匹配任意单个字符（除了换行符）。
+     *：匹配前面的子表达式零次或多次。
+     +：匹配前面的子表达式一次或多次。
+     ?：匹配前面的子表达式零次或一次。
+     |：逻辑“或”，匹配两个表达式中的一个。
+     ^：匹配输入字符串的开始位置。
+     $：匹配输入字符串的结束位置。
+     \s：匹配任何空白字符（包括空格、制表符、换行符等）。
+     \d：匹配任何数字，等同于[0-9]。
+     \w：匹配任何字母数字字符，等同于[a-zA-Z0-9_]。
+
+3. 字符集合
+   - 方括号[]用于定义字符集合，匹配集合中的任意一个字符。
+     例如：[abc] 匹配 'a'、'b' 或 'c' 中的任意一个字符。
+   - 范围表示法：
+     例如：[0-9] 匹配任意一个数字。
+     例如：[a-z] 匹配任意一个小写字母。
+
+4. 量词
+   - {n}：恰好匹配n次。
+   - {n,}：至少匹配n次。
+   - {n,m}：最少匹配n次且最多匹配m次。
+
+5. 分组和捕获
+   - 圆括号()用于分组，将多个表达式组合成一个子表达式。
+   - 捕获组：圆括号内的表达式可以被捕获，以便后续引用。
+     例如：(\d{3})-(\d{3})-(\d{4}) 匹配电话号码，并捕获三个部分。
+
+6. 断言
+   - 正向先行断言 (?=...)：确保某个位置后面跟着指定的模式。
+   - 负向先行断言 (?!...)：确保某个位置后面不跟着指定的模式。
+   - 正向后行断言 (?<=...)：确保某个位置前面是指定的模式。
+   - 负向后行断言 (?<!...)：确保某个位置前面不是指定的模式。
+
+7. JavaScript中的正则表达式
+   - 创建正则表达式对象：var regex = /pattern/flags;
+   - 常用方法：
+     test(str)：测试字符串是否匹配正则表达式，返回布尔值。
+     exec(str)：执行搜索匹配并返回匹配结果数组。
+     match(str)：在字符串中搜索匹配正则表达式的子串，返回匹配结果数组。
+     replace(str, newSubStr)：替换字符串中的匹配项。
+     search(str)：在字符串中搜索匹配正则表达式的子串，返回匹配项的索引。
+
+8. 正则表达式的应用场景
+   - 验证输入：如验证邮箱、电话号码、密码等。
+   - 搜索和替换：在文本中搜索特定模式并替换。
+   - 数据提取：从字符串中提取特定信息，如从日志文件中提取时间戳。
+   - 文本格式化：如去除多余的空格、转换大小写等。
+
+9. 注意事项
+   - 正则表达式的性能：复杂的正则表达式可能会影响性能，特别是在处理大文本时。
+   - 可读性：复杂的正则表达式可能难以理解和维护，建议使用注释和拆分表达式。
+```
+

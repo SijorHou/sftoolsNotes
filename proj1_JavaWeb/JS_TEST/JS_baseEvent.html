@@ -28,7 +28,12 @@
             4). 页面加载事件
                 onload
                 
-        3. 事件的触发 ———— 通过DOM编程动态绑定        
+        3. 事件的触发 ———— 通过DOM编程动态绑定
+            1). 行为触发
+            2). DOM编程触发
+        
+        
+
         
         confirm, enent.preventDefault()
 
@@ -93,10 +98,58 @@
             alert("Form is going to RESET!!!")
         }
     </script>
+
+    <script>
+        // DOM 动态绑定事件 (btn)
+        // DOM 动态触发事件 (div)
+        // DOM 编程触发事件 (div 触发事件 放在 btn 的动态绑定中)
+
+        // 浏览器扫描界面顺序执行，当前 script在<button> btn1之下的时候生效，放在 <head>中则失效
+        // 需要在 body 的button标签中添加 onload事件，即浏览器界面加载完毕后要执行的内容，触发的函数，或者直接使用 windos.onload=function() { ... }
+        // 如下，在外层添加 function()声明
+
+
+        // btn 的 dom动态事件绑定：点击按钮，触发弹窗信息
+        // div1的 dom 动态触发事件：点击 div块，改变颜色
+        
+
+        function ready() {
+            // 通过 dom 获得要操作的元素
+            var btn = document.getElementById("btn1")
+            // 为该元素绑定一个单击事件
+            btn.onclick = function() {
+                alert("BUTTON ONCLICKED, DIV COLOR WILL CHANGE !")
+
+                // 通过 DOM 编程触发 div的颜色变化事件
+                div1.style.backgroundColor="blue"
+            }
+
+            // 为 div1 绑定单击事件：一旦点击，则变化颜色 
+            var div1 = document.getElementById("d1")
+            div1.onclick = function() {
+                div1.style.backgroundColor="darkred"
+            }
+        } 
+    </script>
+
+    <style>
+        .div1 {
+            width: 200px;
+            height: 100px;
+            background-color: yellow;
+        }
+
+        .buttonClass {
+            font-size: 50px;
+            font-weight: bold;
+        }
+
+    </style>
+
 </head>
-<body>
+<body onload="ready()">
     
-    <input
+    <!-- <input
         type="button" 
         value="button" 
         onclick="click_event_fun1(), click_event_fun2()"
@@ -116,7 +169,7 @@
     />
 
     <br><br><br><br><hr>
-    <!-- 表单 -->
+    
     <form action="./JS_intro.html" method="get"  onsubmit="onsubmit_fun()" onreset="onreset_fun()" >
         username: <input type="text" name="realName" onfocus="onfocus_fun('username')" onblur="onblur_fun('username')" /> <br>
         login-ID: <input type="text" name="logoinName" onfocus="onfocus_fun('login-ID')" onchange="onchange_fun(this.value)"/> <br>
@@ -130,6 +183,15 @@
         
         <input type="submit" value="log up"/>
         <input type="reset" value="clean up" />
-    </form>
+    </form> -->
+
+    <br><br>
+    <div id="d1" class="div1">
+    </div>
+    <button id="btn1">BUTTON</button>
+    <br><br>
+    <a href="JS_BOM_APIS.html" class="buttonClass">To Page</button>
+
+
 </body>
 </html>

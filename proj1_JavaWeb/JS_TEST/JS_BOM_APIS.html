@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <script>
+        /*
+        Window 常见APIs：（Window 对象是浏览器提供）
+            三种弹窗方式：
+                .alert(str)
+                .prompt(str)
+                .confirm(str)
+            
+            定时任务
+                .setTimeout(fun, time)
+        
+        Window 属性 APIs
+            history： 窗口访问历史属性， 即 window.history
+                forward()
+                back()
+            
+            location: 修改网址栏内容，定位到URL位置 即 window.location
+                .href="https://..."
+
+            sessionStorage: 用于存储一些 会话级数据
+            localStorage：用于存储一些 存储级数据
+                .setItem(key, value)
+                .setItem(key)
+                .removeItem(key)
+        */
+
+        function fun1() {
+            window.alert("SijorHou")
+        }
+
+        function fun2() {
+            var res = window.prompt("Input your name")
+            console.log(res)
+        }
+
+        function fun3() {
+            var res = window.confirm("Want to close ?")
+            console.log(res)
+        }
+
+        function fun4() {
+            // function 要执行的任务
+            // 2000 单位 ms
+            window.setTimeout(function() { console.log("SIJORHOU")}, 2000)             
+        }
+
+        function funLP() {
+            // 向前翻页
+            window.history.forward()
+        }
+
+        function funNP() {
+            window.history.back()
+
+        }
+
+        function funLocation() {
+            window.location.href="https://www.baidu.com"
+        }
+
+        function funStorage() {
+            // 向 sessionStorage中存储数据
+            window.sessionStorage.setItem("KeysA", "ValueA")
+
+            // 向 localStorage中存储数据
+            window.localStorage.setItem("KeysB", "ValueB")
+        }
+
+        function funGetData() {
+            console.log(window.sessionStorage.getItem("KeysA"))
+            console.log(window.localStorage.getItem("KeysB"))
+        }
+
+        function funRemoveData() {
+            window.sessionStorage.removeItem("KeysA")
+            window.localStorage.removeItem("KeysB")
+            console.log("Has already removed data in both local and session")
+        }
+
+    </script>
+    <style>
+        .buttonClass {
+            width: 400px;
+            height: 100px;
+            font-size: 30px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <button onclick="funStorage()" class="buttonClass">Storage Data</button>
+    <button onclick="funGetData()" class="buttonClass">Get Data</button>
+    <button onclick="funRemoveData()" class="buttonClass">Remove Data</button>
+    
+    <br><br><br><hr><br><br><br>
+    <button onclick="funLocation()" class="buttonClass">BAIDU</button>
+
+    <br><br><br><hr><br><br><br>
+    <button onclick="funLP()" class="buttonClass">Last Page</button>
+    <button onclick="funNP()" class="buttonClass">Next Page</button>
+
+    <br><br>
+    <a href="https://www.baidu.com" style="font-size: 20px; font-weight: bold;">BaiDu</a>
+    <br><br><br><hr><br><br><br>
+    <button onclick="fun1()" class="buttonClass">Information Inform</button>
+    <button onclick="fun2()" class="buttonClass">Information Input</button>
+    <button onclick="fun3()" class="buttonClass">Information confirm</button>
+    <button onclick="fun4()" class="buttonClass">Print `HSJ` in 2s</button>
+</body>
+</html>

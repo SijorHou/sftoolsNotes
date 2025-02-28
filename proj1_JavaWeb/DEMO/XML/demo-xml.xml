@@ -1,0 +1,7 @@
+<?xml version="1.0" encodign="UTF-8"?>
+<!-- 
+1. 根标签 只能有 一个
+
+ -->
+
+<jdbc>
