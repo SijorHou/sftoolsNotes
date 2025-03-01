@@ -1,4 +1,22 @@
 # MySQL
+## 学习记录
+
+课程38，七章练习之前的所有内容已经学习完毕
+
+**[✓] 已完成 or [☐] 未完成**
+
+准备开始在每一章通过练习推动学习，从上至下是按照顺序来的，若有额外需要，可先完成
+
+
+- [☐]***聚合函数及其练习-[39, 42]***
+- [☐]***查询举例分析及其练习-[43, 48]***
+
+由于其他内容需要，先进行 ：
+- [✓]***数据库的创建、修改删除-[49, 54]***
+- [✓]***DML增删改及其练习-[55, 58]***
+- [✓]***数据类型及其相关-[59,, 65]***  未细看
+
+
 ## Reference
 
 - [菜鸟教程](https://www.runoob.com/mysql/mysql-connection.html)
@@ -83,26 +101,68 @@
 - `source absolute_path_of_src_file.sql`
   - `source D:\xxx.sql`
 
-## MySQL 操作实例
+
+### 五大类语句
+在数据库管理系统（DBMS）中，DML、DCL、DDL、DQL 和 TCL 是 SQL（结构化查询语言）的五大类语句，每类语句都有其特定的功能和用途。下面我将逐一介绍这些语句类别：
+
+#### DML
+***（Data Manipulation Language，数据操纵语言）***
+DML 是用来检索、插入、更新和删除数据库中的数据记录的语句。主要的 DML 语句包括：
+
+- `SELECT`：用于查询数据库中的数据。
+- `INSERT`：用于向数据库表中插入新的数据行。
+- `UPDATE`：用于修改数据库表中的现有数据。
+- `DELETE`：用于从数据库表中删除数据。
+
+#### DCL
+***（Data Control Language，数据控制语言）***
+DCL 用于控制数据库中数据的访问权限和安全性。主要的 DCL 语句包括：
+
+- `GRANT`：授予用户或角色对数据库对象（如表、视图、存储过程等）的特定权限。
+- `REVOKE`：撤销之前授予的权限。
+
+#### DDL
+***（Data Definition Language，数据定义语言）***
+DDL 用于定义和管理数据库结构，包括创建、修改和删除数据库对象。主要的 DDL 语句包括：
+
+- `CREATE`：用于创建新的数据库对象，如创建新表或新索引。
+- `ALTER`：用于修改现有数据库对象的结构，如添加、删除或修改表中的列。
+- `DROP`：用于删除数据库对象，如删除表、索引或视图。
+- `TRUNCATE`：用于快速删除表中的所有行，但不删除表本身。
+
+#### DQL
+***（Data Query Language，数据查询语言）***
+DQL 实际上通常被认为是 DML 的一部分，因为它主要涉及数据的查询操作。`SELECT` 语句是 DQL 的核心，用于从数据库中检索数据。DQL 可以包括复杂的查询，如联接（JOIN）、子查询、分组（GROUP BY）和排序（ORDER BY）等。
+
+#### TCL
+***（Transaction Control Language，事务控制语言）***
+TCL 用于管理数据库事务，确保数据的一致性和完整性。主要的 TCL 语句包括：
+
+- `BEGIN` 或 `START TRANSACTION`：开始一个新的事务。
+- `COMMIT`：提交事务，使事务中的所有更改永久生效。
+- `ROLLBACK`：回滚事务，撤销事务中的所有更改，恢复到事务开始前的状态。
+- `SAVEPOINT`：设置事务的保存点，允许在事务中进行部分回滚。
+
+
+## MySQL 操作实例 (DDL)
 - `SHOW`
   - `SHOW DATABASES;` 
   - `SHOW TABLES;`
-  - `SHOW COLUMNS FROM table_name` <=> `DESCRIBE table_name`
-  - `SHOW STATUS`
+  - `SHOW COLUMNS FROM table_name;` <=> `DESCRIBE table_name;`
+  - `SHOW STATUS;`
+  - `SHOW CREATE DATABASE database_name;` ***快速显示常见database_name的完整命令和表结构***
+  - `SHOW CREATE TABLE table_name;` ***快速显示常见table_name的完整命令和表结构***
+
+
+### 数据库相关管理操作
+
 - `USE db_name;`
 
 - `CREATE`
   - `CREATE DATABASE [IF NOT EXISTS] db_name;`
-  - `CREATE TABLE table_name(id int, name varchar(15));`
-
+  - `CREATE DATABASE [IF NOT EXISTS] db_name CHARACTER SET 'gbk/utf-8/...';`
 - `SELECT DATABASE()` 查看当前所使用的数据库名字，直接 `SHOW TABLES;` 也会在第一行告知所使用的数据库
-- `SELECT * FROM table_name;`
-- `INSERT INTO table_name VALUES(1001, 'sijorhou');`
-  - `SHOW CREATE TABLE table_name` 快速显示常见table_name的完整命令和表结构
-  - `SHOW VARIABLES LIKE 'character_set_%';`  用于显示所有以 character 为前缀的系统变量（显示MySQL服务器使用的字符集，如 `character_set_database：默认数据库的字符集`, `character_set_connection：服务器内部使用的客户与服务器之间的通信字符集`）
-  - `SHOW VARIABLES LIKE 'collation_%';` 校对（collation）是指字符数据的比较和排序规则，该命令显示所有校对所依赖的字符集，如`collation_database：默认数据库的校对规则`, `collation_connection：客户与服务器之间通信的校对规则`
-  - mysql数据库目录下的 `my.ini` 文件中可以修改默认字符集
-- `DROP DATABASE db_name;`
+- `DROP DATABASE [IF EXISTS] database_name` 删除数据库
 
 创建数据库时，可以同时配置数据库信息
 ```sql
@@ -116,13 +176,86 @@ ENCRYPTION = 'Y';                    -- 启用加密，适用于MySQL 8.0及以�
 ```
 
 
+- `SHOW VARIABLES LIKE 'character_set_%';`  用于显示所有以 character 为前缀的系统变量（显示MySQL服务器使用的字符集，如 `character_set_database：默认数据库的字符集`, `character_set_connection：服务器内部使用的客户与服务器之间的通信字符集`）
+- `SHOW VARIABLES LIKE 'collation_%';` 校对（collation）是指字符数据的比较和排序规则，该命令显示所有校对所依赖的字符集，如`collation_database：默认数据库的校对规则`, `collation_connection：客户与服务器之间通信的校对规则`
+- mysql数据库目录下的 `my.ini` 文件中可以修改默认字符集
+### 数据库表相关管理操作 
+
+- `CREATE TABLE table_name(id int, name varchar(15));` 创建数据库表
+  - 若未指明字符集，则默认使用所在数据库的字符集
+- 可以在**同一数据库下，基于现有的表创建新表**（可从其中选择所需字段），且查询语句中字段的别名就是新表中字段的名字
+  - `CREATE TABLE test_table2 AS SELECT employee_id, last_name, salary FROM employees;`
+  - 该语句创建新表 test_table2，其中只包含查询语句中的三个字段，若只需要字段不需要数据，使用 where进行肯定false的过滤条件即可 如 `... WHERE 1 = 2;`
+
+```sql
+CREATE TABLE [IF NOT EXISTS] table_name(
+  field1, data_type [约束条件] [默认值],
+  field2, data_type [约束条件] [默认值],
+  field3, data_type [约束条件] [默认值],
+  ...
+)
+
+```
+- `SELECT [*/column] FROM table_name;` 查看数据库的全部/某一列
+- `SHOW CREATE TABLE table_name`       查看数据库的创建信息
+- `SHOW COLUMNS FROM table_name;`  查看数据库字段详情
+  - `DESCRIBE/DESC table_name;` 等效
+- `INSERT INTO table_name VALUES(1001, 'sijorhou');`
+- ***修改表 (ALTER TABLE)***
+  - 添加一个字段（ADD）
+    - `ALTER TABLE test_table ADD salary DOUBLE(10, 2);` 默认添加字段到最后面
+    - `ALTER TABLE test_table ADD new_id INT FIRST;` `FIRST` 关键字将字段添加到最前面
+    - `ALTER TABLE test_table ADD phone VARCHAR(20) AFTER id;` `... AFTER field;` 关键字将字段添加到某个字段之后的特定位置
+  - 修改一个字段（MODIFY）
+    - `ALTER TABLE table_name MODIFY current_filed new_type_length DEFAULT 'aaa';`
+    - ` ALTER TABLE test_table MODIFY emp_name VARCHAR(35) DEFAULT 'AAA';` 将原来 emp_name字段的长度 20 改为 35，并通过 `DEFAULT` 关键字增加默认值
+    - 一般不会修改字段的数据类型，可改的有（数据类型、长度、默认值）
+  - 重命名一个字段（CHANGE）
+    - `ALTER TABLE table_name CHANGE current_filed new_field_name [new type length/...];`
+    - 如 `ALTER TABLE test_table CHANGE salary monthly_salary DOUBLE(10, 3);`修改了 salary字段的名字，并将原来 double(10,2) 类型改为 double(10,3)
+  - 删除一个字段
+    - `ALTER TABLE table_name DROP COLUMN field_name;`
+- `RENAME TABLE old_name TO new_name;` 重命名表
+- `DROP TABLE [IF EXISTS] db_name;`  删除表（无法撤销/回滚）
+- `TRUNCATE TABLE [IF EXISTS] table_name;` 清空表中所有数据，但是表结构还在
+
+### COMMIT ROLLBACK
+COMMIT 是提交数据，一旦提交，数据则永久保存在数据库中，不可以回滚，只能再次执行增删改的CRUD操作
+
+ROLLBACK 是回滚数据，即撤销操作，执行 ROLLBACK 可以回滚数据，***回滚到最近的一次 COMMIT 之后***
+
+- DDL 操作 （如TRUNCATE TABLE）一旦执行，不可回滚（默认自动COMMIT无法设置为false）
+- DML 操作 （如DELETE FROM）默认情况一旦执行，不可回滚，但在执行DML之前限制性 `SET autocommit = FALSE;`，则后续DML操作可以回滚
+
+
+
+***DELETE FROM 回滚演示***
+
+<div style="text-align:center">
+    <img src="./pic/回滚操作.png" alt="回滚操作" style="margin-bottom: 1px;">
+    <p>DELETE FROM 回滚成功</p>
+</div>
+
+如图所示，cpy_jobs 中字段数据显示后执行 `COMMIT;` 提交数据，然后在执行 DML语句 （`DELETE FROM table_name;`） 之前先执行 `SET autocommit = FALSE;`，然后执行删除，再次查询发现数据已经没有了，此时执行回滚操作 `ROLLBACK;` 后再次查询，数据恢复了
+
+
+
+***TRUNCATE TABLE 回滚演示***
+<div style="text-align:center">
+    <img src="./pic/回滚操作.png" alt="回滚操作2" style="margin-bottom: 1px;">
+    <p>TRUNCATE TABLE 回滚失败</p>
+</div>
+
+如图所示，cpy_jobs 中字段数据显示后执行 `COMMIT;` 提交数据，然后在执行 DDL语句 （`TRUNCATE TABLE table_name;`） 之前先执行 `SET autocommit = FALSE;`，然后执行删除，再次查询发现数据已经没有了，此时执行回滚操作 `ROLLBACK;` 后再次查询，数据没有恢复，回滚失败
+
+### 密码重置 
 <div style="text-align:center">
     <img src="./pic/mysql密码重置步骤.png" alt="mysql密码重置步骤" style="margin-bottom: 1px;">
     <p>mysql密码重置步骤</p>
 </div>
 
-## SQL 语句
-### SELECT
+# SQL 语句
+## SELECT (DQL)
 - `SELECT seg(col),... FROM table_name` 以 "SELECT" 为关键字
   - 后跟 列名 （若不是 * 则为查询所有列），也可以写为列的别名 `SELECT seg seg_alias, ...`
   - 空值 NULL 参与运算， 含NULL运算结果仍为NULL
@@ -313,6 +446,95 @@ SELECT * FROM employees ORDER BY salary DESC LIMIT 1; 	-- 省略基准位置， 
 多表查询，即 ***关联查询***，指两个或更多表一起完成查询操作（前提是一起查询的表之间有一对一、一对多等关系，***多表之间有关联字段***）
 
 为什么有些数据要分多个表存储不同字段： 如果都在一个表中，那么一条记录占据内存就比较大，一次所能查询的记录个数就比较少，那么当需要查询大量记录时候，就需要进行多次 IO，开销较大
+
+---
+
+***UNION 和 UNION ALL***
+- `UNION`
+  - `SELECT ... UNION SELECT ...;` 合并结果集并去重
+  - 示例：
+    ```sql
+    SELECT name FROM employees
+    UNION
+    SELECT name FROM managers;
+    ```
+- `UNION ALL`
+  - `SELECT ... UNION ALL SELECT ...;` 合并结果集并保留重复行
+  - 示例：
+    ```sql
+    SELECT name FROM employees
+    UNION ALL
+    SELECT name FROM managers;
+    ```
+
+---
+
+***多表查询分类***
+- **等值连接 vs 非等值连接**
+  - 等值连接
+    - `JOIN ... ON ... = ...;` 基于相等条件连接
+    - 示例：
+      ```sql
+      SELECT employees.name, departments.department_name
+      FROM employees
+      JOIN departments ON employees.department_id = departments.department_id;
+      ```
+  - 非等值连接
+    - `JOIN ... ON ... BETWEEN ... AND ...;` 基于非相等条件连接
+    - 示例：
+      ```sql
+      SELECT employees.name, salary_grades.grade
+      FROM employees
+      JOIN salary_grades ON employees.salary BETWEEN salary_grades.min_salary AND salary_grades.max_salary;
+      ```
+
+- **自连接 vs 非自连接**
+  - 自连接
+    - `JOIN ... ON ... = ...;` 同一个表与自身连接
+    - 示例：
+      ```sql
+      SELECT e1.name AS employee_name, e2.name AS manager_name
+      FROM employees e1
+      JOIN employees e2 ON e1.manager_id = e2.employee_id;
+      ```
+  - 非自连接
+    - `JOIN ... ON ... = ...;` 不同表之间的连接
+    - 示例：
+      ```sql
+      SELECT employees.name, departments.department_name
+      FROM employees
+      JOIN departments ON employees.department_id = departments.department_id;
+      ```
+
+- **内连接 vs 外连接**
+  - 内连接
+    - `INNER JOIN ... ON ... = ...;` 返回匹配的行
+    - 示例：
+      ```sql
+      SELECT employees.name, departments.department_name
+      FROM employees
+      INNER JOIN departments ON employees.department_id = departments.department_id;
+      ```
+  - 外连接
+    - `LEFT JOIN ... ON ... = ...;` 返回左表所有行
+    - `RIGHT JOIN ... ON ... = ...;` 返回右表所有行
+    - `FULL JOIN ... ON ... = ...;` 返回左右表所有行
+    - 示例：
+      ```sql
+      SELECT employees.name, departments.department_name
+      FROM employees
+      LEFT JOIN departments ON employees.department_id = departments.department_id;
+      ```
+
+---
+
+- **UNION** 用于合并结果集并去重，**UNION ALL** 用于合并结果集并保留重复行。
+- **等值连接**基于相等条件，**非等值连接**基于非相等条件。
+- **自连接**是表与自身连接，**非自连接**是不同表之间的连接。
+- **内连接**返回匹配的行，**外连接**返回所有行（即使没有匹配）。
+
+--- 
+
 
 
 ```sql
@@ -1126,4 +1348,318 @@ FROM employees;
 ```
 
 #### 5 大常用聚合函数
+
+
+
+## DB管理-DML-数据类型
+***基础知识***
+- 一个完整的数据存储过程：
+  - 创建数据库
+  - 确认字段
+  - 创建数据表
+  - 插入数据
+
+
+### DML
+#### 插入数据（INSERT INTO）
+***基本插入操作 (插入单行数据)***
+```sql
+INSERT TO table_name (column1, column2, column3, ...) VALUES (value1, value2, value3, ...);
+
+-- 可以省略列名，但要保证提供的 值的顺序和对应的列的顺序一致
+
+-- example:
+INSERT INTO employees (age, name, QQ) VALUES (26, 'sijorhou', '1764308102');
+INSERT INTO employees VALUES (26, 'sijorhou', '1764308102');
+```
+
+***插入多行数据***
+```sql
+INSERT INTO table_name (column1, column2, column3, ...)
+VALUES
+  (value1a, value2a, value3a, ...),
+  (value1b, value2b, value3b, ...),
+  (value1c, value2c, value3c, ...);
+
+-- examples:
+INSERT INTO employees (age, name, QQ)
+VALUES
+  (26, 'HSJ', '1764308102'),
+  (25, 'SJHou', '1234567891'),
+  (24, 'Sijorhou', '1472583693');
+```
+
+***将查询结果插入表中***
+```sql
+INSERT TO table_name
+SELECT .../* FROM src_table WHERE conditions;
+
+-- example:
+INSERT TO children SELECT * FROM my_employees WHERE id IN (1, 2, 3);
+```
+#### 更新数据（UPDATE）
+
+1. **基本语法**
+```sql
+UPDATE table_name
+SET column1 = value1, column2 = value2, ...
+WHERE condition;
+```
+
+- **`table_name`**：需要更新数据的表名。
+- **`SET`**：指定要更新的列及其新值。
+- **`WHERE`**：指定更新条件，决定哪些行会被更新。如果省略 `WHERE`，则会更新表中的所有行。
+
+---
+
+2. **更新单列**
+    更新表中某一列的值。
+    示例：将 `employees` 表中 `id` 为 1 的员工的工资更新为 5000：
+
+```sql
+UPDATE employees
+SET salary = 5000
+WHERE id = 1;
+```
+
+---
+
+3. **更新多列**
+  同时更新多个列的值。
+  示例：将 `employees` 表中 `id` 为 1 的员工的工资更新为 5000，部门更新为 "Sales"：
+```sql
+UPDATE employees
+SET salary = 5000, department = 'Sales'
+WHERE id = 1;
+```
+
+---
+4. **更新所有行**
+  如果省略 `WHERE` 子句，则会更新表中的所有行。
+  示例：将 `employees` 表中所有员工的工资增加 1000：
+
+```sql
+UPDATE employees
+SET salary = salary + 1000;
+```
+
+---
+
+5. **使用条件更新**
+  通过 `WHERE` 子句指定更新条件，只更新符合条件的行。
+  示例：将 `employees` 表中部门为 "HR" 的所有员工的工资增加 500：
+```sql
+UPDATE employees
+SET salary = salary + 500
+WHERE department = 'HR';
+```
+
+---
+6. **使用子查询更新**
+  在 `UPDATE` 语句中，可以使用子查询来动态确定更新的值。
+  示例：将 `employees` 表中工资低于平均工资的员工的工资增加 10%：
+```sql
+UPDATE employees
+SET salary = salary * 1.10
+WHERE salary < (SELECT AVG(salary) FROM employees);
+```
+
+---
+
+7. **更新多表数据**
+  MySQL 支持同时更新多个表中的数据。
+  示例：将 `employees` 表和 `departments` 表中部门为 "Sales" 的员工的工资增加 1000：
+```sql
+UPDATE employees, departments
+SET employees.salary = employees.salary + 1000
+WHERE employees.department_id = departments.department_id
+  AND departments.department_name = 'Sales';
+```
+
+---
+
+8. **使用 `LIMIT` 限制更新行数**
+  通过 `LIMIT` 限制更新的行数。
+  示例：将 `employees` 表中工资最低的 5 名员工的工资增加 500：
+```sql
+UPDATE employees
+SET salary = salary + 500
+ORDER BY salary ASC
+LIMIT 5;
+```
+
+---
+**PS**
+- **`WHERE` 子句**：如果不加 `WHERE` 子句，会更新表中的所有行，可能导致数据丢失。
+- **事务**：在更新重要数据时，建议使用事务（`BEGIN`、`COMMIT`、`ROLLBACK`）来确保数据一致性。
+- **性能**：更新大量数据时，可能会影响性能，建议分批更新或使用索引优化查询条件。
+- **备份**：在执行大规模更新操作前，建议先备份数据。
+
+---
+- `UPDATE` 用于修改表中已有的数据。
+- 通过 `SET` 指定要更新的列及其新值。
+- 通过 `WHERE` 指定更新条件，决定哪些行会被更新。
+- 可以更新单列、多列、所有行，也可以使用子查询和多表更新。
+- 使用 `LIMIT` 可以限制更新的行数。
+
+```sql
+-- 更新单列
+UPDATE employees SET salary = 5000 WHERE id = 1;
+
+-- 更新多列
+UPDATE employees SET salary = 5000, department = 'Sales' WHERE id = 1;
+
+-- 更新所有行
+UPDATE employees SET salary = salary + 1000;
+
+-- 使用条件更新
+UPDATE employees SET salary = salary + 500 WHERE department = 'HR';
+
+-- 使用子查询更新
+UPDATE employees SET salary = salary * 1.10 WHERE salary < (SELECT AVG(salary) FROM employees);
+
+-- 更新多表数据
+UPDATE employees, departments
+SET employees.salary = employees.salary + 1000
+WHERE employees.department_id = departments.department_id
+  AND departments.department_name = 'Sales';
+
+-- 使用 LIMIT 限制更新行数
+UPDATE employees SET salary = salary + 500 ORDER BY salary ASC LIMIT 5;
+```
+
+#### 删除（DELETE）
+
+1. **基本语法**
+```sql
+DELETE FROM table_name
+WHERE condition;
+```
+
+- **`table_name`**：需要删除数据的表名。
+- **`WHERE`**：指定删除条件，决定哪些行会被删除。如果省略 `WHERE`，则会删除表中的所有行。
+
+---
+
+2. **删除特定行**
+  通过 `WHERE` 子句指定删除条件，只删除符合条件的行。
+  示例：删除 `employees` 表中 `id` 为 1 的员工：
+```sql
+DELETE FROM employees
+WHERE id = 1;
+```
+
+---
+3. **删除所有行**
+  如果省略 `WHERE` 子句，则会删除表中的所有行。
+  示例：删除 `employees` 表中的所有数据：
+```sql
+DELETE FROM employees;
+```
+
+---
+4. **使用条件删除**
+  通过 `WHERE` 子句指定复杂的删除条件。
+  示例：删除 `employees` 表中部门为 "HR" 且工资低于 3000 的员工：
+```sql
+DELETE FROM employees
+WHERE department = 'HR' AND salary < 3000;
+```
+
+---
+5. **使用子查询删除**
+  在 `DELETE` 语句中，可以使用子查询来动态确定删除的条件。
+  示例：删除 `employees` 表中工资低于平均工资的员工：
+```sql
+DELETE FROM employees
+WHERE salary < (SELECT AVG(salary) FROM employees);
+```
+
+---
+6. **删除多表数据**
+  MySQL 支持同时从多个表中删除数据。
+  示例：删除 `employees` 表和 `departments` 表中部门为 "Sales" 的员工：
+```sql
+DELETE employees, departments
+FROM employees
+JOIN departments ON employees.department_id = departments.department_id
+WHERE departments.department_name = 'Sales';
+```
+
+---
+7. **使用 `LIMIT` 限制删除行数**
+  通过 `LIMIT` 限制删除的行数。
+  示例：删除 `employees` 表中工资最低的 5 名员工：
+```sql
+DELETE FROM employees
+ORDER BY salary ASC
+LIMIT 5;
+```
+
+---
+
+8. **PS**
+- **`WHERE` 子句**：如果不加 `WHERE` 子句，会删除表中的所有行，可能导致数据丢失。
+- **事务**：在删除重要数据时，建议使用事务（`BEGIN`、`COMMIT`、`ROLLBACK`）来确保数据一致性。
+- **性能**：删除大量数据时，可能会影响性能，建议分批删除或使用索引优化查询条件。
+- **备份**：在执行大规模删除操作前，建议先备份数据。
+
+---
+
+- `DELETE` 用于从表中删除数据。
+- 通过 `WHERE` 指定删除条件，决定哪些行会被删除。
+- 可以删除特定行、所有行，也可以使用子查询和多表删除。
+- 使用 `LIMIT` 可以限制删除的行数。
+
+```sql
+-- 删除特定行
+DELETE FROM employees WHERE id = 1;
+
+-- 删除所有行
+DELETE FROM employees;
+
+-- 使用条件删除
+DELETE FROM employees WHERE department = 'HR' AND salary < 3000;
+
+-- 使用子查询删除
+DELETE FROM employees WHERE salary < (SELECT AVG(salary) FROM employees);
+
+-- 删除多表数据
+DELETE employees, departments
+FROM employees
+JOIN departments ON employees.department_id = departments.department_id
+WHERE departments.department_name = 'Sales';
+
+-- 使用 LIMIT 限制删除行数
+DELETE FROM employees ORDER BY salary ASC LIMIT 5;
+```
+
+通过掌握 `DELETE` 的使用方法，可以灵活地删除数据库中的数据。
+
+### 数据类型相关
+
+
+<div style="text-align:center">
+    <img src="./pic/数据类型及常用数据类型.png" alt="数据类型及常用数据类型" style="margin-bottom: 1px;">
+    <p>数据类型及常用数据类型</p>
+</div>
+
+***总结和建议***
+
+- 在定义数据类型时：
+  - 如果确定是整数，就用 INT
+  - 如果是小数，一定用定点数类型 DECIMAL(M,D)
+  - 如果是日期与时间，就用 DATETIME。
+
+这样做的好处是，首先确保你的系统不会因为数据类型定义出错。不过，凡事都是有两面的，可靠性好，并不意味着高效。比如，TEXT 虽然使用方便，但是效率不如 CHAR(M) 和 VARCHAR(M)。
+
+关于字符串的选择，建议参考如下阿里巴巴的《Java开发手册》规范：
+
+阿里巴巴《Java开发手册》之MySQL数据库：
+- **任何字段如果为非负数，必须是 UNSIGNED**
+- **【强制】小数类型为 DECIMAL，禁止使用 FLOAT 和 DOUBLE**。
+  - 说明：在存储的时候，FLOAT 和 DOUBLE 都存在精度损失的问题，很可能在比较值的时候，得到不正确的结果。如果存储的数据范围超过 DECIMAL 的范围，建议将数据拆成整数和小数并分开存储。
+- **【强制】如果存储的字符串长度几乎相等，使用 CHAR 定长字符串类型**。
+- 【强制】VARCHAR 是可变长字符串，不预先分配存储空间，长度不要超过 5000。如果存储长度大于此值，定义字段类型为 TEXT，独立出来一张表，用主键来对应，避免影响其它字段索引效率。
+
 
