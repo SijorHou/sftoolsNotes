@@ -138,12 +138,12 @@ Web项目中会有一个 Web.xml 文件，需要添加框架支持，新版IDEA�
 - `双击 shift -> 搜索 “添加框架与支持” -> 选择 Java EE 下的 Web应用程序`
 
 <div style="text-align:center">
-    <img src="./DEMO/XML/pics/添加框架支持1.png" alt="HTML 结构.png" style="margin-bottom: 1px;" width=60%>
+    <img src="./DEMO/XML/pics/添加框架支持1.png" alt="HTML 结构.png" style="margin-bottom: 1px;" >
     <p>添加框架支持1</p>
 </div>
 
 <div style="text-align:center">
-    <img src="./DEMO/XML/pics/添加框架支持2.png" alt="HTML 结构.png" style="margin-bottom: 1px;" width=60%>
+    <img src="./DEMO/XML/pics/添加框架支持2.png" alt="HTML 结构.png" style="margin-bottom: 1px;" >
     <p>添加框架支持2</p>
 </div>
 
@@ -260,7 +260,7 @@ Tomcat 是专门运行WEB的 **服务器软件**
 安装后能提供给网络中的其他计算机，将本地文件映射成一个虚拟的url地址供其他人访问
 
 <div style="text-align:center">
-    <img src="pic_src/Tomcat角色.png" alt="HTML 结构.png" style="margin-bottom: 1px;" width=60%>
+    <img src="pic_src/Tomcat角色.png" alt="HTML 结构.png" style="margin-bottom: 1px;" >
     <p>Tomcat角色</p>
 </div>
 
@@ -274,7 +274,7 @@ Tomcat 是专门运行WEB的 **服务器软件**
 - `webapps` 非常重要的目录
     - 运行Tomcat 之后，输入 `webapps\examples\index.html`对应的URL到浏览器中，可以访问对应界面
     <div style="text-align:center">
-        <img src="pic_src/Tomcat自带example访问示例.png" alt="HTML 结构.png" style="margin-bottom: 1px;" width=60%>
+        <img src="pic_src/Tomcat自带example访问示例.png" alt="HTML 结构.png" style="margin-bottom: 1px;" >
         <p>服务器资源访问</p>
     </div>
 
@@ -290,14 +290,14 @@ Tomcat 是专门运行WEB的 **服务器软件**
 
 
 <div style="text-align:center">
-    <img src="pic_src/Tomcat下载.png" alt="HTML 结构.png" style="margin-bottom: 1px;" width=60%>
+    <img src="pic_src/Tomcat下载.png" alt="HTML 结构.png" style="margin-bottom: 1px;" >
     <p>Tomcat下载</p>
 </div>
 
 
 
 <div style="text-align:center">
-    <img src="pic_src/Tomcat运行.png" alt="HTML 结构.png" style="margin-bottom: 1px;" width=60%>
+    <img src="pic_src/Tomcat运行.png" alt="HTML 结构.png" style="margin-bottom: 1px;" >
     <p>Tomcat运行</p>
 </div>
 
@@ -305,7 +305,277 @@ Tomcat 是专门运行WEB的 **服务器软件**
 ## WEB项目结构
 
 <div style="text-align:center">
-        <img src="pic_src/WEB项目标准结构.png" alt="HTML 结构.png" style="margin-bottom: 1px;" width=60%>
+        <img src="pic_src/WEB项目标准结构.png" alt="HTML 结构.png" style="margin-bottom: 1px;"  >
         <p>WEB项目标准结构</p>
 </div>
 
+在 **Tomcat** 中发布的项目需要遵循一定的目录结构，以确保 Tomcat 能够正确识别和运行应用程序。以下是标准的 **Web 项目结构** 及其详细说明：
+
+---
+
+###  标准 Web 项目结构
+一个典型的 Web 项目结构如下：
+
+```
+MyWebApp/
+├── WEB-INF/
+│   ├── web.xml                # 部署描述文件（必需）
+│   ├── classes/               # 编译后的 Java 类文件
+│   └── lib/                   # 第三方库文件（JAR 文件）
+├── index.html                 # 静态资源文件（HTML、CSS、JS 等）
+├── css/
+│   └── style.css
+├── js/
+│   └── script.js
+└── images/
+    └── logo.png
+```
+
+---
+
+#### `WEB-INF` 目录 
+- **作用**：存放 Web 应用程序的配置文件和私有资源。
+- **特点**：
+  - 该目录下的内容对客户端不可见，只能通过服务器端访问。
+  - 必须包含 `web.xml` 文件（除非使用注解配置）。
+- **子目录**：
+  - **`classes`**：存放编译后的 Java 类文件（如 `.class` 文件）。
+  - **`lib`**：存放项目依赖的第三方库文件（如 `.jar` 文件）。
+
+---
+
+#### `web.xml` 文件 
+- **作用**：Web 应用程序的部署描述文件，用于配置 Servlet、Filter、Listener 等。
+- **位置**：`WEB-INF/web.xml`。
+- **示例**：
+  ```xml
+  <web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee
+                               http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
+           version="3.1">
+      <servlet>
+          <servlet-name>HelloServlet</servlet-name>
+          <servlet-class>com.example.HelloServlet</servlet-class>
+      </servlet>
+      <servlet-mapping>
+          <servlet-name>HelloServlet</servlet-name>
+          <url-pattern>/hello</url-pattern>
+      </servlet-mapping>
+  </web-app>
+  ```
+
+---
+
+#### 静态资源文件 
+- **位置**：项目根目录或子目录（如 `css/`、`js/`、`images/`）。
+- **作用**：存放 HTML、CSS、JavaScript、图片等静态资源。
+- **示例**：
+  - `index.html`：首页文件。
+  - `css/style.css`：样式表文件。
+  - `js/script.js`：JavaScript 文件。
+  - `images/logo.png`：图片文件。
+
+---
+
+#### Java 类文件 
+- **位置**：`WEB-INF/classes/`。
+- **作用**：存放编译后的 Java 类文件（如 Servlet、Filter、Listener）。
+- **示例**：
+  - `com/example/HelloServlet.class`：Servlet 类文件。
+
+---
+
+#### 第三方库文件 
+- **位置**：`WEB-INF/lib/`。
+- **作用**：存放项目依赖的第三方库文件（JAR 文件）。
+- **示例**：
+  - `mysql-connector-java-8.0.26.jar`：MySQL 数据库驱动。
+
+---
+
+### 打包为 WAR 文件 
+- **WAR 文件**：Web 应用程序的打包格式，可以直接部署到 Tomcat。
+- **打包方式**：
+  - 使用 Maven 或 Gradle 构建工具打包。
+  - 手动将项目目录压缩为 `.war` 文件。
+- **部署方式**：
+  - ***将 WAR 文件复制到 Tomcat 的 `webapps` 目录下，Tomcat 会自动解压并部署***。
+
+---
+
+### 示例项目结构 
+以下是一个完整的 Web 项目示例：
+
+#### 项目目录结构 
+```
+MyWebApp/
+├── WEB-INF/
+│   ├── web.xml
+│   ├── classes/
+│   │   └── com/
+│   │       └── example/
+│   │           └── HelloServlet.class
+│   └── lib/
+│       └── mysql-connector-java-8.0.26.jar
+├── index.html
+├── css/
+│   └── style.css
+├── js/
+│   └── script.js
+└── images/
+    └── logo.png
+```
+
+#### `web.xml` 文件 
+```xml
+<web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee
+                             http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
+         version="3.1">
+    <servlet>
+        <servlet-name>HelloServlet</servlet-name>
+        <servlet-class>com.example.HelloServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>HelloServlet</servlet-name>
+        <url-pattern>/hello</url-pattern>
+    </servlet-mapping>
+</web-app>
+```
+
+#### `HelloServlet.java` 文件**
+```java
+package com.example;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+public class HelloServlet extends HttpServlet {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        response.setContentType("text/html");
+        PrintWriter out = response.getWriter();
+        out.println("<html><body>");
+        out.println("<h1>Hello, World!</h1>");
+        out.println("</body></html>");
+    }
+}
+```
+
+#### `index.html` 文件 
+```html
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Web App</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="js/script.js"></script>
+</head>
+<body>
+    <h1>Welcome to My Web App</h1>
+    <img src="images/logo.png" alt="Logo">
+    <a href="/hello">Go to HelloServlet</a>
+</body>
+</html>
+```
+
+---
+
+### 部署到 Tomcat 
+1. **打包为 WAR 文件**：
+   - 使用 Maven 或 Gradle 打包，生成 `MyWebApp.war`。
+2. **部署到 Tomcat**：
+   - 将 `MyWebApp.war` 复制到 Tomcat 的 `webapps` 目录下。
+3. **启动 Tomcat**：
+   - 运行 `bin/startup.sh`（Linux/macOS）或 `bin/startup.bat`（Windows）。
+4. **访问应用程序**：
+   - 打开浏览器，访问 `http://localhost:8080/MyWebApp`。
+
+---
+
+## Tomcat WEB项目部署方式1
+
+<div style="text-align:center">
+    <img src="pic_src/可发布Tomcat的标准项目结构.png" alt="HTML 结构.png" style="margin-bottom: 1px;" >
+    <p>可发布Tomcat的标准项目结构</p>
+</div>
+
+在 `webapps` 中新建一个 `app` 目录，创建和添加内容如下
+
+<div style="text-align:center">
+    <img src="pic_src/Tomcat-webapps-项目创建实操.png" alt="HTML 结构.png" style="margin-bottom: 1px;">
+    <p>项目创建实操</p>
+</div>
+
+- 运行 Tomcat 服务器
+- 浏览器中访问服务器资源，输入对应资源路径，均能访问到相应内容
+    - `http://localhost:8080/app/login.html`
+    - `http://localhost:8080/app/regist.html`
+    - `http://localhost:8080/app/static/img/baby.jpg`
+
+<div style="text-align:center">
+    <img src="pic_src/Tomcat资源访问.png" alt="HTML 结构.png" style="margin-bottom: 1px;">
+    <p>资源访问结果</p>
+</div>
+
+---
+
+## Tomcat WEB项目部署方式2
+
+### 项目部署路径配置
+
+- `app` 项目文件不一定非要在 `webapps` 目录中
+
+- 假如在 D 盘当中想要 Tomcat能够访问 app的资源：***需要在Tomcat的conf/Catalina/localhost 中配置一个app.xml文件***
+
+- 其中内容为：`<Context path="app" docBase="E:\文件杂物\Test\app"/>`
+
+### Tomcat 服务器用户信息配置
+在 `conf/tomcat-users.xml` 文件中的 添加如下代码：
+```xml
+<role rolename="admin-gui"/>
+<role rolename="admin-script"/>
+<role rolename="manager-gui"/>
+<role rolename="manager-script"/>
+<role rolename="manager-jmx"/>
+<role rolename="manager-status"/>
+<user username="admin" password="123456" roles="admin-gui,admin-script,manager-gui,manager-script,manager-jmx,manager-status"/>
+```
+
+然后浏览器访问 `localhost:8080/manager` 输入密码范文管理员界面
+
+
+## IDEA中开发部署运行WEB项目
+
+***目标：*** 
+***IDEA创建WEB工程 -> 转化成可以发布的项目 -> 部署到Tomcat服务器***
+
+<div style="text-align:center">
+    <img src="pic_src/IDEA开发部署运行WEB项目.png" alt="IDEA开发部署运行WEB项目.png" style="margin-bottom: 1px;">
+    <p>IDEA开发部署运行WEB项目</p>
+</div>
+
+- 建立 ***tomcat 和 idea 的关联***
+    - `设置 -> 构建、执行、部署 -> 应用程序性服务器 -> + Tomcat服务器`
+- 使用 idea 创建 JavaWEB 工程， 在 WEB工程中开发代码
+    - 创建JavaWEB工程：
+        - 创建 Java项目
+        - 添加WEB配置信息（参考前面，但是IDEA中WEB应用程序的依赖库版本4.0，要使用Tomcat至少5.0，***需要先在项目结构的该项目module中添加tomcat的依赖库，再次添加WEB配置信息则为6.0***）
+        - 特别操作：
+        <div style="text-align:center">
+            <img src="pic_src/WEB项目特别操作01.png" alt="IDEA开发部署运行WEB项目.png" style="margin-bottom: 1px;">
+            <p>WEB项目特别操作01</p>
+        </div>
+        - ***添加jar包***，要放在Web.WEB-INF下的lib中，并且需要邮件设为 Library（添加库）
+        <div style="text-align:center">
+            <img src="pic_src/创建库.png" alt="创建库" style="margin-bottom: 1px;">
+            <p>创建库</p>
+        </div>
+- 使用idea 将工程构建成可以发布的app
+- 使用idea 将构建好的app部署到 tomcat中运行
