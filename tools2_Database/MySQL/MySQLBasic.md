@@ -8,7 +8,7 @@
 准备开始在每一章通过练习推动学习，从上至下是按照顺序来的，若有额外需要，可先完成
 
 
-- [☐]***聚合函数及其练习-[39, 42]***
+- [✓]***聚合函数及其练习-[39, 42]***
 - [☐]***查询举例分析及其练习-[43, 48]***
 
 由于其他内容需要，先进行 ：
@@ -1349,6 +1349,224 @@ FROM employees;
 
 #### 5 大常用聚合函数
 
+***聚合函数：*** 对一组数据返回一个值
+
+***常用聚合函数：***
+
+- `AVG()`
+- `SUM()`
+- `MAX()`
+- `MIN()`
+- `COUNT()` 计算行数或非空值的数量。
+
+#### GROUP BY & HAVING
+在 SQL 中，**`GROUP BY`** 和 **`HAVING`** 是用于对数据进行分组和过滤的重要子句。它们通常与聚合函数（如 `COUNT()`、`SUM()`、`AVG()` 等）一起使用，以实现对数据的汇总和分析。以下是它们的详细讲解及用法示例：
+
+---
+
+##### `GROUP BY` 的用法
+1.1 **作用**
+- **`GROUP BY`** 用于将数据按指定的列进行分组。
+- 分组后，可以对每个组应用聚合函数（如 `COUNT()`、`SUM()`、`AVG()` 等）。
+1.2 **语法**
+```sql
+SELECT column1, column2, aggregate_function(column3)
+FROM table
+GROUP BY column1, column2;
+```
+1.3 ***示例***
+- 按部门分组，计算每个部门的员工数量：
+  ```sql
+  SELECT department, COUNT(*) AS employee_count
+  FROM employees
+  GROUP BY department;
+  ```
+  结果：
+  | department | employee_count |
+  |------------|----------------|
+  | HR         | 5              |
+  | IT         | 10             |
+  | Sales      | 8              |
+
+- 按部门和职位分组，计算每个组的平均工资：
+  ```sql
+  SELECT department, job_title, AVG(salary) AS average_salary
+  FROM employees
+  GROUP BY department, job_title;
+  ```
+
+---
+
+##### `HAVING` 的用法
+
+2.1 **作用**
+- **`HAVING`** 用于过滤分组后的结果。
+- 它通常与 `GROUP BY` 一起使用，用于筛选满足条件的分组。
+
+2.2 **语法**
+```sql
+SELECT column1, column2, aggregate_function(column3)
+FROM table
+GROUP BY column1, column2
+HAVING condition;
+```
+
+2.3 **示例**
+- 查找员工数量大于 5 的部门：
+  ```sql
+  SELECT department, COUNT(*) AS employee_count
+  FROM employees
+  GROUP BY department
+  HAVING employee_count > 5;
+  ```
+  结果：
+  | department | employee_count |
+  |------------|----------------|
+  | IT         | 10             |
+  | Sales      | 8              |
+
+- 查找平均工资大于 5000 的部门：
+  ```sql
+  SELECT department, AVG(salary) AS average_salary
+  FROM employees
+  GROUP BY department
+  HAVING average_salary > 5000;
+  ```
+
+---
+
+##### 执行顺序
+SQL 查询的执行顺序如下：
+1. **`FROM`**：确定数据来源。
+2. **`WHERE`**：过滤行。
+3. **`GROUP BY`**：对数据进行分组。
+4. **`HAVING`**：过滤分组后的结果。
+5. **`SELECT`**：选择要返回的列。
+6. **`ORDER BY`**：对结果进行排序。
+
+```sql
+SELECT department, AVG(salary) AS average_salary
+FROM employees
+WHERE salary > 3000
+GROUP BY department
+HAVING average_salary > 5000
+ORDER BY average_salary DESC;
+```
+- **执行顺序**：
+  1. 从 `employees` 表中选择数据。
+  2. 过滤出 `salary > 3000` 的行。
+  3. 按 `department` 分组。
+  4. 过滤出 `average_salary > 5000` 的组。
+  5. 选择 `department` 和 `average_salary` 列。
+  6. 按 `average_salary` 降序排序。
+
+---
+
+##### PS
+1. **`GROUP BY` 的列必须在 `SELECT` 中**：
+   - 如果 `SELECT` 中包含非聚合列，则这些列必须出现在 `GROUP BY` 中。
+   - 示例：
+     ```sql
+     SELECT department, job_title, AVG(salary)
+     FROM employees
+     GROUP BY department, job_title;
+     ```
+
+2. **`HAVING` 只能用于过滤分组后的结果**：
+   - `HAVING` 不能用于过滤单行数据，单行数据过滤应使用 `WHERE`。
+   - 示例：
+     ```sql
+     SELECT department, AVG(salary) AS average_salary
+     FROM employees
+     GROUP BY department
+     HAVING average_salary > 5000;
+     ```
+
+3. **`HAVING` 可以使用聚合函数**：
+   - `HAVING` 可以基于聚合函数的结果进行过滤。
+   - 示例：
+     ```sql
+     SELECT department, COUNT(*) AS employee_count
+     FROM employees
+     GROUP BY department
+     HAVING COUNT(*) > 5;
+     ```
+
+---
+
+##### 总结
+- **`GROUP BY`** 用于对数据进行分组，通常与聚合函数一起使用。
+- **`HAVING`** 用于过滤分组后的结果，通常基于聚合函数的结果进行过滤。
+- **`WHERE`** 用于过滤单行数据，而 **`HAVING`** 用于过滤分组后的结果。
+- 理解 `GROUP BY` 和 `HAVING` 的执行顺序和用法，可以帮助编写更复杂的 SQL 查询。
+
+
+#### 聚合函数练习
+
+```sql
+#1.where子句可否使用组函数进行过滤？
+-- 不可以， 参考下面各个关键字作用：
+-- 1. WHERE 针对每行数据进行条件过滤，必需在GROUP BY 之前进行
+-- 2. GROUP BY 列数据进行了分组，后面不可以再使用WHERE了
+-- 3. HAVING 是对GROUP BY 分组的每个组内的数据进行处理判断，和那些聚合函数一样 
+
+FROM：确定数据来源。
+WHERE：过滤行。
+GROUP BY：对数据进行分组。
+HAVING：过滤分组后的结果。
+SELECT：选择要返回的列。
+ORDER BY：对结果进行排序
+
+
+#2.查询公司员工工资的最大值，最小值，平均值，总和
+#(5大聚合函数的用法)
+SELECT 
+MAX(salary) AS max_salary,
+MIN(salary) AS min_salary,
+SUM(salary) AS sum_salary,
+SUM(salary) / COUNT(salary) AS average_salary,
+AVG(salary) AS AVG_salary
+FROM employees;
+
+
+#3.查询各job_id的员工工资的最大值，最小值，平均值，总和
+SELECT  
+job_id, 
+AVG(salary) average_s, 
+SUM(salary) total_s,
+MAX(salary) max_s,
+MIN(salary) min_s
+FROM employees GROUP BY job_id;
+
+
+#4.选择各个job_id的员工人数
+SELECT job_id, COUNT(*) FROM employees GROUP BY job_id;
+
+
+# 5.查询员工最高工资和最低工资的差距（DIFFERENCE）
+SELECT MAX(salary) - MIN(salary) AS salary_difference FROM employees;
+
+
+# 6.查询各个管理者手下员工的最低工资，其中最低工资不能低于6000，没有管理者的员工不计算在内
+-- 注意，GROUP BY 不能放在 WHERE 之前，即WHERE 不能先用 GROUP BY 过滤，看第一个问题
+SELECT 
+manager_id, MIN(salary)
+FROM employees WHERE manager_id IS NOT NULL
+GROUP BY manager_id 
+HAVING MIN(salary) >= 6000;
+
+
+# 7.查询所有部门的名字，location_id，员工数量和平均工资，并按平均工资降序
+SELECT 
+d.department_name, d.location_id, COUNT(*), AVG(e.salary)
+FROM departments d JOIN employees e 
+ON d.department_id = e.department_id 
+GROUP BY d.department_name, d.location_id
+ORDER BY `AVG(e.salary)`;
+
+
+# 8.查询每个工种、每个部门的部门名、工种名和最低工资
+```
 
 
 ## DB管理-DML-数据类型

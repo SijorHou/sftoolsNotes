@@ -572,10 +572,48 @@ public class HelloServlet extends HttpServlet {
             <img src="pic_src/WEB项目特别操作01.png" alt="IDEA开发部署运行WEB项目.png" style="margin-bottom: 1px;">
             <p>WEB项目特别操作01</p>
         </div>
-        - ***添加jar包***，要放在Web.WEB-INF下的lib中，并且需要邮件设为 Library（添加库）
+        
+        - ***添加jar包***，要放在Web.WEB-INF下的lib中，并且需要右键设为 Library（添加库）
         <div style="text-align:center">
             <img src="pic_src/创建库.png" alt="创建库" style="margin-bottom: 1px;">
             <p>创建库</p>
         </div>
+
+        
 - 使用idea 将工程构建成可以发布的app
+    - 构建工件，最后结构如下：
+        <div style="text-align:center">
+            <img src="pic_src/WEB项目构建结构.png" alt="创建库" style="margin-bottom: 1px;" width=60%>
+            <p>WEB项目构建结构</p>
+        </div>
 - 使用idea 将构建好的app部署到 tomcat中运行
+    - 菜单栏 -> 运行 -> 编辑配置 
+    - 在配置中添加 Tomcat服务器配置 -> 部署选项中添加构建好的项目 -> 回到IDEA点击运行
+        <div style="text-align:center">
+            <img src="pic_src/运行部署构建的WEB项目.png" alt="创建库" style="margin-bottom: 1px;">
+            <p>运行部署构建的WEB项目</p>
+        </div>
+
+
+***IDEA使用Tomcat部署项目原理***
+<div style="text-align:center">
+    <img src="pic_src/IDEA使用Tomcat原理.png" alt="IDEA开发部署运行WEB项目.png" style="margin-bottom: 1px;">
+    <p>IDEA使用Tomcat原理</p>
+</div>
+
+
+# HTTP
+## HTTP简介
+***HTTP简介***
+***HTTP请求和响应报文格式***
+***HTTP常见响应状态码***
+
+
+
+## Servlet
+### Servlet简介
+#### 动态资源 & 静态资源
+- ***静态资源***： 无需在程序运行时 “通过代码运行生成” 的资源，在程序运行之前就写好的资源，如 html、css、js、img、音视频等文件
+- ***动态资源***：需要在程序运行时 “通过代码运行生成” 的资源，如 **Servlet、Thymeleaf**。
+
+
