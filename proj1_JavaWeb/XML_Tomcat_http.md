@@ -616,4 +616,118 @@ public class HelloServlet extends HttpServlet {
 - ***静态资源***： 无需在程序运行时 “通过代码运行生成” 的资源，在程序运行之前就写好的资源，如 html、css、js、img、音视频等文件
 - ***动态资源***：需要在程序运行时 “通过代码运行生成” 的资源，如 **Servlet、Thymeleaf**。
 
+Servlet 是 Java Web 开发中一种重要的服务器端组件，用于扩展 Web 服务器的功能，处理客户端的请求并生成动态响应。以下是关于 Servlet 的详细介绍：
+
+***Servlet 是一个运行在服务器端的 Java 类***，用于处理客户端的请求（通常是 HTTP 请求）并生成响应（即运行Java代码的jar包，动态生成所需的请求数据）。它是一种基于 Java 的通用接口，允许开发者创建动态的、可扩展的 Web 应用程序。
+
+#### Servlet 的工作原理
+Servlet 的工作原理基于请求/响应模型。当客户端（如浏览器）发送一个请求到服务器时，服务器会将请求转发给对应的 Servlet。Servlet 处理请求后生成响应，并通过服务器返回给客户端。
+
+***工作流程：***
+
+1. **客户端发送请求**：客户端通过 HTTP 协议向服务器发送请求。
+2. **服务器接收请求**：Web 服务器（如 Apache Tomcat）接收请求，将请求报文的信息转换成一个 `HttpServletrequest` 对象，该对象中包含了请求中的所有信息
+    - Tomcat 同时创建了一个 `HttpServeletResponse` 对象，用于承装响应客户端的信息，该对象最后会被转换成响应的报文
+3. **Servlet 处理请求**：Servlet 接收到请求后，解析请求参数，执行业务逻辑，并生成响应内容。（Tomcat根据请求中的资源路径找到对应的servlet，将service实例化，调用service方法，同时传入 `HttpServletrequest` 和 `HttpServeletResponse` 对象）
+4. **服务器返回响应**：Servlet 将响应内容传递给服务器，服务器再将响应返回给客户端。
+
+#### Servlet 的生命周期
+Servlet 的生命周期由 Web 容器（如 Tomcat）管理，主要包括以下三个阶段：
+
+（1）**加载与实例化**
+- 当第一个请求到达时，容器会加载 Servlet 类并创建其实例。
+- 容器调用 Servlet 的 `init()` 方法进行初始化。
+
+（2）**请求处理**
+- 每次客户端请求到达时，容器会调用 Servlet 的 `service()` 方法。
+- `service()` 方法根据请求的类型（如 GET 或 POST）调用对应的 `doGet()` 或 `doPost()` 方法来处理请求。
+
+（3）**销毁**
+- 当容器需要销毁 Servlet 时（如服务器关闭或资源回收），容器会调用 Servlet 的 `destroy()` 方法。
+- 在 `destroy()` 方法中，可以释放资源，如关闭数据库连接等。
+
+#### Servlet 的核心接口和类
+Servlet 的实现基于 Java 的 `javax.servlet` 包，其中最核心的接口和类包括：
+
+（1）**Servlet 接口**
+- `javax.servlet.Servlet` 是所有 Servlet 的根接口，定义了 Servlet 的生命周期方法：
+  - `init(ServletConfig config)`：初始化方法。
+  - `service(ServletRequest request, ServletResponse response)`：处理请求的方法。
+  - `destroy()`：销毁方法。
+  - `getServletConfig()`：获取 Servlet 配置信息。
+  - `getServletInfo()`：返回 Servlet 的描述信息。
+
+（2）**HttpServlet 类**
+- `javax.servlet.http.HttpServlet` 是一个抽象类，继承自 `GenericServlet`。
+- 它专门用于处理 HTTP 协议的请求，提供了 `doGet()` 和 `doPost()` 方法来处理 GET 和 POST 请求。
+- 开发者通常通过继承 `HttpServlet` 并重写 `doGet()` 或 `doPost()` 方法来实现具体的业务逻辑。
+
+（3）**ServletRequest 和 ServletResponse**
+- `ServletRequest` 和 `ServletResponse` 是用于封装请求和响应的接口。
+- `HttpServletRequest` 和 `HttpServletResponse` 是它们的子接口，专门用于处理 HTTP 请求和响应。
+
+---
+
+<div style="text-align:center">
+    <img src="pic_src/Servelet工作原理.png" alt="Servelet工作原理.png" style="margin-bottom: 1px;">
+    <p>Servelet工作原理</p>
+</div>
+
+
+#### Servlet 的配置方式
+***Servlet 的配置可以通过以下两种方式实现***：
+
+（1）**web.xml 配置**
+在 `web.xml` 文件中，可以通过 `<servlet>` 和 `<servlet-mapping>` 标签来配置 Servlet：
+```xml
+<servlet>
+    <servlet-name>MyServlet</servlet-name>
+    <servlet-class>com.example.MyServlet</servlet-class>
+</servlet>
+<servlet-mapping>
+    <servlet-name>MyServlet</servlet-name>
+    <url-pattern>/myServlet</url-pattern>
+</servlet-mapping>
+```
+
+（2）**注解配置**
+从 Servlet 3.0 开始，可以使用 `@WebServlet` 注解来简化配置：
+```java
+@WebServlet("/myServlet")
+public class MyServlet extends HttpServlet {
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        resp.getWriter().write("Hello, Servlet!");
+    }
+}
+```
+
+#### Servlet 的应用场景
+Servlet 主要用于以下场景：
+- **动态内容生成**：根据用户请求动态生成 HTML 页面。
+- **表单处理**：处理用户提交的表单数据。
+- **用户认证与授权**：实现用户登录、权限验证等功能。
+- **与数据库交互**：通过 JDBC 连接数据库，实现数据的增删改查。
+
+#### Servlet 的优缺点
+***优点：***
+- **跨平台**：基于 Java，具有良好的跨平台性。
+- **高性能**：支持多线程，可以同时处理多个请求。
+- **安全性**：可以利用 Java 的安全机制，如用户认证和授权。
+
+***缺点：***
+- **开发复杂**：需要编写大量的 Java 代码，开发效率较低。
+- **依赖容器**：需要依赖 Web 容器（如 Tomcat）来运行。
+- **功能有限**：主要用于处理 HTTP 请求，对于复杂的业务逻辑支持不足。
+
+**Servlet 与现代框架的对比**
+虽然 Servlet 是 Java Web 开发的基础，但随着技术的发展，许多现代框架（如 Spring MVC、Spring Boot）在 Servlet 的基础上提供了更高级的抽象和更强大的功能。这些框架通过注解、依赖注入等技术简化了开发过程，提高了开发效率。
+
+---
+
+### Servelet 开发流程
+#### 目标
+***校验注册时，用户名是否被占用：*** 通过客户端像一个Servelet发送请求，携带username， 如果用户名是 `sijor`，则向客户端响应 No， 如果是其他，响应Yes
+
+#### 步骤
 
