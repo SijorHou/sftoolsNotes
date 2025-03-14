@@ -749,6 +749,35 @@ drwx------. 17 sjor  sjor   4096 12月  1 21:09 sjor
 
 # 杂项
 
+## 程序管理
+### 工作管理
+
+- `&` 将命令放入后台执行
+  - `ping localhost > ping.log &`
+- `Ctrl + Z` 将当前工作“暂停” 运行并放入后台
+  - `vi ~/.bashrc` 后执行 `Ctrl + Z`
+  - `find / -print` 后执行 `Ctrl + Z`
+- `jobs [-lrs]` 查看工作
+  - `jobs -l` 查看所有工作（列出进程号PID）
+  - `jobs -r` 仅仅查看正在运行的工作
+  - `jobs -s` 仅仅查看已经暂停的工作
+- `bg %jobnumber` 恢复后台暂停任务（会在后台继续运行）
+- `fg %jobnumber` 恢复后台工作到前台
+- **终止进程**
+  - `kill` 终止后台作业
+    - `kill PID/%n` 杀死PID进程
+    - `kill -9 PID/%n` 强制杀死任务
+    - `kill -15 PID/%n` 以正常方式终止任务
+  - `Ctrl + Z` 暂停
+  - `Ctrl + C` 终止前台进程
+
+
+
+
+
+
+
+
 ## systemctl command detail
 
 语法： ***`systemctl COMMAND name.service`***

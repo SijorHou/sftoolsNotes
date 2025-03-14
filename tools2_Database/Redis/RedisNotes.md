@@ -125,7 +125,7 @@ Redis 是一个高性能的缓存系统，适用于在高并发读操作的场�
 
 ***使用和关闭***
 
-1. 启动和连接服务。完成配置修改后，启动server服务，连接cli 并使用redis
+1. ***启动和连接服务***。完成配置修改后，启动server服务，连接cli 并使用redis
     - `redis-server /myredis/redis7.conf`
     - `ps -ef | grep redis` 查看运行的server进程
     - `redis-cli -a 123456 -p 6379`
@@ -135,7 +135,7 @@ Redis 是一个高性能的缓存系统，适用于在高并发读操作的场�
     <p>启动连接redis</p>
 </div>
 
-2. 退出和关闭redis实例
+2. ***退出和关闭redis实例***
     直接在 redis-cli 中输入 `quit` 只是退出，明没有关闭
     - `127.0.0.1 > SHUTDOWN`
 

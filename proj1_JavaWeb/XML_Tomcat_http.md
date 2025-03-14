@@ -611,6 +611,9 @@ public class HelloServlet extends HttpServlet {
 
 
 ## Servlet
+
+[Servlet教程](https://www.w3cschool.cn/servlet/)
+
 ### Servlet简介
 #### 动态资源 & 静态资源
 - ***静态资源***： 无需在程序运行时 “通过代码运行生成” 的资源，在程序运行之前就写好的资源，如 html、css、js、img、音视频等文件
@@ -618,7 +621,7 @@ public class HelloServlet extends HttpServlet {
 
 Servlet 是 Java Web 开发中一种重要的服务器端组件，用于扩展 Web 服务器的功能，处理客户端的请求并生成动态响应。以下是关于 Servlet 的详细介绍：
 
-***Servlet 是一个运行在服务器端的 Java 类***，用于处理客户端的请求（通常是 HTTP 请求）并生成响应（即运行Java代码的jar包，动态生成所需的请求数据）。它是一种基于 Java 的通用接口，允许开发者创建动态的、可扩展的 Web 应用程序。
+***Servlet 是一个运行在服务器端的 Java 类，用于处理客户端的请求（通常是 HTTP 请求）并生成响应（即运行Java代码的jar包，动态生成所需的请求数据）***。它是一种基于 Java 的通用接口，允许开发者创建动态的、可扩展的 Web 应用程序。
 
 #### Servlet 的工作原理
 Servlet 的工作原理基于请求/响应模型。当客户端（如浏览器）发送一个请求到服务器时，服务器会将请求转发给对应的 Servlet。Servlet 处理请求后生成响应，并通过服务器返回给客户端。
@@ -721,13 +724,94 @@ Servlet 主要用于以下场景：
 - **功能有限**：主要用于处理 HTTP 请求，对于复杂的业务逻辑支持不足。
 
 **Servlet 与现代框架的对比**
-虽然 Servlet 是 Java Web 开发的基础，但随着技术的发展，许多现代框架（如 Spring MVC、Spring Boot）在 Servlet 的基础上提供了更高级的抽象和更强大的功能。这些框架通过注解、依赖注入等技术简化了开发过程，提高了开发效率。
+虽然 Servlet 是 Java Web 开发的基础，但随着技术的发展，***许多现代框架（如 Spring MVC、Spring Boot）在 Servlet 的基础上提供了更高级的抽象和更强大的功能***。这些框架通过注解、依赖注入等技术简化了开发过程，提高了开发效率。
 
 ---
 
 ### Servelet 开发流程
-#### 目标
-***校验注册时，用户名是否被占用：*** 通过客户端像一个Servelet发送请求，携带username， 如果用户名是 `sijor`，则向客户端响应 No， 如果是其他，响应Yes
 
-#### 步骤
+***目标：校验注册时，用户名是否被占用*** 
+    
+通过客户端像一个Servelet发送请求，携带username， 如果用户名是 `sijor`，则向客户端响应 No， 如果是其他，响应Yes
 
+- 当客户端浏览器访问服务器静态资源的时候，Tomcat会找到静态资源，并生成响应报文，响应报文包含响应行、响应头、响应体
+    - 响应头中包含 `Content-Type`， 代表返回内容（响应体）的类型（Tomcat在其conf中的web.xml查找）
+    - 响应体就是所请求的静态资源
+- 若访问的是动态资源（Tomcat需要调用Servlet来获取）
+    - 响应头中需要在程序中显示设置 `Content-Type`
+
+
+***完整过程***
+<div style="text-align:center">
+    <img src="pic_src/项目运行http访问全过程.png" alt="项目运行http访问全过程" style="margin-bottom: 1px;">
+    <p>项目运行http访问全过程</p>
+</div>
+
+- 浏览器访问 url
+    - `localhost` 定位到本地主机
+    - `8080`端口找到 Tomcat
+    - `demo02` 找到Tomcat中的 demo02项目
+    - `s1` 在该Web项目的 `web.xml` 中查找对应于 `s1` 的映射，然后根据 `servlet-name` 定位到对应的 `servlet-class` 并运行该程序
+
+**PS**
+- 一个 `<servlet>` 可以对应多个 `<servlet-mapping>`
+- `<servlet-mapping>` 中一个 `servlet-name` 可以有多个不同的 `servlet-pattern`
+- 可以使用注解，取代上面的配置方式
+    - `@WebServlet(urlPatterns/value={...})`
+
+
+### Servlet 生命周期
+<div style="text-align:center">
+    <img src="pic_src/Servlet生命周期.png" alt="Servlet生命周期" style="margin-bottom: 1px;">
+    <p>Servlet生命周期</p>
+</div>
+
+可以从运行结果中看到：
+- Servlet 的 构造器 **只在第一次请求时候执行过一次**
+    - 若要在 Tomcat 启动时就进行 对象构造和初始化，需要在 注解中设置属性、配置 web.xml 
+    - 原来是 `@WebServlet("/xxx")`，需要增加属性设置 —> `@WebServlet(value="/xxx", loadOnStartup=n)` (n>0)
+    ```xml
+    <servlet>
+        ...
+        <load-on-startup>-1</load-on-startup>
+        <!-- 
+            default -1， Tomcat 启动时不会实例化 该 Servlet
+            任意正数， 则会
+         -->
+    </servlet>
+    ```
+- Servlet 的 初始化 **只在第构造器执行完毕后执行过一次**
+- Servlet 的 服务方法**在每次请求的时候都会执行**
+- 真正执行 destroy 销毁的时候 **在关闭服务的时候**
+
+
+由此可见 ***Servlet在Tomcat中是单例的***
+
+对于并发访问的服务，若两个以上客户端同时请求一个 Servlet动态资源：
+- 一般情况下，**Tomcat 会为每一个到来的请求 分配一个线程 来处理该请求**
+    - **每个线程 有自己的线程栈** 
+    - 线程会执行 service方法，每个线程都会 将 service方法（地址） 压栈到自己的线程栈
+- Tomcat 中的 Servlet实例对象又存在于 堆中
+- 当不同线程执行service方法，若要访问 同一个实例对象的 成员变量 会怎样？
+    - 如图，不同线程栈中执行的 i++， 所操作的对象 都是同一对象的 i 成员变量 （即 ***Servlet的成员变量 在多个线程栈之中是共享的***），***会在并发请求时 引发线程安全问题***
+    <div style="text-align:center">
+        <img src="pic_src/Servlet线程安全问题.png" alt="Servlet线程安全问题" style="margin-bottom: 1px;">
+        <p>Servlet线程安全问题</p>
+    </div>
+
+    - 所以 避免 修改 Servlet对象的成员变量
+
+***defalut-servlet***
+
+- 当客户端请求 静态 资源的 时候，Tomcat 会根据请求 查找现有 Servlet 对象
+- 没有匹配者，最后会交给 ***default-servlet*** 处理该请求
+    - Tomcat的 web.xml 中配置如下
+    ```xml
+    <servlet-mapping>
+        <servlet-name>default</servlet-name>
+        <url-pattern>/</url-pattern>
+    </servlet-mapping>
+    ```
+    - default-servlet 会通过IO流读取 请求路径下的文件，并将其放入 response对象中（响应体），然后封装进响应报文
+
+### Servlet继承结构

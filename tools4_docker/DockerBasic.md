@@ -10,10 +10,12 @@
 [网友笔记](https://www.yuque.com/tmfl/cloud)
 
 ## 问题解决
-[docker run hello-world 无法从镜像源拉取报错](https://blog.csdn.net/qq_52712971/article/details/141862621?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522C64B1263-50CA-4288-B8E9-ED1B552F555E%2522%252C%2522scm%2522%253A%252220140713.130102334..%2522%257D&request_id=C64B1263-50CA-4288-B8E9-ED1B552F555E&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~top_positive~default-1-141862621-null-null.142^v100^control&utm_term=docker%3A%20Error%20response%20from%20daemon%3A%20Get%20https%3A%2F%2Fregistry-1.docker.io%2Fv2%2F%3A%20net%2Fhttp%3A%20request%20canceled%20while%20waiting%20for%20connection%20%28Client.Timeout%20exceeded%20while%20awaiting%20headers%29.&spm=1018.2226.3001.4187)
+[docker pull hello-world 无法从镜像源拉取报错](https://blog.csdn.net/qq_52712971/article/details/141862621?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522C64B1263-50CA-4288-B8E9-ED1B552F555E%2522%252C%2522scm%2522%253A%252220140713.130102334..%2522%257D&request_id=C64B1263-50CA-4288-B8E9-ED1B552F555E&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~top_positive~default-1-141862621-null-null.142^v100^control&utm_term=docker%3A%20Error%20response%20from%20daemon%3A%20Get%20https%3A%2F%2Fregistry-1.docker.io%2Fv2%2F%3A%20net%2Fhttp%3A%20request%20canceled%20while%20waiting%20for%20connection%20%28Client.Timeout%20exceeded%20while%20awaiting%20headers%29.&spm=1018.2226.3001.4187)
 
 [docker search 报错](https://blog.csdn.net/qq_28908085/article/details/125346981?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522C176DA12-CA3D-48C3-B40B-6F82174DEE2D%2522%252C%2522scm%2522%253A%252220140713.130102334..%2522%257D&request_id=C176DA12-CA3D-48C3-B40B-6F82174DEE2D&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~sobaiduend~default-1-125346981-null-null.142^v100^control&utm_term=docker%20search%E5%91%BD%E4%BB%A4%E6%8A%A5%E9%94%99&spm=1018.2226.3001.4187)
 
+
+[docker pull 拉去镜像源问题解决](https://blog.csdn.net/jhgj56/article/details/142209517?ops_request_misc=%257B%2522request%255Fid%2522%253A%25221aea68bf2f585da1c1f4a8686dc735e8%2522%252C%2522scm%2522%253A%252220140713.130102334..%2522%257D&request_id=1aea68bf2f585da1c1f4a8686dc735e8&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~top_positive~default-4-142209517-null-null.142^v102^pc_search_result_base5&utm_term=Error%20response%20from%20daemon%3A%20Get%20https%3A%2F%2Fregistry-1.docker.io%2Fv2%2F%3A%20net%2Fhttp%3A%20request%20canceled%20while%20waiting%20for%20connection%20%28Client.Timeout%20exceeded%20while%20awaiting%20headers%29&spm=1018.2226.3001.4187)
 
 [centos 镜像中无法使用 yum install 问题解决](https://blog.csdn.net/qq_41422009/article/details/122865240)
 
@@ -200,7 +202,7 @@ sudo yum-config-manager --add-repo https://mirrors.aliyun.com/docker-ce/linux/ce
 ***重新进入容器***
 - `docker exec [options] CONTAINER_NAME/ID COMMAND` 进入**正在运行的容器**并以命令行交互
   - `docker execu -it myCentos /bin/bash` 重新以交互式方式执行容器中的 bash
-  - `Ctl + P + Q` 可以从交互式命令行中退出容器 
+  - `Ctrl + P + Q` 可以从交互式命令行中退出容器 
 - `docker attach CONTAINER_NAME/ID`  重新进入容器
 - ***两者区别：***
   - `docker exec` 是在容器中打开新的终端，可以启动新的进程，使用 `exit` 退出，不会停止容器
@@ -399,7 +401,7 @@ Docker 镜像层都是只读的，容器层是可写的
 - `docker run images`
   
 ### docker MySQL 使用
-
+#### 安装配置
 [使用教程](https://hub.docker.com/_/mysql)
 
 ***使用MySQL镜像***
@@ -457,6 +459,58 @@ mysql> SOURCE /var/lib/mysql/atguigudb.sql
 - 删除容器，mysql容器中数据如何备份？
   - 只要设定了容器卷保存数据，即使删除mysql容器，再次新建msyql容器实例，也会具有宿主机中存储的原来数据
   - 或者 commit生成新的镜像，下次直接根据原镜像构造容器
+
+
+#### windows连接虚拟机docker的mysql
+
+1. ***查看Windows端口占用情况***
+```bash
+# cmd 中查看 3306 端口被哪些进程在使用
+netstat -ano | findstr :3306
+
+# 根据查询到的进程ID 确认进程
+# 若显示是 MySQL在使用，说明Windows本地的 3306端口被占用
+tasklist | findstr PID
+```
+
+2. ***查看Centos上端口使用情况***
+```bash
+# approach 1 
+netstat -tulnp | grep 3306
+
+# approach 2
+ss -tulnp | grep 3306
+
+# approach 3
+lsof -i :3306
+```
+<div style="text-align:center">
+    <img src="/tools4_docker/pic_src/3306端口查看.png" alt="3306端口查看" style="margin-bottom: 1px;">
+    <p>3306端口查看</p>
+</div>
+
+如图所示，docker代理正在监听该端口（实际上是其中的mysql进程）
+
+如果关闭该docker容器或关闭Windows的MySQL服务呢？
+
+```
+在 Windows 和 CentOS 虚拟机 中，你可能有两个 MySQL 服务：
+
+Windows 本机的 MySQL，监听 3306 端口。
+CentOS 虚拟机的 MySQL（Docker 容器内），默认也监听 3306 端口。
+💡 端口冲突的本质：
+
+同一台机器（或者同一台虚拟机）不能有两个进程监听同一个端口。
+但是，Windows 和 CentOS 虚拟机是两套独立的系统，它们各自有自己的网络环境，所以不会直接端口冲突。
+```
+3. ***端口冲突解决***
+
+不采用端口转发等额外操作方式
+
+直接 管理员运行 cmd， 执行 `NET STOP MySQL91` 关闭Windows上的 MySQL服务即可
+
+Windows中的navicat 连接 Centos主机 ip 即可
+
 
 ### docker redis 使用
 
