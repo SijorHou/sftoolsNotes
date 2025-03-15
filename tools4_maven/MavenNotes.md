@@ -112,10 +112,11 @@ Maven 就是一个软件，需要掌握的是：安装、配置、基本功能�
     - 变量名为 `JAVA_HOME`, `MAVEN_HOME` 
     - 路径为包含 bin目录的 路径如 `D:\Software\Java\jdk-17`, `D:\Software\Maven`
 - `Path`中添加环境变量 `%JAVA_HOME%\bin`, `%MAVEN_HOME%\bin`
+- 检测 Maven配置成功： cmd 中执行 `mvn -v`
 
 #### Maven功能配置
 
-需要修改 `maven/conf/seetings.xml` 配置文件来修改 Maven 的一些默认配置
+需要修改 `maven/conf/seetings.xml` 配置文件来修改 Maven 的一些默认配置，***单数标签都放在复数标签之前***
 1. 依赖本地缓存（本地仓库位置）
 ```xml
   <!-- localRepository
@@ -289,6 +290,95 @@ GAVP 模式帮助 Maven 在构建和管理 Java 项目时保持结构清晰、�
 
 Web 工程和 java工程的区别仅仅在于 ***java工程缺少一个 Web模块***（其中设置着 Web资源的路径），想要将 maven_Web （初创时是一个java工程） 真正变为一个 Web工程：需要在其中加入 Web模块：
 
-- 手动添加
 
+<div style="text-align:center">
+    <img src="/tools4_maven/pics/Maven构建Web项目1.png" alt="图片描述" style="margin-bottom: 1px;">
+    <p>Maven构建Web项目1</p>
+</div>
+
+如图所示：
+- 直接在 web.xml 文件中添加属性为 `war` 包，然后 maven 刷新重新加载项目
+- 然后会出现 默认的web 资源目录
+- 根据web 资源目录，上面 + 添加 部署描述符 web.xml
+- 最后出现左侧的 webapp下内容，**注意目录安排要根据默认生成的 web资源目录**
+
+### 项目构建
+#### 构建命令：编译、清理、测试
+<div style="text-align:center">
+    <img src="/tools4_maven/pics/lombok-maven导入.png" alt="图片描述" style="margin-bottom: 1px;">
+    <p>lombok-maven导入</p>
+</div>
+
+***如图所示***
+- maven_java 项目中，在 src.main.java 先新建 com.sijor.maven.User Java文件
+- 然后在 添加 `lombok.jar` 的依赖 （参考上面创建Maven Java 工程的依赖添加）
+- 然后更新 Maven配置
+- `lombok.jar` 可以直接导入关联私有属性的构造器、getter、setter等方法，不必再编写
+- ***在 maven_java的 命令行中执行编译命令 `mvn compile`***
+  - 注意：***`mvn compile` 只能编译项目主文件***
+  - 若test目录中的测试文件需要编译，执行命令 `mvn test-compile`
+- 执行 `mvn test` 会自动执行测试文件
+  - ***测试文件名称必须 以 Test 开头或结尾 如 `xxxTest`***
+- 可以一次执行多个命令，按照顺序列出命令，如 `mvn clean test` 会先清理然后测试
+
+
+只需要在项目的pom文件中声明依赖信息，Maven就会自动解析依赖，根据pom.xml文件下载相关依赖及其传递性依赖（依赖的依赖）
+
+#### 构建命令：打包
+
+首先，理解插件机制： **Maven 的功能主要通过插件来实现，插件是一组可重用的构建逻辑**，观察如下命令所用到的插件，插件的执行都是顺序的
+
+
+```bash
+(base) PS E:\Projs\MyProjs\JavaProj\mave-test\maven_java> mvn compile
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] -------------------< com.sijorhou.maven:maven_java >--------------------
+[INFO] Building maven_java 1.0-SNAPSHOT
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO]
+[INFO] --- maven-resources-plugin:2.6:resources (default-resources) @ maven_java ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] Copying 0 resource
+[INFO]
+[INFO] --- maven-compiler-plugin:3.1:compile (default-compile) @ maven_java ---
+[INFO] Changes detected - recompiling the module!
+[INFO] Compiling 1 source file to E:\Projs\MyProjs\JavaProj\mave-test\maven_java\target\classes
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  1.046 s
+[INFO] Finished at: 2025-03-15T23:21:30+08:00
+[INFO] ------------------------------------------------------------------------
+
+```
+同理，有如下插件使用情况：
+1. ***打包***
+- `mvn compile` 用到的插件
+  - `maven-resources-plugin:2.6:resources`
+  - `maven-compiler-plugin:3.1:compile`
+
+2. ***清理***
+- `mvn clean` 用到的插件
+  - `maven-clean-plugin:2.5:clean`
+
+3. ***测试***
+- `mvn test-compile` 用到的插件
+  - `maven-resources-plugin:2.6:resources`
+  - `maven-compiler-plugin:3.1:compile`
+  - `maven-resources-plugin:2.6:testResources`
+  - `maven-compiler-plugin:3.1:testCompile`
+- `mvn test ` 用到的插件
+  - 所有`mvn test-compile` 用到的插件
+  - `maven-surefire-plugin:2.12.4:test`
+
+4. ***打包***
+- `mvn package` 用到的插件
+  - `maven-resources-plugin:2.6:resources`
+  - `maven-compiler-plugin:3.1:compile`
+  - `maven-resources-plugin:2.6:testResources`
+  - `maven-compiler-plugin:3.1:testCompile`
+  - `maven-surefire-plugin:2.12.4:test`
+  - ` maven-jar-plugin:2.4:jar`
 
