@@ -118,4 +118,53 @@ docker exec -it sijor_redis redis-cli shutdown
 # redis.conf 中的 appendonly 设置为 yes
 ```
 
+### 环境-开发工具-环境安装
+#### Maven安装
+- ***参考Maven 笔记的 settings.xml 的配置，然后配置到 IDEA中去。***
+- 使用 IDEA 开发后端微服务，使用 vscode开发前端的后台管理系统 （前后端分离项目）
+
+
+#### 项目结构创建
+
+1. ***微服务模块创建（以商品服务模块创建为例）***
+- `Spring initializer` 创建 module
+- 创建服务： 商品服务、仓储服务、订单服务、优惠券服务、用户服务
+  - 共同点：
+    - 都导入 `web`、 `openfeign`模块
+    - 每一个服务，包名为 `com.sijor.guilmall.xxx` (`xxx` 为 `product/order/ware/coupon/member` 等模块)
+    - 模块名：`gulimall-coupon`
+
+
+2. ***使用git远程仓库提交项目代码***
+- 创建远程仓库
+- 重点是整体项目、子项目模块（各个微服务模块）**只提交 `src`源码目录 和 `pom.xml`文件**
+- 了解IDEA的 git分支使用（十分便捷，无需敲命令）
+
+#### 数据库初始化
+
+
+
+
+
+
+
+
+# 补充内容
+
+## Spring initializr
+
+**Spring Initializr 是 Spring 官方提供的一个用于快速创建和初始化 Spring 项目的在线工具**：它可以让开发人员选择所需的 Spring 模块、版本、编程语言等，自动生成项目的基本结构和配置文件，从而简化项目初始化过程
+
+- 视频讲解中，创建 `module` 的时候，选择 `Spring initializr` 的方式，第一个界面的两个内容：`Module SDK 的选择`、`Choose initializr Service URL`
+  - `Choose initializr Service URL`： 为 `https://start.spring.io/` 用于输入项目信息、Spring Boot 依赖
+  - `Spring initializr` 会生成完整的Spring Boot项目的 zip文件
+  - 下载解压zip文件，在 IDEA中打开即可
+  - 这些流程都可使用 IDEA中的插件自动完成
+
+***Spring Initializr = 在线 Spring Boot 项目生成器***
+
+
+
+
+
 
