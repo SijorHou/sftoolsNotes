@@ -374,6 +374,31 @@ Web 工程和 java工程的区别仅仅在于 ***java工程缺少一个 Web模�
   - `maven-surefire-plugin:2.12.4:test`
 
 4. ***打包***
+
+    1. 执行命令，会将 Java工程打包成 `jar` 包，将Web工程打包成 `war`包
+
+    2. 注意插件版本与jdk不兼容的报错：
+    ```bash
+    Execution default-war of goal org.apache.maven.plugins:maven-war-plugin:2.2:war fail
+
+    ed: Unable to load the mojo 'war' in the plugin 'org.apache.maven.plugins:maven-war-plugin:2.2' due to an API incompatibility: org.codehaus.plexus.component.repository.exception.ComponentLookupException: Cannot access defaults field of Properties
+
+    ```
+    3. 解决版本问题：在 pom.xml 中添加如下内容：
+    ```xml
+    <build>
+        <!-- jdk17 和 war包版本插件不匹配，添加这里的插件配置，然后更新Maven项目 -->
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>3.2.2</version>
+            </plugin>
+        </plugins>
+    </build>
+    ```
+
+
 - `mvn package` 用到的插件
   - `maven-resources-plugin:2.6:resources`
   - `maven-compiler-plugin:3.1:compile`
@@ -382,3 +407,6 @@ Web 工程和 java工程的区别仅仅在于 ***java工程缺少一个 Web模�
   - `maven-surefire-plugin:2.12.4:test`
   - ` maven-jar-plugin:2.4:jar`
 
+#### 构建命令：安装
+
+***安装就是将 jar、war包加入到现有

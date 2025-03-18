@@ -142,10 +142,22 @@ docker exec -it sijor_redis redis-cli shutdown
 
 #### 数据库初始化
 
+***Power Designer***
+
+[软件破解下载安装教程](https://blog.csdn.net/WwLK123/article/details/132729462)
+
+[软件使用教程](https://blog.csdn.net/lfdfhl/article/details/131328054?ops_request_misc=%257B%2522request%255Fid%2522%253A%252203f7686afa3d5e82598835f9435200a3%2522%252C%2522scm%2522%253A%252220140713.130102334..%2522%257D&request_id=03f7686afa3d5e82598835f9435200a3&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~top_positive~default-1-131328054-null-null.142^v102^pc_search_result_base5&utm_term=Power%20Designer&spm=1018.2226.3001.4187)
+
+- 使用 `Power Designer` 查看数据库设计
+- 创建对应于模块的数据库，将 .sql 文件中的建表语句执行生成各个数据库的所有表
 
 
+### 快速开发
 
-
+后台管理系统：前后端内容的搭建费事，从人人开源获取这类管理系统相关框架，快速搭建
+- 了解人人开源项目，快速搭建后台脚手架
+- 修改代码调整为我们的业务逻辑
+- 创建各个微服务以及数据库
 
 
 
