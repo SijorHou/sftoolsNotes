@@ -159,9 +159,36 @@ docker exec -it sijor_redis redis-cli shutdown
 - 修改代码调整为我们的业务逻辑
 - 创建各个微服务以及数据库
 
+#### Node.js 安装配置
+[node.js 卸载教程](https://blog.csdn.net/weixin_43801036/article/details/141487791?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522ef6eacf0c45a10a727f049e75f8b3775%2522%252C%2522scm%2522%253A%252220140713.130102334..%2522%257D&request_id=ef6eacf0c45a10a727f049e75f8b3775&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~top_click~default-1-141487791-null-null.142^v102^pc_search_result_base5&utm_term=node.js%E5%8D%B8%E8%BD%BD&spm=1018.2226.3001.4187)
+
+- ***Node.js是运行在服务端的JavaScript运行时环境***
+  - 官网下载安装 LTS Node.js（这里版本比较老旧，node.js 安装10.x.x 版本，Python 2.7.x，才不会报错）
+  - 配置 npm镜像，无需从国外网站下载node.js 的相关包依赖 `npm config set registry http://registry.npm.taobao.org/`
+- ***npm是Node.js的默认包管理器，相当于前端中的Maven***
+  - 在项目中执行 `npm install` 会解析 `package.json` 中内容并下载所需要的包
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 # 补充内容
+
+
 
 ## Spring initializr
 

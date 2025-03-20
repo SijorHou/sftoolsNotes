@@ -605,8 +605,61 @@ public class HelloServlet extends HttpServlet {
 # HTTP
 ## HTTP简介
 ***HTTP简介***
-***HTTP请求和响应报文格式***
-***HTTP常见响应状态码***
+### 请求和响应报文格式 
+| 部分         | 描述                                                         |
+|------------|--------------------------------------------------------------|
+| 请求行       | 包含方法（GET、POST 等）、请求 URI 和 HTTP 版本。                     |
+| 请求头       | 包含若干个字段，每个字段名和字段值成对出现，字段之间用冒号分隔，字段结束后换行。 |
+| 请求体       | 包含请求的主体数据，通常用于 POST 和 PUT 请求。                     |
+| （空行）     | 请求头和请求体之间用一个空行分隔。                                   |
+| 状态行       | 包含 HTTP 版本、状态码和状态消息。                                   |
+| 响应头       | 包含若干个字段，每个字段名和字段值成对出现，字段之间用冒号分隔，字段结束后换行。 |
+| 响应体       | 包含响应的主体数据。                                               |
+| （空行）     | 响应头和响应体之间用一个空行分隔。                                   |
+
+
+### 常见响应状态码
+| 状态码 | 类别  | 描述                                                         |
+|-------|-----|--------------------------------------------------------------|
+| 1xx   | 信息性 | 接收的请求正在处理。                                             |
+| 100   |      | 继续。                                                       |
+| 101   |      | 切换协议。                                                   |
+| 2xx   | 成功   | 请求正常处理完毕。                                               |
+| 200   |      | OK。                                                        |
+| 201   |      | 创建。                                                       |
+| 202   |      | 已接受。                                                     |
+| 203   |      | 非授权信息。                                                  |
+| 204   |      | 无内容。                                                      |
+| 205   |      | 重置内容。                                                    |
+| 206   |      | 部分内容。                                                    |
+| 3xx   | 重定向 | 请求必须包含更多的信息才能被处理。                                 |
+| 300   |      | 多种选择。                                                    |
+| 301   |      | 永久移动。                                                    |
+| 302   |      | 临时移动。                                                    |
+| 303   |      | 查看其他位置。                                                 |
+| 304   |      | 未修改。                                                      |
+| 307   |      | 临时重定向。                                                  |
+| 4xx   | 客户端错误 | 服务器无法处理请求。                                           |
+| 400   |      | 错误请求。                                                    |
+| 401   |      | 未授权。                                                      |
+| 403   |      | 禁止。                                                       |
+| 404   |      | 未找到。                                                      |
+| 405   |      | 方法禁用。                                                    |
+| 408   |      | 请求超时。                                                    |
+| 409   |      | 冲突。                                                       |
+| 410   |      | 已删除。                                                      |
+| 411   |      | 需要有效长度。                                                |
+| 412   |      | 未满足前提条件。                                               |
+| 413   |      | 请求实体太大。                                                 |
+| 414   |      | 请求的 URI 太长。                                              |
+| 415   |      | 不支持的媒体类型。                                             |
+| 5xx   | 服务器错误 | 服务器处理请求出错。                                           |
+| 500   |      | 服务器内部错误。                                               |
+| 501   |      | 尚未实施。                                                    |
+| 502   |      | 错误网关。                                                    |
+| 503   |      | 服务不可用。                                                  |
+| 504   |      | 网关超时。                                                    |
+| 505   |      | HTTP 版本不受支持。                                            |
 
 
 
@@ -799,7 +852,7 @@ Servlet 主要用于以下场景：
         <p>Servlet线程安全问题</p>
     </div>
 
-    - 所以 避免 修改 Servlet对象的成员变量
+    - 所以 ***避免 修改 Servlet对象的成员变量***
 
 ***defalut-servlet***
 
@@ -815,3 +868,182 @@ Servlet 主要用于以下场景：
     - default-servlet 会通过IO流读取 请求路径下的文件，并将其放入 response对象中（响应体），然后封装进响应报文
 
 ### Servlet继承结构
+
+
+#### 1. 顶级Servlet接口
+```java
+    public interface Servlet {
+        // 初始化方法，构造完毕后，由tomcat 自动调用完成初始化功能的方法
+        void init(ServletConfig var1) throws ServletException;
+
+        // 获得ServletConfig 对象的方法 （配置信息如何存放？）
+        ServletConfig getServletConfig();
+
+        // 接受用户请求，用于响应信息、处理请求的方法
+        void service(ServletRequest var1, ServletResponse var2) throws ServletException, IOException;
+
+        // 返回Servlet字符串描述信息的方法
+        String getServletInfo();
+
+        // Servlet在回收前由tomcat所调用的销毁方法，用于资源释放
+        void destroy();
+    }
+```
+
+***Servlet配置信息存放***
+
+上述Servlet配置信息写在 web.xml 中，如下，tomcat会读取标签中的键值对数据，然后在执行 `void init(ServletConfig var1)` 的时候会生成一个 `ServletConfig` 对象，从而可以被获取
+
+```xml
+    <servlet>
+        <servlet-name>userServlet</servlet-name>
+        <servlet-class>com.sijor.servlet.UserServlet</servlet-class>
+        <init-param>
+            <param-name>key</param-name>
+            <param-value>value</param-value>
+        </init-param>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>userServlet</servlet-name>
+        <url-pattern>/usr-servlet</url-pattern>
+    </servlet-mapping>
+```
+
+#### 2. 抽象类GenericServlet
+
+```java
+    public abstract class GenericServlet implements Servlet, ServletConfig, Serializable {
+        private transient ServletConfig config;
+    
+        public void destroy() {
+            // 将抽象方法，重写为普通方法，在方法内部没有任何的实现代码
+            // 平庸实现
+        }
+    
+        // tomcat在调用init方法时，会读取配置信息进入一个ServletConfig对象并将该对象传入init方法
+        public void init(ServletConfig config) throws ServletException {
+            // 将config对象存储为当前的属性
+            this.config = config;
+            // 调用了重载的无参的init
+            this.init();
+        }
+    
+        // 重载的初始化方法，我们重写初始化方法时对应的方法
+        public void init() throws ServletException {
+        }
+    
+        // 返回ServletConfig的方法
+        public ServletConfig getServletConfig() {
+            return this.config;
+        }
+    
+        // 再次抽象声明service方法
+        public abstract void service(ServletRequest var1, ServletResponse var2) throws ServletException, IOException;
+    }
+```
+
+#### 3. 抽象类HttpServlet
+
+`HttpServletRequest` 侧重于实现 `service` 
+
+```java
+    public abstract class HttpServlet extends GenericServlet {
+    
+        public void service(ServletRequest req, ServletResponse res) throws ServletException, IOException {
+            HttpServletRequest request;
+            HttpServletResponse response;
+            try {
+
+                // 参数的父转子，调用了重载的 service 方法 
+                request = (HttpServletRequest)req;
+                response = (HttpServletResponse)res;
+            } catch (ClassCastException var6) {
+                throw new ServletException(lStrings.getString("http.non_http"));
+            }
+
+            // 调用了重载的 service 方法  
+            this.service(request, response);
+        }
+
+        protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+            // 获取请求方式
+            String method = req.getMethod();    // GET POST PUT DELETE OPTIONS ... ... 
+            long lastModified;
+
+            // 根据请求方式，调用对应的 doxxx 方法
+            if (method.equals("GET")) {
+                lastModified = this.getLastModified(req);
+                if (lastModified == -1L) {
+                    this.doGet(req, resp);
+                } else {
+                    ...
+                }
+            } else if (method.equals("HEAD")) {
+                ...
+                this.doHead(req, resp);
+            } else if (method.equals("POST")) {
+                this.doPost(req, resp);
+            } else if (method.equals("PUT")) {
+                this.doPut(req, resp);
+            } else if (method.equals("DELETE")) {
+                this.doDelete(req, resp);
+            } else if (method.equals("OPTIONS")) {
+                this.doOptions(req, resp);
+            } else if (method.equals("TRACE")) {
+                this.doTrace(req, resp);
+            } else {
+                ...
+                resp.sendError(501, errMsg);
+            }
+        }
+
+        protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+            String msg = lStrings.getString("http.method_get_not_supported");
+            ...
+            
+            // 故意响应405，发送请求不允许的信息
+            resp.sendError(405, msg)
+        }
+
+        protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+            String msg = lStrings.getString("http.method_post_not_supported");
+            ...
+            // 故意响应405，发送请求不允许的信息
+            resp.sendError(405, msg)
+        }
+    }
+```
+
+#### 4. 自定义Servlet
+
+<div style="text-align:center">
+    <img src="pic_src/自定义Servlet方法.png" alt="Servlet生命周期" style="margin-bottom: 1px;">
+    <p>自定义Servlet方法</p>
+</div>
+
+如图前面所示，实际上所继承的 `HttpServlet` 中的 `service` 实际上实现了根据请求类型执行 `doXXX` 的处理逻辑
+
+这里如果注释掉自定义Servlet中的 `service` 方法， 则默认调用父类中的 `service` 方法，而父类 `HttpServlet` 中的 `service` 在处理 `doGet` 和 `doPost` 会故意返回 405
+
+在重写两个 `doXXX` 处理逻辑的条件下，可以看到控制台中会执行相应的输出动作
+
+---
+
+1. 部分程序员推荐在 `Servlet` 中重写 `doXXX` 方法处理请求，理由是 `service` 方法中可能做了一些处理，如果我们直接重写 `service` 的话，父类中 `service`方法处理功能会失效
+2. 目前直接重写 `service` 也没有什么问题
+3. 后续使用了 SpringMVC 框架后，我们则无需继承 `HttpServlet`，处理请求的方法也无需是 `doXXX` 或 `service`
+4. 如 `doGet` 和 `doPost` 方法中，我们定义的代码都一样，可以让一个方法直接调用另一个方法
+
+
+***需要掌握的技能***
+    继承 `HttpServlet` 之后，要么重写 `service` 方法，要么重写 `doGet/doPost` 方法
+
+### ServletConfig
+
+### ServletContext
+
+
+
+
+
+

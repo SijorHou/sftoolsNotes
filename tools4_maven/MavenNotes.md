@@ -405,8 +405,152 @@ Web 工程和 java工程的区别仅仅在于 ***java工程缺少一个 Web模�
   - `maven-resources-plugin:2.6:testResources`
   - `maven-compiler-plugin:3.1:testCompile`
   - `maven-surefire-plugin:2.12.4:test`
-  - ` maven-jar-plugin:2.4:jar`
+  - `maven-jar-plugin:2.4:jar`
 
 #### 构建命令：安装
 
-***安装就是将 jar、war包加入到现有
+如图所示，**希望 maven-Web 工程能够使用 maven-java 项目，即依赖与 maven-java项目**，已经在 pom.xml 文件中添加了依赖，但是执行 `mvn package` 依然会报错 `Could not find artifact com.sijorhou.maven:maven_java:jar:1.0-SNAPSHOT`
+
+<div style="text-align:center">
+    <img src="/tools4_maven/pics/安装命令解决的问题.png" alt="图片描述" style="margin-bottom: 1px;">
+    <p>mvn install 解决的问题</p>
+</div>
+
+这是因为，Maven解析依赖的时候，会现在本地仓库查找所需依赖，然后再到中央仓库寻找，上述 maven-java项目只是打包生成了 .jar 文件，任何仓库中都不存在该文件，***所以如果想依赖本地.jar包，应该先安装到本地仓库，即 `mvn install`***
+
+
+- `mvn install` 用到的插件
+  - `maven-resources-plugin:2.6:resources`
+  - `maven-compiler-plugin:3.1:compile`
+  - `maven-resources-plugin:2.6:testResources`
+  - `maven-compiler-plugin:3.1:testCompile`
+  - `maven-surefire-plugin:2.12.4:test`
+  - `maven-install-plugin:2.4:install`
+
+
+#### IDEA 的可视化操作
+前面截图中可以看到，IDEA 中的Maven面板，可以直接执行基本 Maven命令，而无需命令行输入
+
+其中 `Plugins` 是对应命令所需的基本默认依赖，由此可以看出：
+***依赖文件主要分为三类***：
+  1. 自定义的项目.jar文件作为依赖
+  2. 项目中要用到的 .jar包作为依赖
+  3. Maven命令执行所需的插件的默认依赖
+
+
+### 依赖管理
+
+***依赖管理***
+
+Maven 依赖管理是 Maven 软件中最重要的功能之一。使得软件包依赖的管理和使用更加智能和方便，简化了开发过程中的工作，并提高了软件质量和可维护性。
+
+- Maven 的依赖管理能够帮助开发人员**自动解决软件包依赖问题**，使得开发人员能够轻松地将其他开发人员开发的模块或第三方框架**集成到自己的应用程序或模块中**，**避免出现版本冲突和依赖缺失等问题**。
+
+- 通过定义 POM 文件，**Maven 能够自动解析项目的依赖关系**，并通过 Maven **仓库自动**下载和管理依赖，从而避免了手动下载和管理依赖的繁琐工作和可能引发的版本冲突问题。
+
+---
+
+***一些关键点***
+- 可以在 `<properies></properies>` 中设置自定义的属性
+  - 如设置自定义版本属性 `<packageName.version>x.x.x</packageName.version>`，那么就可以统一管理 `<dependency></dependency>`中依赖的版本信息，即 `<verison>${packageName.version}</verison>`
+- `<scope></scope>` 划定了依赖起作用的范围
+  - 如打包后的 `jar/war` 等文件中是没有 `lib/junit.xx`的，因为测试的执行发生在打包之前，相关依赖只在测试过程中使用
+
+---
+
+***生命周期***
+
+- 前面可以看到，在执行一个 maven命令的时候，真正执行的插件还包括前期的一些操作，如上面 `mvn install`，观察插件执行过程，实际上是在 `mvn package` 命令执行的基础上再执行 `install` 的插件。同理，打包命令也是如此。
+- 即 **构建生命周期可以理解成是一组固定构建命令的有序集合，触发周期后的命令，会自动触发周期前的命令**
+
+---
+
+***插件、命令、周期三者关系 ***
+
+- 周期 → 包含若干命令 → 包含若干插件
+- 使用周期命令构建，简化构建过程！
+- 最终进行构建的是插件
+
+### Maven工程Build 构建配置
+
+***项目构建是指将源代码、依赖库和资源文件等转换成可执行或可部署的应用程序的过程，在这个过程中包括编译源代码、链接依赖库、打包和部署等多个步骤。***
+
+默认情况下，构建不需要额外配置，都有对应的缺省配置。当然了，我们也可以在pom.xml定制一些配置，来修改默认构建的行为和产物！
+
+***例如：***
+
+1.  指定构建打包文件的名称，非默认名称
+2.  指定构建打包时，指定包含文件格式和排除文件
+3.  打包插件版本过低，配置更高版本插件
+
+构建配置是在pom.xml / build标签中指定！
+
+***指定打包文件***
+
+<div style="text-align:center">
+    <img src="/tools4_maven/pics/未按Maven规则放置文件.png" alt="图片描述" style="margin-bottom: 1px;">
+    <p>未按Maven规则放置文件</p>
+</div>
+
+如图，未按照 Maven规则将 test.xml 文件放在 resources目录下，打包生成的 war 包中对应 classes下没有 test.xml文件
+
+**配置依赖插件**
+
+***dependencies标签下引入开发需要的jar包！我们可以在build/plugins/plugin标签引入插件！***
+
+***常用的插件：修改jdk版本、tomcat插件、mybatis分页插件、mybatis逆向工程插件等等！***
+
+```xml
+<build>
+  <plugins>
+      <!-- java编译插件，配jdk的编译版本 -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <source>1.8</source>
+          <target>1.8</target>
+          <encoding>UTF-8</encoding>
+        </configuration>
+      </plugin>
+      <!-- tomcat插件 -->
+      <plugin>
+        <groupId>org.apache.tomcat.maven</groupId>
+        <artifactId>tomcat7-maven-plugin</artifactId>
+         <version>2.2</version>
+          <configuration>
+          <port>8090</port>
+          <path>/</path>
+          <uriEncoding>UTF-8</uriEncoding>
+          <server>tomcat7</server>
+        </configuration>
+      </plugin>
+    </plugins>
+</build>
+```
+
+### 继承和聚合
+
+
+**承 vs 聚合：关键区别**
+| **特性**  | **继承（Inheritance）** | **聚合（Aggregation）** |
+|----------|---------------------|--------------------|
+| **作用**  | 代码复用、继承父 POM 配置 | 统一管理多个子模块的构建 |
+| **实现方式** | 通过 `<parent>` 关键字 | 通过 `<modules>` 关键字 |
+| **父 POM 需要 `packaging=pom`？** | 是 | 是 |
+| **子 POM 是否必须是父 POM 的子目录？** | 否 | 是 |
+| **子 POM 是否自动继承父 POM 配置？** | 是 | 否 |
+| **`mvn install` 是否会递归构建所有子模块？** | 否 | 是 |
+
+---
+
+- **继承** 用于 **代码复用**，允许子 POM 继承父 POM 的依赖、插件、属性等。
+- **聚合** 用于 **构建管理**，一个 `mvn install` 统一编译多个模块。
+- **实际开发中常常结合使用**，父 POM 既做**继承**（提供公共配置），又做**聚合**（管理模块构建）。
+
+### Maven私服
+
+
+
+
+
