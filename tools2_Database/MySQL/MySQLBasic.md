@@ -1,3 +1,4 @@
+# 基础篇
 # MySQL
 ## 学习记录
 
@@ -1886,3 +1887,1442 @@ DELETE FROM employees ORDER BY salary ASC LIMIT 5;
 [软件破解下载安装教程](https://blog.csdn.net/WwLK123/article/details/132729462)
 
 [软件使用教程](https://blog.csdn.net/lfdfhl/article/details/131328054?ops_request_misc=%257B%2522request%255Fid%2522%253A%252203f7686afa3d5e82598835f9435200a3%2522%252C%2522scm%2522%253A%252220140713.130102334..%2522%257D&request_id=03f7686afa3d5e82598835f9435200a3&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~top_positive~default-1-131328054-null-null.142^v102^pc_search_result_base5&utm_term=Power%20Designer&spm=1018.2226.3001.4187)
+
+
+# 约束
+
+***约束就是对数据库表中字段的限制***
+
+## MySQL中的约束（Constraints）
+
+### 1. 数据完整性（Data Integrity）
+在数据库中，约束（Constraints）用于保证数据的完整性和一致性。**MySQL提供了多种约束类型，以确保数据符合业务规则，并防止错误数据的插入**。
+
+数据完整性主要包括：
+- **实体完整性**（Entity Integrity）：确保每一行数据有唯一标识（如主键约束）。
+- **域完整性**（Domain Integrity）：限制列中数据的类型和范围（如非空约束、检查约束）。
+- **引用完整性**（Referential Integrity）：维护表与表之间的关系（如外键约束）。
+- **用户定义完整性**（User-defined Integrity）：应用特定的业务规则（如默认值、检查约束等）。
+
+---
+
+### 2. 约束分类
+
+1. ***按照作用范围分类***
+
+列级约束：约束声明在字段后面
+表级约束：表中字段都声明完毕后，在所有字段后面声明的约束
+
+2. ***按照功能分类***
+
+MySQL的约束主要包括以下几种：
+
+| 约束类型   | 作用 |
+|-----------|-------------------------------|
+| `NOT NULL` | 确保列不能为空 |
+| `UNIQUE` | 确保列值唯一 |
+| `PRIMARY KEY` | 既是`UNIQUE`又是`NOT NULL`，标识唯一行 |
+| `FOREIGN KEY` | 确保引用完整性，维护表间关系 |
+| `CHECK` | 约束列值范围（MySQL 8.0.16+ 支持） |
+| `DEFAULT` | 设定列的默认值 |
+
+---
+
+### 3. 详细介绍各类约束
+
+#### 3.1 `NOT NULL`（非空约束）
+- 作用：防止某列插入`NULL`值，确保数据完整性。
+- 示例：
+```sql
+CREATE TABLE users (
+    id INT PRIMARY KEY,
+    name VARCHAR(50) NOT NULL
+);
+```
+- 说明：`name`列必须有值，不能为`NULL`。
+
+---
+
+#### 3.2 `UNIQUE`（唯一性约束）
+- 作用：确保某列的所有值是唯一的，但可以包含`NULL`值（多个`NULL`被视为不同值）。
+- 示例：
+```sql
+CREATE TABLE employees (
+    id INT PRIMARY KEY,
+    email VARCHAR(100) UNIQUE
+);
+```
+- 说明：`email`列中的值必须唯一，但可以为空。
+
+*添加唯一索引方式：*
+```sql
+CREATE TABLE employees (
+    id INT PRIMARY KEY,
+    email VARCHAR(100),
+    CONSTRAINT unique_email UNIQUE (email)
+);
+```
+
+***`CONSTRAINT`*** 为复合约束显示命名，便于直接管理约束（by name）
+
+---
+
+#### 3.3 `PRIMARY KEY`（主键约束）
+- 作用：确保列的值唯一且不能为空，一个表只能有一个主键。
+- 示例：
+```sql
+CREATE TABLE products (
+    product_id INT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL
+);
+```
+- 说明：`product_id`列不能重复，也不能为`NULL`。
+
+*多列主键（复合主键）：*
+```sql
+CREATE TABLE orders (
+    order_id INT,
+    product_id INT,
+    quantity INT,
+    PRIMARY KEY (order_id, product_id) -- 组合主键
+);
+```
+
+---
+
+#### 3.4 `FOREIGN KEY`（外键约束）
+- 作用：用于建立两个表之间的关系，确保子表中的值必须在父表中存在（保证引用完整性）。
+- 示例：
+```sql
+CREATE TABLE customers (
+    customer_id INT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL
+);
+
+CREATE TABLE orders (
+    order_id INT PRIMARY KEY,
+    customer_id INT,
+    order_date DATE,
+    FOREIGN KEY (customer_id) REFERENCES customers(customer_id) ON DELETE CASCADE
+);
+```
+- 说明：
+  - `orders` 表中的 `customer_id` 必须在 `customers` 表中存在。
+  - `ON DELETE CASCADE` 表示当 `customers` 表中的某个 `customer_id` 被删除时，`orders` 表中的相关记录也会被删除。
+
+---
+
+#### 3.5 `CHECK`（检查约束）
+- 作用：限制列中的值符合一定的条件（MySQL 8.0.16+ 支持）。
+- 示例：
+```sql
+CREATE TABLE employees (
+    id INT PRIMARY KEY,
+    age INT CHECK (age >= 18 AND age <= 65)
+);
+```
+- 说明：`age` 必须在 `18-65` 之间。
+
+---
+
+#### 3.6 `DEFAULT`（默认约束）
+- 作用：当插入数据时，如果某列未提供值，则使用默认值。
+- 示例：
+```sql
+CREATE TABLE users (
+    id INT PRIMARY KEY,
+    name VARCHAR(50) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+```
+- 说明：如果`created_at`未提供值，则自动填充当前时间。
+
+---
+
+### 4. 综合示例
+
+```sql
+CREATE DATABASE Company;
+USE Company;
+
+-- 创建部门表
+CREATE TABLE departments (
+    dept_id INT PRIMARY KEY,
+    dept_name VARCHAR(50) NOT NULL UNIQUE
+);
+
+-- 创建员工表
+CREATE TABLE employees (
+    emp_id INT PRIMARY KEY,           -- 主键约束
+    name VARCHAR(100) NOT NULL,        -- 非空约束
+    email VARCHAR(100) UNIQUE,         -- 唯一性约束
+    age INT CHECK (age >= 18 AND age <= 65), -- 检查约束（MySQL 8.0.16+）
+    dept_id INT,                       -- 部门ID
+    salary DECIMAL(10,2) DEFAULT 3000, -- 默认约束
+    FOREIGN KEY (dept_id) REFERENCES departments(dept_id) ON DELETE SET NULL
+);
+```
+
+**解释：**
+- `departments` 表的 `dept_id` 是主键。
+- `employees` 表：
+  - `emp_id` 是主键。
+  - `name` 不能为空。
+  - `email` 必须唯一。
+  - `age` 必须在 18-65 之间。
+  - `salary` 默认值为 3000。
+  - `dept_id` 是外键，引用 `departments.dept_id`，如果部门被删除，则该列设为 `NULL`。
+
+---
+
+### 5. 总结
+- **非空约束（NOT NULL）**：防止列为空。
+- **唯一约束（UNIQUE）**：保证列值唯一。
+- **主键约束（PRIMARY KEY）**：唯一且非空，标识唯一行。
+- **外键约束（FOREIGN KEY）**：确保子表数据与父表数据一致。
+- **检查约束（CHECK）**：限制值的范围（MySQL 8.0.16+）。
+- **默认约束（DEFAULT）**：指定列的默认值。
+
+这些约束有助于确保数据完整性，减少错误输入，提高数据管理的可靠性。
+
+---
+
+
+
+## 单列-多列约束
+
+在 MySQL 中，部分约束可以作用于**单列**，而部分约束可以**作用于多列**（即**复合约束**）。  
+
+### 1. 只能作用于单列的约束
+以下约束**只能**定义在单个列上：
+- `NOT NULL`（非空约束）
+- `DEFAULT`（默认约束）
+- `CHECK`（检查约束，虽然可以涉及多个列的计算，但通常定义在单列上）
+
+示例：
+```sql
+CREATE TABLE users (
+    id INT PRIMARY KEY,
+    name VARCHAR(50) NOT NULL,  -- 单列非空约束
+    age INT CHECK (age >= 18),  -- 单列检查约束
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP -- 单列默认值
+);
+```
+
+---
+
+### 2. 可以作用于多列的约束
+以下约束**可以**作用于多列：
+| 约束类型   | 说明 |
+|-----------|-------------------------------|
+| `UNIQUE` | 可以确保多列的组合值唯一 |
+| `PRIMARY KEY` | 复合主键（多个列共同作为主键） |
+| `FOREIGN KEY` | 外键可以引用多列 |
+| `CHECK` | 可以涉及多个列（但不是标准写法）|
+
+---
+
+### 3. 适用于多列的约束示例
+
+#### 3.1 `UNIQUE` 约束（作用于多列）
+确保多个列的**组合值**唯一，而不是单独某列唯一。
+
+```sql
+CREATE TABLE employees (
+    first_name VARCHAR(50),
+    last_name VARCHAR(50),
+    department_id INT,
+    UNIQUE (first_name, last_name) -- 确保同一个部门内，员工姓名不能重复
+);
+```
+**说明：**  
+- `first_name` 和 `last_name` 组合必须唯一（但单独的 `first_name` 或 `last_name` 可以重复）。
+- 可用于防止姓名相同但不同部门的员工重复插入。
+
+---
+
+#### 3.2 `PRIMARY KEY` 约束（复合主键）
+多个列**共同**构成主键，确保行的唯一性。
+
+```sql
+CREATE TABLE orders (
+    order_id INT,
+    product_id INT,
+    quantity INT,
+    PRIMARY KEY (order_id, product_id) -- 复合主键
+);
+```
+**说明：**
+- 订单表的主键由 `order_id` 和 `product_id` 组成。
+- 这样可以保证**同一订单中**不能重复添加相同 `product_id`，但允许不同订单有相同 `product_id`。
+
+---
+
+#### 3.3 `FOREIGN KEY` 约束（作用于多列）
+外键可以引用多个列，确保父表和子表的一致性。
+
+```sql
+CREATE TABLE parent_table (
+    col1 INT,
+    col2 INT,
+    PRIMARY KEY (col1, col2) -- 复合主键
+);
+
+CREATE TABLE child_table (
+    col1 INT,
+    col2 INT,
+    value VARCHAR(50),
+    FOREIGN KEY (col1, col2) REFERENCES parent_table(col1, col2) -- 复合外键
+);
+```
+**说明：**
+- `child_table` 的 `col1, col2` 组合必须在 `parent_table` 中存在。
+
+---
+
+#### 3.4 `CHECK` 约束（作用于多列）
+虽然 `CHECK` 通常用于单列，但可以包含**涉及多个列的条件**（MySQL 8.0.16+ 支持）。
+
+```sql
+CREATE TABLE employees (
+    salary DECIMAL(10,2),
+    bonus DECIMAL(10,2),
+    CHECK (bonus <= salary * 0.5) -- 确保奖金不超过工资的50%
+);
+```
+**说明：**
+- `CHECK` 约束可以涉及**多个列**的计算（如 `bonus` 相对 `salary` 不能超过50%）。
+
+---
+
+### 4. 总结
+
+| 约束类型  | 是否可作用于多列？ | 备注 |
+|-----------|------------------|------|
+| `NOT NULL` | ❌ | 只能作用于单列 |
+| `DEFAULT` | ❌ | 只能作用于单列 |
+| `CHECK` | ✅ | 可用于多列，但受限 |
+| `UNIQUE` | ✅ | 可用于多列，确保组合唯一 |
+| `PRIMARY KEY` | ✅ | 可用于多列，形成复合主键 |
+| `FOREIGN KEY` | ✅ | 可用于多列，形成复合外键 |
+
+在数据库设计时，可以利用**复合约束**来满足更复杂的业务逻辑，如**唯一组合键、复合主键、外键完整性等**。
+
+## 约束后添加
+在 MySQL 中，如果**表已经创建**，可以**使用 `ALTER TABLE` 语句**来添加约束，但**某些约束不能后添加**或**有特殊限制**。
+
+---
+
+### 1. 能否后添加？
+| 约束类型     | 是否能后添加？ | `ALTER TABLE` 方式 |
+|-------------|--------------|--------------------|
+| `NOT NULL`  | ✅ 可以 | `ALTER TABLE table_name MODIFY column_name datatype NOT NULL;` |
+| `DEFAULT`   | ✅ 可以 | `ALTER TABLE table_name ALTER column_name SET DEFAULT value;` |
+| `CHECK` (MySQL 8.0.16+) | ✅ 可以 | `ALTER TABLE table_name ADD CONSTRAINT chk_name CHECK (condition);` |
+| `UNIQUE`    | ✅ 可以 | `ALTER TABLE table_name ADD CONSTRAINT uniq_name UNIQUE (column1, column2);` |
+| `PRIMARY KEY` | ✅ 可以 | `ALTER TABLE table_name ADD PRIMARY KEY (column1, column2);` |
+| `FOREIGN KEY` | ✅ 可以 | `ALTER TABLE table_name ADD CONSTRAINT fk_name FOREIGN KEY (col1, col2) REFERENCES parent_table(col1, col2);` |
+
+---
+### 2. 具体添加方式
+
+#### 2.1 添加 `NOT NULL` 约束
+如果某列允许 `NULL`，但想改为**非空**：
+```sql
+ALTER TABLE employees 
+MODIFY name VARCHAR(50) NOT NULL;
+```
+⚠ **注意：**
+- 不能直接把**已有 `NULL` 值的列**改为 `NOT NULL`，需要先更新数据：
+```sql
+UPDATE employees SET name = 'Unknown' WHERE name IS NULL;
+```
+
+---
+
+#### 2.2 添加 `DEFAULT` 约束
+```sql
+ALTER TABLE employees 
+ALTER COLUMN salary SET DEFAULT 3000;
+```
+⚠ **注意：**
+- 这个只影响**新插入的数据**，不修改已有数据。
+
+---
+
+#### 2.3 添加 `CHECK` 约束（MySQL 8.0.16+ 才支持）
+```sql
+ALTER TABLE employees 
+ADD CONSTRAINT chk_salary CHECK (bonus <= salary * 0.5);
+```
+⚠ **注意：**
+- `CHECK` 约束在 MySQL 5.x 版本之前不会生效。
+
+---
+
+#### 2.4 添加 `UNIQUE` 约束
+```sql
+ALTER TABLE employees 
+ADD CONSTRAINT uniq_name UNIQUE (first_name, last_name);
+```
+⚠ **注意：**
+- 如果已有重复数据，**添加唯一约束会失败**，需先删除重复数据：
+```sql
+DELETE FROM employees WHERE id NOT IN (
+    SELECT MIN(id) FROM employees GROUP BY first_name, last_name
+);
+```
+
+---
+
+#### 2.5 添加 `PRIMARY KEY` 约束
+如果表中没有主键，可以这样添加：
+```sql
+ALTER TABLE orders 
+ADD PRIMARY KEY (order_id, product_id);
+```
+⚠ **注意：**
+- **列必须是 `NOT NULL`**，否则报错：
+```sql
+ERROR 1171 (42000): All parts of a PRIMARY KEY must be NOT NULL
+```
+解决方案：
+```sql
+ALTER TABLE orders 
+MODIFY order_id INT NOT NULL,
+MODIFY product_id INT NOT NULL;
+```
+
+---
+
+#### 2.6 添加 `FOREIGN KEY` 约束
+```sql
+ALTER TABLE child_table 
+ADD CONSTRAINT fk_parent 
+FOREIGN KEY (col1, col2) REFERENCES parent_table(col1, col2);
+```
+⚠ **注意：**
+- **子表中的数据必须先满足外键约束**，否则添加失败！
+- 可以先删除不符合条件的数据：
+```sql
+DELETE FROM child_table WHERE (col1, col2) NOT IN (
+    SELECT col1, col2 FROM parent_table
+);
+```
+
+---
+
+### 3. 删除约束
+| 约束类型     | 删除方式 |
+|-------------|------------------------------|
+| `NOT NULL`  | `ALTER TABLE table_name MODIFY column_name datatype;` |
+| `DEFAULT`   | `ALTER TABLE table_name ALTER column_name DROP DEFAULT;` |
+| `CHECK`     | `ALTER TABLE table_name DROP CHECK chk_name;` |
+| `UNIQUE`    | `ALTER TABLE table_name DROP INDEX uniq_name;` |
+| `PRIMARY KEY` | `ALTER TABLE table_name DROP PRIMARY KEY;` |
+| `FOREIGN KEY` | `ALTER TABLE table_name DROP FOREIGN KEY fk_name;` |
+
+示例：
+```sql
+ALTER TABLE employees DROP CONSTRAINT chk_salary;
+```
+
+---
+
+### 4. 汇总完整代码示例
+```sql
+CREATE TABLE employees (
+    id INT AUTO_INCREMENT,
+    first_name VARCHAR(50),
+    last_name VARCHAR(50),
+    salary DECIMAL(10,2),
+    bonus DECIMAL(10,2),
+    department_id INT,
+    PRIMARY KEY (id)
+);
+
+-- 添加 NOT NULL 约束
+ALTER TABLE employees MODIFY first_name VARCHAR(50) NOT NULL;
+
+-- 添加 DEFAULT 约束
+ALTER TABLE employees ALTER salary SET DEFAULT 3000;
+
+-- 添加 CHECK 约束
+ALTER TABLE employees ADD CONSTRAINT chk_bonus CHECK (bonus <= salary * 0.5);
+
+-- 添加 UNIQUE 约束（多列）
+ALTER TABLE employees ADD CONSTRAINT uniq_name UNIQUE (first_name, last_name);
+
+-- 添加外键约束
+ALTER TABLE employees ADD CONSTRAINT fk_department FOREIGN KEY (department_id) REFERENCES departments(id);
+```
+
+---
+
+### 5. 结论
+✅ **大多数约束** (`NOT NULL`, `DEFAULT`, `CHECK`, `UNIQUE`, `PRIMARY KEY`, `FOREIGN KEY`) **都可以后添加**。  
+⚠ **注意可能失败的情况**：
+1. **`NOT NULL` 约束**：已有 `NULL` 值时不能直接加，需先修改数据。
+2. **`UNIQUE` 约束**：若已有重复值，需先删除重复项。
+3. **`PRIMARY KEY` 约束**：涉及的列必须是 `NOT NULL`。
+4. **`FOREIGN KEY` 约束**：子表已有数据但不满足外键关系时，会失败。
+
+如果你对某个约束的操作有具体问题，可以告诉我，我可以帮你修改 SQL 语句 😃
+
+
+
+# 视图
+
+## MySQL 视图（View）详解
+
+### 1. 什么是视图？ 
+视图（`View`）是**基于 SQL 查询结果创建的虚拟表**，它并不存储数据，而是对数据表的**逻辑抽象**。视图的主要作用包括：
+- **简化查询**：封装复杂 SQL 逻辑，提供更直观的数据访问。
+- **提高安全性**：限制用户只能访问视图定义的数据，而不能直接操作底层表。
+- **提高可维护性**：如果底层表结构变化，只需修改视图，而不影响应用层 SQL。
+
+---
+
+### 2. 视图的创建 
+#### 基本语法 
+```sql
+CREATE VIEW 视图名 AS
+SELECT 列1, 列2, ... FROM 表名
+WHERE 条件;
+```
+
+
+**📌 示例 1：创建一个简单视图**
+
+假设有一个 `employees` 表：
+```sql
+CREATE TABLE employees (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(100),
+    email VARCHAR(255),
+    salary DECIMAL(10,2),
+    department VARCHAR(50)
+);
+```
+
+创建一个 `high_salary_employees` 视图，筛选工资大于 8000 的员工：
+```sql
+CREATE VIEW high_salary_employees AS
+SELECT id, name, salary
+FROM employees
+WHERE salary > 8000;
+```
+**🔹 作用**
+- 现在 `high_salary_employees` 作为虚拟表，可以像普通表一样查询：
+```sql
+SELECT * FROM high_salary_employees;
+```
+- 但它不存储数据，而是实时从 `employees` 获取符合条件的数据。
+
+---
+
+### 3. 视图的管理 
+#### 查看已有视图 
+```sql
+SHOW FULL TABLES WHERE Table_type = 'VIEW';
+```
+
+#### 查看视图结构 
+```sql
+SHOW CREATE VIEW high_salary_employees;
+```
+
+#### 删除视图 
+```sql
+DROP VIEW high_salary_employees;
+```
+
+---
+
+#### 视图的修改 
+
+**🔹 修改视图（`ALTER VIEW` 或 `CREATE OR REPLACE VIEW`）**
+
+如果要更新视图的 SQL 逻辑：
+```sql
+CREATE OR REPLACE VIEW high_salary_employees AS
+SELECT id, name, salary, department
+FROM employees
+WHERE salary > 9000;
+```
+这样可以**直接覆盖**已有视图，而不需要先 `DROP VIEW` 再 `CREATE VIEW`。
+
+---
+
+### 5. 复杂视图 
+
+**📌 示例 2：多表连接视图**
+
+```sql
+CREATE TABLE departments (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    dept_name VARCHAR(50)
+);
+
+CREATE VIEW employee_department AS
+SELECT e.id, e.name, e.salary, d.dept_name
+FROM employees e
+JOIN departments d ON e.department = d.id;
+```
+- 这个视图将 `employees` 和 `departments` 关联，方便查询员工所属部门。
+
+
+**📌 示例 3：聚合视图**
+
+```sql
+CREATE VIEW department_avg_salary AS
+SELECT department, AVG(salary) AS avg_salary
+FROM employees
+GROUP BY department;
+```
+- 该视图计算每个部门的平均工资。
+
+---
+
+### 6. 视图的更新 
+视图通常可以执行 `SELECT` 查询，但能否 `INSERT`、`UPDATE`、`DELETE` 取决于是否**符合更新视图的条件**。
+
+**🔹 可更新视图**
+
+如果视图：
+✔ 只涉及 **单个表**  
+✔ 不包含 **聚合（`GROUP BY`、`SUM`、`AVG`）**  
+✔ 不包含 **DISTINCT、JOIN、子查询等**  
+那么它可以更新：
+```sql
+UPDATE high_salary_employees
+SET salary = 9500
+WHERE id = 1;
+```
+这个操作会**同步更新 `employees` 表**。
+
+
+**🔹 不能更新的视图**
+以下情况的视图 **不可更新**：
+- **包含 `JOIN`**
+- **包含 `GROUP BY`、`HAVING`**
+- **包含 `DISTINCT`**
+- **使用 `UNION`**
+- **使用 `非确定性函数`（如 `RAND()`）**
+
+示例：
+```sql
+UPDATE department_avg_salary
+SET avg_salary = 12000;  -- ❌ 报错，不可更新
+```
+
+---
+
+### 7. 视图 vs 表 
+| 比较项 | 视图（View） | 表（Table） |
+|--------|------------|------------|
+| **是否存储数据** | ❌ 不存储，只保存 SQL 逻辑 | ✅ 存储真实数据 |
+| **是否可查询** | ✅ 支持 `SELECT` | ✅ 支持 `SELECT` |
+| **是否可更新** | ⚠ 视情况而定 | ✅ 可更新 |
+| **是否可索引** | ❌ 无索引 | ✅ 可创建索引 |
+| **主要用途** | 简化查询，保护数据安全 | 存储数据 |
+
+---
+
+### 8. 视图的应用场景 
+✔ **封装复杂查询**（避免重复写长 SQL）  
+✔ **权限控制**（用户只能访问特定数据）  
+✔ **数据抽象**（隐藏表的结构变化）  
+✔ **跨表数据整合**（简化 `JOIN` 操作）  
+
+---
+
+### 9. 视图的综合示例 
+```sql
+CREATE TABLE employees (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(100),
+    email VARCHAR(255),
+    salary DECIMAL(10,2),
+    department_id INT
+);
+
+CREATE TABLE departments (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    dept_name VARCHAR(50)
+);
+
+-- 创建基于两张表的视图
+CREATE VIEW employee_info AS
+SELECT e.id, e.name, e.salary, d.dept_name
+FROM employees e
+JOIN departments d ON e.department_id = d.id;
+
+-- 查询视图
+SELECT * FROM employee_info;
+```
+
+---
+
+### 10. 结论 
+- 视图是**基于 SQL 结果的虚拟表**，**不存储数据**。
+- 可以用来简化查询、提高安全性和可维护性。
+- 视图**可以更新**，但必须符合可更新条件（单表、无 `GROUP BY` 等）。
+- **不可索引**，但底层表的索引仍然生效。
+- 适用于**封装复杂查询、权限管理、数据整合**等场景。
+
+
+# 存储过程
+## MySQL存储过程
+
+（Stored Procedure） 
+
+### 什么是存储过程？ 
+存储过程（Stored Procedure）是 **一组预编译的SQL语句**，存储在数据库中，可以重复调用。它类似于**函数**，但主要用于执行数据库操作，如增删改查。  
+
+> 📌 **特点**：
+> - **封装性**：将多条SQL语句封装在一起，减少重复代码  
+> - **提高性能**：预编译后存储在数据库中，执行速度快  
+> - **增强安全性**：可以限制用户访问权限，只允许调用存储过程  
+> - **减少网络传输**：在服务器端执行，减少 SQL 发送次数  
+
+***一个完整的存储过程实例***
+```sql
+
+-- 删除存储过程
+DROP PROCEDURE IF EXISTS get_highest_salary;
+
+-- 创建存储过程 （注意 DELIMITER 的含义）
+DELIMITER //
+CREATE PROCEDURE get_highest_salary(OUT id INT, OUT fname VARCHAR(10), OUT max_salary DOUBLE(10,2))
+BEGIN
+
+	SELECT id, first_name, salary FROM my_employees 
+	WHERE salary = (SELECT MIN(salary) FROM my_employees) 
+	LIMIT 1;
+
+END //
+DELIMITER ;
+
+-- 展示创建语句
+SHOW CREATE PROCEDURE get_highest_salary;
+
+-- 定义变量
+SET @id = 0, @fname = '', @max_salary = 0.0;
+
+-- 调用存储过程
+CALL get_highest_salary(@id, @fname, @max_salary);
+
+-- 显示结果
+SELECT @id, @fname, @max_salary;
+```
+
+
+---
+
+### 存储过程的语法 
+```sql
+DELIMITER //
+CREATE PROCEDURE 存储过程名 (参数列表)
+BEGIN
+    -- 过程体（SQL 语句）
+END //
+DELIMITER ;
+```
+
+🔹 **`DELIMITER //`**：用于改变 MySQL 语句的结束符，防止 `;` 提前终止 `BEGIN ... END` 块  
+🔹 **参数列表**：可选，支持 **`IN`（输入参数）、`OUT`（输出参数）、`INOUT`（输入输出参数）**  
+🔹 **过程体**：包含一组 SQL 语句  
+
+---
+
+### 存储过程的参数 
+#### PS： SELECT INTO
+***`SELECT ... INTO ...` 用于将查询结果写入文件或变量***
+
+| 参数类型 | 作用 |
+|---------|-----|
+| `IN` | 传入参数，调用时提供值 |
+| `OUT` | 传出参数，存储过程执行后返回 |
+| `INOUT` | 既可传入也可传出 |
+
+#### 示例 
+```sql
+CREATE PROCEDURE add_numbers(IN a INT, IN b INT, OUT sum_result INT)
+BEGIN
+    SET sum_result = a + b;
+END //
+```
+调用存储过程并获取返回值：
+```sql
+CALL add_numbers(10, 20, @result);
+SELECT @result;  -- 输出 30
+```
+
+---
+
+### 存储过程的示例
+
+#### 示例 1：无参数的存储过程
+```sql
+DELIMITER //
+CREATE PROCEDURE show_employees()
+BEGIN
+    SELECT * FROM employees;
+END //
+DELIMITER ;
+```
+调用：
+```sql
+CALL show_employees();
+```
+
+---
+
+#### 示例 2：带 `IN` 参数的存储过程
+```sql
+DELIMITER //
+CREATE PROCEDURE get_employee_by_id(IN emp_id INT)
+BEGIN
+    SELECT * FROM employees WHERE id = emp_id;
+END //
+DELIMITER ;
+```
+调用：
+```sql
+CALL get_employee_by_id(3);
+```
+
+---
+
+#### 示例 3：带 `OUT` 参数的存储过程 
+
+
+```sql
+DELIMITER //
+CREATE PROCEDURE get_employee_count(OUT emp_count INT)
+BEGIN
+    SELECT COUNT(*) INTO emp_count FROM employees;
+END //
+DELIMITER ;
+```
+调用：
+```sql
+CALL get_employee_count(@count);
+SELECT @count;  -- 显示员工总数
+```
+
+---
+
+#### 示例 4：带 `INOUT` 参数的存储过程 
+```sql
+DELIMITER //
+CREATE PROCEDURE double_number(INOUT num INT)
+BEGIN
+    SET num = num * 2;
+END //
+DELIMITER ;
+```
+调用：
+```sql
+SET @x = 5;
+CALL double_number(@x);
+SELECT @x;  -- 输出 10
+```
+
+---
+
+### 存储过程的流程控制 
+存储过程支持常见的控制流语句，如 `IF`、`CASE`、`LOOP`、`WHILE`、`REPEAT`。
+
+#### `IF...ELSE` 语句 
+```sql
+DELIMITER //
+CREATE PROCEDURE check_salary(IN emp_id INT, OUT salary_status VARCHAR(20))
+BEGIN
+    DECLARE emp_salary INT;
+    SELECT salary INTO emp_salary FROM employees WHERE id = emp_id;
+    
+    IF emp_salary > 8000 THEN
+        SET salary_status = 'High Salary';
+    ELSE
+        SET salary_status = 'Low Salary';
+    END IF;
+END //
+DELIMITER ;
+```
+调用：
+```sql
+CALL check_salary(3, @status);
+SELECT @status;
+```
+
+---
+
+#### `WHILE` 循环 
+```sql
+DELIMITER //
+CREATE PROCEDURE count_to_n(IN n INT)
+BEGIN
+    DECLARE i INT DEFAULT 1;
+    WHILE i <= n DO
+        SELECT i;
+        SET i = i + 1;
+    END WHILE;
+END //
+DELIMITER ;
+```
+调用：
+```sql
+CALL count_to_n(5);
+```
+
+---
+
+### 修改和删除存储过程 
+#### 修改存储过程 
+MySQL **不支持 `ALTER PROCEDURE`**，需要先删除再重新创建：
+```sql
+DROP PROCEDURE IF EXISTS 存储过程名;
+```
+然后重新创建新的存储过程。
+
+---
+
+#### 删除存储过程 
+```sql
+DROP PROCEDURE IF EXISTS show_employees;
+```
+
+---
+
+### 存储过程 vs 普通 SQL 语句 
+| 对比项 | 存储过程 | 普通 SQL |
+|--------|---------|---------|
+| **执行效率** | 预编译后执行更快 | 需要每次解析 |
+| **封装性** | 可以封装多条SQL，提高复用性 | 只能执行单条或少量SQL |
+| **减少网络流量** | 只发送 `CALL` 语句，减少网络传输 | 需要多次往返数据库 |
+| **可读性** | 逻辑清晰，代码复用 | 可能需要重复编写 SQL |
+
+---
+
+### 什么时候使用存储过程？ 
+✅ 适用场景：
+- **需要重复执行的 SQL 逻辑**（例如统计、批量操作）  
+- **复杂业务逻辑**（如 `IF`、`LOOP`）  
+- **提高查询性能**（避免频繁解析 SQL）  
+- **安全性要求高**（只暴露存储过程，不让用户访问原始表）  
+
+❌ **不适用场景**：
+- 逻辑非常简单，只需单条 SQL 即可  
+- 需要频繁修改逻辑（存储过程修改较繁琐）  
+
+---
+
+### 总结 
+✔ **存储过程是一组预编译的 SQL 语句**，提高性能，减少网络传输  
+✔ **支持 `IN`、`OUT`、`INOUT` 参数**，可以传递数据  
+✔ **支持 `IF`、`LOOP`、`WHILE` 等控制流**，可以实现复杂逻辑  
+✔ **可以封装查询、插入、更新、删除操作**，提高代码复用性  
+✔ **缺点：维护成本较高，修改麻烦，不能直接索引**  
+
+💡 **一句话总结**：**存储过程适用于高性能、复杂查询或批量处理的业务逻辑！** 🚀
+
+
+
+## 存储函数
+### MySQL 存储函数（Stored Function） 
+存储函数（Stored Function）是 MySQL 服务器端的一种预定义 SQL 代码块，它接受输入参数，执行一系列 SQL 语句，并返回一个单一值。类似于编程语言中的函数，它可以用于计算、转换数据、封装复杂查询等。
+
+---
+
+#### 存储函数的特点 
+- **必须有 `RETURN` 语句**，返回单个值。
+- **只能返回一个值**，如果需要返回多个值，应该使用存储过程（Stored Procedure）。
+- **可以在 `SELECT` 语句、`WHERE` 子句、`ORDER BY` 等位置使用**。
+- **不能修改数据库表的数据**（默认情况下，存储函数不能执行 `INSERT`、`UPDATE`、`DELETE` 语句）。
+
+---
+
+### 存储函数的创建 
+**基本语法**
+```sql
+CREATE FUNCTION 函数名 (参数名 数据类型, ...)
+RETURNS 返回值数据类型
+DETERMINISTIC | NOT DETERMINISTIC
+BEGIN
+    -- 变量声明
+    -- SQL 语句
+    RETURN 返回值;
+END;
+```
+**关键点**
+- `RETURNS`：指定返回值的数据类型。
+- `DETERMINISTIC | NOT DETERMINISTIC`：
+  - `DETERMINISTIC`（确定性函数）：相同输入总是返回相同输出（例如 `ABS()`）。
+  - `NOT DETERMINISTIC`（非确定性函数）：相同输入可能返回不同输出（如 `RAND()`）。
+- `RETURN`：存储函数必须有 `RETURN` 语句。
+
+---
+
+### 存储函数示例 
+**示例 1：计算员工的最高薪资**
+```sql
+DELIMITER //
+CREATE FUNCTION get_max_salary() RETURNS DOUBLE
+DETERMINISTIC
+BEGIN
+    DECLARE max_sal DOUBLE;
+    SELECT MAX(salary) INTO max_sal FROM employees;
+    RETURN max_sal;
+END //
+DELIMITER ;
+```
+**调用**
+```sql
+SELECT get_max_salary();
+```
+返回 `employees` 表中的最高薪资。
+
+---
+
+**示例 2：计算两个数的和**
+```sql
+DELIMITER //
+CREATE FUNCTION add_numbers(a INT, b INT) RETURNS INT
+DETERMINISTIC
+BEGIN
+    RETURN a + b;
+END //
+DELIMITER ;
+```
+**调用**
+```sql
+SELECT add_numbers(10, 20);
+```
+返回 `30`。
+
+---
+
+**示例 3：根据员工 ID 获取姓名**
+```sql
+DELIMITER //
+CREATE FUNCTION get_employee_name(emp_id INT) RETURNS VARCHAR(50)
+DETERMINISTIC
+BEGIN
+    DECLARE emp_name VARCHAR(50);
+    SELECT first_name INTO emp_name FROM employees WHERE id = emp_id;
+    RETURN emp_name;
+END //
+DELIMITER ;
+```
+**调用**
+```sql
+SELECT get_employee_name(101);
+```
+返回员工 ID 为 101 的 `first_name`。
+
+---
+
+### 存储函数的管理
+#### 修改存储函数 
+MySQL **不支持** `ALTER FUNCTION`，只能删除后重新创建：
+```sql
+DROP FUNCTION IF EXISTS get_max_salary;
+```
+
+#### 查看存储函数
+列出数据库中的所有存储函数：
+```sql
+SHOW FUNCTION STATUS WHERE Db = 'your_database_name';
+```
+
+查看函数的定义：
+```sql
+SHOW CREATE FUNCTION get_max_salary;
+```
+
+---
+
+### 存储函数与存储过程的区别
+| 对比项 | 存储函数（Stored Function） | 存储过程（Stored Procedure） |
+|--------|------------------|------------------|
+| **是否返回值** | 必须返回一个值 | 可以返回多个值（通过 `OUT` 参数），也可以不返回值 |
+| **调用方式** | 可在 `SELECT` 语句中调用 | 只能用 `CALL` 语句调用 |
+| **修改数据库数据** | 不能执行 `INSERT`、`UPDATE`、`DELETE`（默认情况下） | 可以修改数据库数据 |
+| **是否支持事务** | 不能显式提交或回滚事务 | 可以使用 `COMMIT`、`ROLLBACK` |
+| **是否能被索引** | 不能被索引 | 不能被索引 |
+| **使用场景** | 计算、转换、封装查询逻辑 | 批量处理数据、事务操作 |
+
+---
+
+**存储函数 vs. 存储过程：示例对比**
+**存储函数**
+```sql
+DELIMITER //
+CREATE FUNCTION get_total_salary() RETURNS DOUBLE
+DETERMINISTIC
+BEGIN
+    DECLARE total_sal DOUBLE;
+    SELECT SUM(salary) INTO total_sal FROM employees;
+    RETURN total_sal;
+END //
+DELIMITER ;
+```
+**调用**
+```sql
+SELECT get_total_salary();
+```
+**存储函数可以直接在 `SELECT` 语句中调用**。
+
+---
+
+**存储过程**
+```sql
+DELIMITER //
+CREATE PROCEDURE get_total_salary_proc(OUT total_sal DOUBLE)
+BEGIN
+    SELECT SUM(salary) INTO total_sal FROM employees;
+END //
+DELIMITER ;
+```
+**调用**
+```sql
+CALL get_total_salary_proc(@result);
+SELECT @result;
+```
+**存储过程需要 `CALL` 语句，并通过 `OUT` 参数返回数据**。
+
+---
+
+#### 何时使用存储函数 vs. 存储过程？ 
+| 需求 | 选择 |
+|------|------|
+| 需要返回单个值 | 存储函数 |
+| 需要在 `SELECT` 语句中调用 | 存储函数 |
+| 需要执行 `INSERT`、`UPDATE`、`DELETE` | 存储过程 |
+| 需要返回多个值 | 存储过程（通过 `OUT` 参数） |
+| 需要执行复杂业务逻辑 | 存储过程 |
+
+---
+
+### 总结 
+- **存储函数** 适用于计算值、封装查询逻辑，可以在 `SELECT` 语句中使用，但不能修改数据库数据。
+- **存储过程** 适用于执行复杂逻辑和事务处理，可以修改数据库数据，但不能在 `SELECT` 语句中调用。
+- 存储函数 **必须有 `RETURN`** 语句，而存储过程 **使用 `OUT` 参数返回值**。
+
+你现在对存储函数的概念和用途清楚了吗？如果有具体的需求，可以一起分析如何选择合适的方案！ 😊
+## 变量、流程控制、与游标
+
+<div style="text-align:center">
+    <img src="./pic/系统变量分类.png" alt="系统变量分类" style="margin-bottom: 1px;">
+    <p>系统变量分类</p>
+</div>
+
+根据目录内容，我将详细讲解 MySQL 中的相关知识点，包括 **变量、条件与处理程序、流程控制** 这三个方面。  
+
+---
+
+### 变量（Variables） 
+MySQL 变量主要分为 **系统变量** 和 **用户变量**。
+
+#### 系统变量（System Variables）
+系统变量是 MySQL 服务器提供的全局变量，用于控制数据库的行为和配置。  
+
+**系统变量分类**
+
+系统变量可以分为：
+- **全局变量（GLOBAL）**：对整个 MySQL 服务器生效，例如 `max_connections`（最大连接数）。
+- **会话变量（SESSION）**：仅对当前会话生效，例如 `autocommit`（是否自动提交）。
+
+**查看系统变量**
+可以使用 `SHOW VARIABLES` 或 `SELECT @@变量名` 来查看：
+```sql
+-- 查看所有系统变量
+SHOW VARIABLES;
+
+-- 查看特定变量
+SHOW VARIABLES LIKE 'max_connections';
+
+-- 通过 SELECT 方式查看
+SELECT @@max_connections;
+```
+
+---
+
+#### 用户变量（User Variables）
+用户变量是 MySQL 会话级别的变量，在一个连接内有效，适用于存储临时数据。
+
+**用户变量分类**
+
+用户变量主要包括：
+- **会话用户变量**（Session Variables）：作用范围仅限当前会话（Connection）。
+- **局部变量**（Local Variables）：在存储过程或函数内部定义的变量，仅在其作用域内有效。
+
+**会话用户变量**
+
+用户变量以 `@` 符号开头，并且无需声明即可使用：
+```sql
+SET @my_var = 100;
+SELECT @my_var;
+```
+
+**局部变量**
+
+局部变量只能在 `BEGIN ... END` 代码块中使用，必须通过 `DECLARE` 语句声明：
+```sql
+DECLARE v_salary INT;
+SET v_salary = 5000;
+```
+
+**对比会话用户变量与局部变量**
+
+| 变量类型  | 定义方式 | 作用范围 | 适用场景 |
+|-----------|---------|---------|---------|
+| 会话用户变量 | `SET @var = 值` | 当前会话 | 适用于存储查询结果，多个查询之间共享 |
+| 局部变量 | `DECLARE var 类型` | 代码块内部 | 适用于存储过程和函数，不能跨查询 |
+
+---
+
+### 定义条件与处理程序（Condition Handling）
+MySQL 提供 **条件处理机制**，用于处理错误、异常或其他情况。
+
+#### 案例分析
+比如，我们要创建一个存储过程，在插入数据时如果主键重复，就处理错误，而不是直接报错。
+
+##### 定义条件
+MySQL 使用 `DECLARE` 定义 **条件（Condition）**，可用于异常处理：
+```sql
+DECLARE duplicate_key CONDITION FOR SQLSTATE '23000';
+```
+其中 `23000` 代表 **主键冲突**。
+
+##### 定义处理程序
+使用 `DECLARE HANDLER` 定义 **处理程序（Handler）**：
+```sql
+DECLARE CONTINUE HANDLER FOR SQLSTATE '23000' SET @error_msg = 'Duplicate entry';
+```
+`CONTINUE` 表示当异常发生时，继续执行后续代码。
+
+##### 案例解决
+创建存储过程，处理主键重复错误：
+```sql
+DELIMITER //
+CREATE PROCEDURE insert_employee(IN emp_id INT, IN emp_name VARCHAR(50))
+BEGIN
+    DECLARE CONTINUE HANDLER FOR SQLSTATE '23000'
+    BEGIN
+        -- 记录错误信息
+        SET @error_msg = 'Duplicate entry found';
+    END;
+
+    INSERT INTO employees(id, name) VALUES(emp_id, emp_name);
+END //
+DELIMITER ;
+```
+调用时：
+```sql
+CALL insert_employee(1, 'Alice');
+SELECT @error_msg; -- 如果有错误，会返回错误信息
+```
+
+---
+
+### 流程控制（Flow Control）
+流程控制包括 **分支结构**（IF、CASE） 和 **循环结构**（LOOP、WHILE、REPEAT）。
+
+#### 分支结构之 IF
+在存储过程中使用：
+```sql
+IF condition THEN
+   -- 语句
+ELSEIF condition THEN
+   -- 语句
+ELSE
+   -- 语句
+END IF;
+```
+示例：
+```sql
+DELIMITER //
+CREATE PROCEDURE check_salary(IN emp_salary INT)
+BEGIN
+    IF emp_salary > 5000 THEN
+        SELECT 'High Salary';
+    ELSE
+        SELECT 'Low Salary';
+    END IF;
+END //
+DELIMITER ;
+```
+
+---
+
+#### 分支结构之 CASE
+`CASE` 语句类似于 `switch`：
+```sql
+CASE var
+    WHEN value1 THEN
+        -- 语句
+    WHEN value2 THEN
+        -- 语句
+    ELSE
+        -- 语句
+END CASE;
+```
+示例：
+```sql
+DELIMITER //
+CREATE PROCEDURE grade_student(IN score INT)
+BEGIN
+    CASE
+        WHEN score >= 90 THEN SELECT 'A';
+        WHEN score >= 80 THEN SELECT 'B';
+        ELSE SELECT 'F';
+    END CASE;
+END //
+DELIMITER ;
+```
+
+---
+
+#### 循环结构
+##### LOOP 循环
+使用 `LOOP` 结构：
+```sql
+LOOP
+    -- 语句
+    IF condition THEN LEAVE label_name; END IF;
+END LOOP label_name;
+```
+示例：
+```sql
+DELIMITER //
+CREATE PROCEDURE count_numbers()
+BEGIN
+    DECLARE i INT DEFAULT 1;
+    loop_label: LOOP
+        SELECT i;
+        SET i = i + 1;
+        IF i > 5 THEN LEAVE loop_label; END IF;
+    END LOOP loop_label;
+END //
+DELIMITER ;
+```
+
+---
+
+##### WHILE 循环
+```sql
+WHILE condition DO
+   -- 语句
+END WHILE;
+```
+示例：
+```sql
+DELIMITER //
+CREATE PROCEDURE while_loop_example()
+BEGIN
+    DECLARE i INT DEFAULT 1;
+    WHILE i <= 5 DO
+        SELECT i;
+        SET i = i + 1;
+    END WHILE;
+END //
+DELIMITER ;
+```
+
+---
+
+##### REPEAT 循环
+`REPEAT` 语句会 **至少执行一次**：
+```sql
+REPEAT
+    -- 语句
+UNTIL condition
+END REPEAT;
+```
+示例：
+```sql
+DELIMITER //
+CREATE PROCEDURE repeat_example()
+BEGIN
+    DECLARE i INT DEFAULT 1;
+    REPEAT
+        SELECT i;
+        SET i = i + 1;
+    UNTIL i > 5 END REPEAT;
+END //
+DELIMITER ;
+```
+
+---
+
+#### 跳转语句
+##### LEAVE 语句
+用于跳出循环：
+```sql
+LOOP
+    IF condition THEN LEAVE loop_label; END IF;
+END LOOP loop_label;
+```
+
+##### ITERATE 语句
+用于 **跳过本次循环，直接进入下一次循环**：
+```sql
+LOOP
+    IF condition THEN ITERATE loop_label; END IF;
+    -- 其他语句
+END LOOP loop_label;
+```
+
+示例：
+```sql
+DELIMITER //
+CREATE PROCEDURE iterate_example()
+BEGIN
+    DECLARE i INT DEFAULT 0;
+    loop_label: LOOP
+        SET i = i + 1;
+        IF i = 3 THEN ITERATE loop_label; END IF;
+        SELECT i;
+        IF i >= 5 THEN LEAVE loop_label; END IF;
+    END LOOP loop_label;
+END //
+DELIMITER ;
+```
+
+---
+
+### 总结
+- **变量**：系统变量（全局、会话）、用户变量（会话变量、局部变量）。
+- **条件处理**：定义异常，使用 `DECLARE HANDLER` 处理错误。
+- **流程控制**：
+  - **分支**：`IF`、`CASE`
+  - **循环**：`LOOP`、`WHILE`、`REPEAT`
+  - **跳转**：`LEAVE`、`ITERATE`
+
+这三个部分构成了 MySQL 存储过程和编程的重要基础，适用于各种数据库操作和逻辑控制。
+
+### 课后练习题
+
+
+
+# 高级篇
+## 数据目录结构
+## 用户权限管理
+
+- `mysql` 系统表
+  - MySQL 系统自带的核心数据库，它存储了**MySQL的用户账户和权限信息**，一些**存储过程、事件的定义**信息，一些运行过程中产生的**日志信息**，一些帮助信息以及时区信息等
+
+
+
+
+
+
+
+
+
+
+
+

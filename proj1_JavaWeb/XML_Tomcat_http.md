@@ -1040,7 +1040,290 @@ Servlet 主要用于以下场景：
 
 ### ServletConfig
 
+<div style="text-align:center">
+    <img src="pic_src/ServletConfig原理.png" alt="Servlet生命周期" style="margin-bottom: 1px;">
+    <p>ServletConfig原理</p>
+</div>
+
+- `ServletConfig` 是为 `Servlet` 提供配置参数的一种对象，每个 `Servlet` 都有自己唯一的 `ServletConfig`
+- 容器会为每个  `Servlet` 实例化一个 `ServletConfig` 对象，并通过  `Servlet` 生命周期的  `init` 方法传给  `Servlet` 作为属性 
+
+#### web.xml 配置
+```xml
+    <servlet>
+        <servlet-name>servlet1</servlet-name>
+        <servlet-class>com.sijor.servlet.Servlet1</servlet-class>
+        <init-param>
+            <param-name>keyA</param-name>
+            <param-value>valueA</param-value>
+        </init-param>
+        <init-param>
+            <param-name>keyB</param-name>
+            <param-value>valueB</param-value>
+        </init-param>
+    </servlet>
+    
+    <servlet-mapping>
+        <servlet-name>servlet1</servlet-name>
+        <url-pattern>/ConfigContextServlet</url-pattern>
+    </servlet-mapping>
+```
+#### 注解配置
+
+```java
+@WebServlet(
+        name = "Servlet1",
+        urlPatterns = "/Servlet1",
+        initParams = {@WebInitParam(name = "key-A", value = "value-A"), @WebInitParam(name = "key-B", value = "value-B")}
+)
+public class Servlet1 extends HttpServlet {
+    @Override
+    protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        ...
+    }
+```
+
+
+
 ### ServletContext
+
+#### ervletContext是什么 
+- ServletContext对象有称呼为**上下文对象**，或者叫**应用域对象**(后面统一讲解域对象)
+- 容器会为每个app创建一个 ***独立的唯一的ServletContext对象***
+- ServletContext对象为所有的Servlet所共享
+- ***ServletContext可以为所有的Servlet提供初始配置参数***
+
+<div style="text-align:center">
+    <img src="pic_src/ServletContext原理.png" alt="ServletContext原理" style="margin-bottom: 1px;">
+    <p>ServletContext原理</p>
+</div>
+
+#### ServletContext其他中要API
+##### 获取资源的真实路径 
+```java
+String path = servletContext.getRealPath("资源在web目录中的路径");
+```
+例如目标是 ***获取某个静态资源的路径***，不是工程目录中的路径，而是部署项目中的路径；
+
+不能直接拷贝静态资源在本地的完整路径
+
+上述代码中的API可以动态获取 ***项目在实际运行时候的实际路径***
+
+##### 获取项目的上下文路径 
+
+```java
+String contextPath = servletContext.getContextPath();
+```
+项目的部署名称，也叫做项目的上下文路径、在部署进入tomcat时所使用的路径，该路径是可能发生变化的，***通过上述API可以动态获取项目真实的上下文路径***
+
+##### 域对象的相关API 
+
+域对象的相关API
+
+- 域对象：一些用于存储数据和传递数据的对象，传递数据不同的范围，我们称之为不同的域，不同的域对象代表不同的域，共享数据的范围也不同
+- ***ServletContext代表应用，所以ServletContext域也叫作应用域，是webapp中最大的域，可以在本应用内实现数据的共享和传递***
+- webapp中的三大域对象，分别是***应用域，会话域，请求域***
+- 后续我们会将三大域对象统一进行讲解和演示，三大域对象都具有的API如下
+
+API | 功能解释
+--- | ---
+void setAttribute(String key,Object value); | 向域中存储/修改数据
+Object getAttribute(String key); | 获得域中的数据
+void removeAttribute(String key); | 移除域中的数据
+
+
+***域对象（Scope Object）是 Java Servlet API 中用于在不同的作用域（范围）内存储和共享数据的对象。Servlet 规范定义了四种域对象，每种域对象对应不同的数据共享范围：***
+
+1. **Page 域**：仅在同一个 JSP 页面或 Servlet 的请求处理方法中有效。
+2. **Request 域**：在一次请求中有效，可以跨多个页面共享数据。
+3. **Session 域**：在同一个会话中有效，可以跨多个请求共享数据。
+4. **Application 域**：在同一个应用程序中有效，可以跨多个会话和请求共享数据。
+
+### 域对象的 API 使用
+
+域对象提供了一组标准的 API 来存储、检索和移除数据。这些 API 在所有四种域对象中都是通用的，包括 `PageContext`、`HttpServletRequest`、`HttpSession` 和 `ServletContext`。以下是这些 API 的详细说明和使用方法：
+
+#### 1. `setAttribute(String key, Object value)`
+
+用于向域对象中存储数据。`key` 是数据的名称，`value` 是要存储的数据。
+
+**示例代码：**
+```java
+// 在 Servlet 中设置属性
+request.setAttribute("username", "Kimi");
+session.setAttribute("userRole", "admin");
+application.setAttribute("appVersion", "1.0");
+```
+
+#### 2. `getAttribute(String key)`
+
+用于从域对象中检索数据。`key` 是之前存储数据时使用的名称。
+
+**示例代码：**
+```java
+// 在 Servlet 中获取属性
+String username = (String) request.getAttribute("username");
+String userRole = (String) session.getAttribute("userRole");
+String appVersion = (String) application.getAttribute("appVersion");
+```
+
+#### 3. `removeAttribute(String key)`
+
+用于从域对象中移除数据。`key` 是之前存储数据时使用的名称。
+
+**示例代码：**
+```java
+// 在 Servlet 中移除属性
+request.removeAttribute("username");
+session.removeAttribute("userRole");
+application.removeAttribute("appVersion");
+```
+
+#### 使用场景
+
+- **Page 域**：通常用于在 JSP 页面中传递数据，例如在表单处理中。
+- **Request 域**：适用于在一次请求中传递数据，例如在请求转发时。
+- **Session 域**：适用于在用户会话期间存储用户特定的信息，例如用户的登录状态。
+- **Application 域**：适用于在整个应用程序中共享全局数据，例如应用程序的配置信息。
+
+#### 示例：使用 ServletContext 存储和检索全局数据
+
+```java
+import javax.servlet.*;
+import javax.servlet.http.*;
+
+public class MyAppServlet extends HttpServlet {
+    public void init() throws ServletException {
+        // 在应用启动时设置全局属性
+        getServletContext().setAttribute("appVersion", "1.0");
+    }
+
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        // 从应用域中获取全局属性
+        String appVersion = (String) getServletContext().getAttribute("appVersion");
+        response.setContentType("text/html");
+        response.getWriter().println("<html><body>");
+        response.getWriter().println("<h1>Application Version: " + appVersion + "</h1>");
+        response.getWriter().println("</body></html>");
+    }
+}
+```
+
+在这个示例中，我们在 Servlet 的 `init()` 方法中设置了一个全局属性 `appVersion`，然后在 `doGet()` 方法中检索并显示这个属性。这个属性在整个应用程序中都是可用的。
+
+
+<div style="text-align:center">
+    <img src="pic_src/Servlet域对象.png" alt="Servlet域对象" style="margin-bottom: 1px;">
+    <p>Servlet域对象</p>
+</div>
+
+如图所示，左右两边分别是两个 `servlet` 类，左边的最后设置了 `usingServletContext` 设置了如下属性值：
+
+```java
+ServletContext context = getServletContext();
+
+...
+
+// void setAttribute(String key, Object value); 向域中存储修改数据
+context.setAttribute("ka", "va");
+context.setAttribute("ka", "vaa"); // 键值对中key
+```
+
+右边 `Servlet3` 可以使用这个应用域中的属性值
+```java
+ServletContext servletContext = getServletContext();
+        
+...
+
+// 从域对象中读取数据
+String ka = (String) servletContext.getAttribute("ka");
+System.out.println("ka's data is: " + ka);
+
+String kaa = (String) servletContext.getAttribute("kaa");
+System.out.println("if ka's value is null, it has been overrided by kaa, kaa's data is: " + kaa);
+```
+
+可以看到，`ka` 的值是 `vaa` ，因为键值对设置时，相同键的后来的值会覆盖之前的，而 `kaa` 并没有对应的键值对设置
+
+***PS:访问方式是先访问左边的 urlpattern `/TestingContext` 然后再访问右边的 `servlet3`***，因为只有先设置了，才能访问到
+
+
+### HttpServletRequest
+
+- HttpServletRequest是一个接口,其父接口是ServletRequest
+- HttpServletRequest是 ***Tomcat 将请求报文转换封装而来的对象,在Tomcat调用service方法时传入***
+- HttpServletRequest代表客户端发来的请求,所有请求中的信息都可以通过该对象获得
+
+<div style="text-align:center">
+    <img src="pic_src/HttpServletRequest概念.png" alt="HttpServletRequest概念.png" style="margin-bottom: 1px;">
+    <p>HttpServletRequest概念</p>
+</div>
+
+
+#### HttpServletRequest常见API
+
+- ***获取请求行信息相关(方式,请求的Url,协议及版本)***
+
+| API | 功能解释 |
+| --- | --- |
+| StringBuffer getRequestURL(); | 获取客户端请求的url |
+| String getRequestURI(); | 获取客户端请求项目中的具体资源 |
+| int getServerPort(); | 获取客户端发送请求时的端口 |
+| int getLocalPort(); | 获取本应用在所在容器的端口 |
+| int getRemotePort(); | 获取客户端程序的端口 |
+| String getScheme(); | 获取请求协议 |
+| String getProtocol(); | 获取请求协议及版本号 |
+| String getMethod(); | 获取请求方式 |
+
+---
+
+- ***获取请求头信息相关***
+
+| API | 功能解释 |
+| --- | --- |
+| String getHeader(String headerName); | 根据头名称获取请求头 |
+| Enumeration<String> getHeaderNames(); | 获取所有的请求头名字 |
+| String getContentType(); | 获取content-type请求头 |
+
+
+---
+- ***获取请求参数相关***
+
+| API | 功能解释 |
+| --- | --- |
+| String getParameter(String parameterName); | 根据请求参数名获取请求单个参数值 |
+| String[] getParameterValues(String parameterName); | 根据请求参数名获取请求多个参数值数组 |
+| Enumeration<String> getParameterNames(); | 获取所有请求参数名 |
+| Map<String, String[]> getParameterMap(); | 获取所有请求参数的键值对集合 |
+| BufferedReader getReader() throws IOException; | 获取读取请求体的字符输入流 |
+| ServletInputStream getInputStream() throws IOException; | 获取读取请求体的字节输入流 |
+| int getContentLength(); | 获取请求体长度的字节数 |
+
+
+---
+#### HttpServletResponse
+#### 请求转发和重定向
+***请求转发特点（通过 HttpServletRequest对象获取请求转发器实现）***
+- 请求转发时，请求和响应对象会继续传递给下一个资源
+- 请求中的参数可以继续向下传递
+- 请求转发是服务器内部行为
+- 不能访问项目以外的资源，`请求的资源[/demo04/http://www.baidu.com]不可用`
+
+***响应重定向特点（通过HttpServletResponse对象的sendRedirect方法实现）***
+- 定向可以到本项目以外的外部资源
+#### 乱码问题
+#### 路径问题
+
+## 案例开发-日程管理
+
+
+
+
+
+
+
+
+
 
 
 

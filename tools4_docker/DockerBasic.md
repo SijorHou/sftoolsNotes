@@ -538,7 +538,16 @@ docker run -d -p 6379:6379 --name redis --privileged=true \
   -v /app/redis/data:/data redis:6.0.8 \
   redis-server /etc/redis/redis.conf
 
+后台登录并启动了 redis-server
+然后：
+  1. 在容器中交互方式使用 redis-cli 客户端
+      `docker exec -it sijor_redis redis-cli`
+  2. 在宿主机上弃用 redis-cli
+      `redis-cli -h 127.0.0.1 -p 6379`
+
 ```
+
+
 
 
 
