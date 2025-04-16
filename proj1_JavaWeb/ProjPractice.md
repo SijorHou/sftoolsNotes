@@ -41,7 +41,7 @@
 
 ***根据上述MVC架构的示例图进行项目构造
 
-## 项目搭建 
+## 日程管理第一二期
 ### 数据库准备
 - 创还能 `schedule_system`数据库并执行如下语句
 ```sql
@@ -162,7 +162,113 @@ SET FOREIGN_KEY_CHECKS = 1;
 
 ***过滤器的工作位置在 "项目中所有目标资源之前"，即可以对请求作出过滤，也可以在 目标资源响应之前，对响应再次处理"***
 
+### 监听器
+了解您的问题，让我详细解释监听器是如何在 Java Web 应用中捕获和响应事件的。
 
+#### 监听器的注册
+
+首先，监听器需要在应用中注册。这可以通过两种方式完成：
+
+1. **注解方式**：在监听器类上使用特定的注解（如 `@WebListener`）来自动注册监听器。
+2. **XML配置**：在 `web.xml` 文件中配置监听器。
+
+#### 事件的触发
+
+当应用的生命周期事件发生时（如应用启动、会话创建、请求开始等），Servlet 容器（如 Tomcat）会检测到这些事件，并自动触发相应的监听器方法。
+
+#### 监听器的执行
+
+一旦事件被触发，容器会调用监听器中相应的方法来处理这些事件。例如：
+
+- 当应用启动时，容器会调用所有注册的应用域监听器的 `contextInitialized` 方法。
+- 当会话创建时，容器会调用所有注册的会话域监听器的 `sessionCreated` 方法。
+- 当请求开始时，容器会调用所有注册的请求域监听器的 `requestInitialized` 方法。
+
+#### 实践示例：ServletContextListener
+
+假设我们有一个 `ServletContextListener` 来监听应用的启动和关闭事件：
+
+```java
+import javax.servlet.ServletContextEvent;
+import javax.servlet.ServletContextListener;
+import javax.servlet.annotation.WebListener;
+
+@WebListener
+public class AppListener implements ServletContextListener {
+
+    @Override
+    public void contextInitialized(ServletContextEvent sce) {
+        System.out.println("Application is starting...");
+        // 初始化代码，如数据库连接等
+    }
+
+    @Override
+    public void contextDestroyed(ServletContextEvent sce) {
+        System.out.println("Application is stopping...");
+        // 清理代码，如关闭数据库连接等
+    }
+}
+```
+
+#### 容器如何捕获事件并调用监听器
+
+1. **应用启动**：
+   - 当应用部署到 Servlet 容器（如 Tomcat）并启动时，容器会创建 `ServletContext`。
+   - 容器会查找所有使用 `@WebListener` 注解的类，或者在 `web.xml` 中配置的监听器类。
+   - 容器实例化这些监听器类，并调用它们的 `contextInitialized` 方法。
+
+2. **应用关闭**：
+   - 当应用被卸载或容器关闭时，容器会调用所有注册的应用域监听器的 `contextDestroyed` 方法。
+
+3. **会话和请求事件**：
+   - 类似地，当会话创建或销毁时，容器会调用会话域监听器的 `sessionCreated` 和 `sessionDestroyed` 方法。
+   - 当请求开始或结束时，容器会调用请求域监听器的 `requestInitialized` 和 `requestDestroyed` 方法。
+
+#### 总结
+
+监听器是 Java Web 应用中监听和响应生命周期事件的重要机制。**通过在监听器类中实现相应的方法，开发者可以在应用的关键时刻执行特定的初始化和清理工作**。**Servlet 容器自动捕获生命周期事件，并调用相应的监听器方法，使得监听器能够响应这些事件**。这种机制有助于确保应用的资源被正确管理，并在关键时刻执行必要的操作。
+
+## 日程管理第三期
+
+### 过滤器控制登录校验
+
+当项目运行起来后，直接访问其中的 html资源（`showSchedule.html`），依然能够展示
+
+***但是并不希望这些资源在 没有登录的状态下，外部可以访问到，故需要使用 过滤器 进行登录校验后 方能访问一些资源***
+
+<div style="text-align:center">
+      <img src="pic_src_projs/登录校验.png" alt="登录校验" style="margin-bottom: 1px;">
+      <p>过滤器控制登录校验</p>
+  </div>
+
+如过程图示：`SysUserController` 中的 `login` 仅仅执行了 校验登录用户名存在与否，密码正确与否，并没有任何对属于用户的资源的访问限制
+
+- 添加过滤器，检测登录状态，已登录，则放行允许访问 schedule资源，否则跳转回到登录界面
+- 那么如果登录成功，**Filter 如何检测到这个登陆成功的状态呢？**
+  - 使用 Session 会话域：登录成功时（`login`校验账户密码通过）将用户信息放入会话域（即创建包含用户信息的 User 对象加入到会话域的键值对变量中）
+
+
+#### 响应规范化
+
+使用 JSON 格式规范请求响应交互中的数据信息格式
+（使用 `jackson` 包）
+
+```txt
+{
+  "code": 100/200/400/401/.. （自定义状态码）业务状态码，本次请求的业务是否成功？若失败，原因？（不是 响应报文中的响应码）
+  "message": 业务状态码的补充说明
+  "data":{} 本次响应的数据
+  ... ...
+
+}
+```
+
+# 前端工程化
+
+<div style="text-align:center">
+    <img src="pic_src_projs/前后端分离.png" alt="使用lombok.png" style="margin-bottom: 1px;">
+    <p>前后端分离</p>
+</div>
 
 
 
