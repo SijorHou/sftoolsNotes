@@ -258,3 +258,122 @@ public class MyService {
 
 通过使用`util`命名空间，你可以更方便地定义和管理复杂的Bean依赖关系，使Spring的配置文件更加简洁和易于维护。
 
+# SpringMVC
+
+
+## 分层概念
+
+你理解得 **基本正确**，我们来逐层详细解释这句“三层架构”的含义，并说明每一层都对应哪些内容。
+
+---
+
+### 三层架构详解
+
+```
+⛳ 用户请求 --> 表述层 --> 业务逻辑层 --> 数据访问层 --> 数据库
+```
+
+---
+
+#### 表述层（Presentation Layer）
+
+> “表述层表示前台页面和后台 servlet/controller”
+
+##### 主要作用：
+
+* 负责接收用户请求和返回响应。
+* 与用户打交道，控制页面跳转或接口响应。
+
+##### 主要包括：
+
+* 前台页面（HTML、JSP、Thymeleaf、Vue 等）
+* 后端控制器（SpringMVC 的 `@Controller` 或 `@RestController`）
+
+##### 举例：
+
+```java
+@Controller
+public class UserController {
+    @Autowired
+    private UserService userService;
+
+    @GetMapping("/user/list")
+    public String list(Model model) {
+        model.addAttribute("users", userService.getAllUsers());
+        return "userList";  // 返回 userList.html 页面
+    }
+}
+```
+
+---
+
+#### 业务逻辑层（Business Layer）
+
+##### 主要作用：
+
+* 封装核心业务逻辑。
+* 协调多个 DAO 的操作，进行业务处理、校验等。
+* 提供服务给 controller 调用。
+
+##### 主要包括：
+
+* `@Service` 注解的类
+* 核心业务算法和逻辑判断
+
+##### 举例：
+
+```java
+@Service
+public class UserServiceImpl implements UserService {
+    @Autowired
+    private UserDao userDao;
+
+    public List<User> getAllUsers() {
+        // 可能包含数据过滤、权限判断等业务逻辑
+        return userDao.findAll();
+    }
+}
+```
+
+---
+
+#### 数据访问层（Data Access Layer / DAO 层）
+
+##### 主要作用：
+
+* 与数据库直接交互，执行 CRUD（增删改查）操作。
+* 将数据库结果转换为 Java 对象。
+
+##### 主要包括：
+
+* DAO 接口和实现类（MyBatis 或 JPA Repository）
+* `@Repository` 注解的类
+
+##### 举例（MyBatis）：
+
+```java
+@Repository
+public class UserDaoImpl implements UserDao {
+    @Autowired
+    private SqlSession sqlSession;
+
+    public List<User> findAll() {
+        return sqlSession.selectList("com.xxx.mapper.UserMapper.findAll");
+    }
+}
+```
+
+---
+
+### 总结：三层架构职责划分
+
+| 层级    | 对应内容                        | 注解            | 职责说明             |
+| ----- | --------------------------- | ------------- | ---------------- |
+| 表述层   | Controller、JSP/HTML/Vue 页面等 | `@Controller` | 接收请求、返回响应        |
+| 业务逻辑层 | Service、ServiceImpl 类       | `@Service`    | 编写业务处理逻辑         |
+| 数据访问层 | DAO 接口及其实现，MyBatis Mapper 等 | `@Repository` | 与数据库交互，执行 SQL 语句 |
+
+---
+
+ 
+
